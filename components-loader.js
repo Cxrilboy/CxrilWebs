@@ -1,21 +1,16 @@
 // ========== LOADER POUR LES COMPOSANTS HEADER ET FOOTER ==========
 
-// ⚠️ IMPORTANT: Attendre que Font Awesome soit chargé
-let fontAwesomeReady = false;
-let fontAwesomeCheckAttempts = 0;
-
 // Vérifier que Font Awesome est disponible
 function waitForFontAwesome() {
     return new Promise((resolve) => {
         const maxAttempts = 20; // 2 secondes max (20 × 100ms)
+        let attempts = 0;
         
         const checkFA = () => {
             if (typeof window.FontAwesome !== 'undefined' || typeof fontawesome !== 'undefined') {
-                fontAwesomeReady = true;
-                console.log('✓ Font Awesome est chargé');
                 resolve();
-            } else if (fontAwesomeCheckAttempts < maxAttempts) {
-                fontAwesomeCheckAttempts++;
+            } else if (attempts < maxAttempts) {
+                attempts++;
                 setTimeout(checkFA, 100);
             } else {
                 console.warn('⚠️ Font Awesome n\'a pas pu être chargé après 2s, continuant sans...');
@@ -45,7 +40,6 @@ function reinitFontAwesome() {
             window.fontawesome.dom.i2svg();
             return true;
         }
-        console.warn('⚠️ Font Awesome API non trouvée');
         return false;
     } catch (error) {
         console.warn('⚠️ Erreur réinitialisation Font Awesome:', error.message);
@@ -56,7 +50,6 @@ function reinitFontAwesome() {
 // Fonction pour charger un composant HTML (avec fallback pour file://)
 async function loadComponent(elementId, filePath) {
     try {
-        console.log(`📦 [LOADCOMPONENT] Chargement ${elementId} de ${filePath}...`);
         const container = document.getElementById(elementId);
         if (!container) {
             console.warn(`⚠️ Conteneur ${elementId} introuvable`);
@@ -84,18 +77,6 @@ async function loadComponent(elementId, filePath) {
         
         if (html && html.trim() !== '') {
             container.innerHTML = html;
-            console.log(`✅ Composant ${elementId} chargé avec succès depuis ${filePath}`);
-            console.log(`   - Taille du contenu: ${html.length} caractères`);
-            
-            // Vérifier que les éléments markdown sont présents
-            if (elementId === 'header-container') {
-                const mobileSidebar = document.getElementById('mobileSidebar');
-                console.log(`   - mobileSidebar présent dans le DOM:`, !!mobileSidebar);
-                if (mobileSidebar) {
-                    console.log(`   - mobileSidebar classes:`, mobileSidebar.className);
-                    console.log(`   - mobileSidebar style.display:`, window.getComputedStyle(mobileSidebar).display);
-                }
-            }
             
             // Réinitialiser Font Awesome APRÈS insertion du contenu
             const faInitialized = reinitFontAwesome();
@@ -195,17 +176,13 @@ async function loadComponents() {
     
     // Réinitialiser Font Awesome une dernière fois pour s'assurer que TOUTES les icônes sont converties
     setTimeout(() => {
-        console.log('Réinitialisation finale de Font Awesome...');
         reinitFontAwesome();
     }, 100);
     
     // Réinitialiser le menu mobile après chargement des composants (sidebar est maintenant dans le DOM)
     setTimeout(() => {
         if (typeof initMobileMenu === 'function') {
-            console.log('🔄 [COMPONENTS-LOADER] Réinitialisation du menu mobile après chargement des composants...');
             initMobileMenu();
-        } else {
-            console.error('❌ [COMPONENTS-LOADER] Fonction initMobileMenu non trouvée!');
         }
     }, 150);
     
