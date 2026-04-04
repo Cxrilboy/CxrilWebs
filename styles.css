@@ -1264,7 +1264,7 @@ body.stop-hero-animation .marquee-track {
    RESPONSIVE
    ============================================================ */
 @media (max-width: 768px) {
-    .services-grid { grid-template-columns: repeat(2,1fr); }
+    .services-grid { grid-template-columns: 1fr; }
     .about-content { grid-template-columns: 1fr; gap: 3rem; }
     .about-visual { height: 400px; }
     .portfolio-slide { grid-template-columns: 1fr; }
