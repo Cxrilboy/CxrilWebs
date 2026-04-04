@@ -500,8 +500,8 @@ function initMobileMenu() {
     const sidebarLinks = document.querySelectorAll('.sidebar-link');
     const body = document.body;
     
+    // Silently return if elements aren't found yet (they may load later)
     if (!mobileMenuToggle || !sidebar || !sidebarOverlay) {
-        console.error('❌ [MOBILE MENU] Éléments manquants pour initialiser le menu mobile');
         return;
     }
     
