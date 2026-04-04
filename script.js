@@ -502,10 +502,14 @@ function initMobileMenu() {
     
     // Silently return if elements aren't found yet (they may load later)
     if (!mobileMenuToggle || !sidebar || !sidebarOverlay) {
+        console.log('[MOBILE MENU] Elements not found - will retry after components load');
         return;
     }
     
+    console.log('[MOBILE MENU] ✓ All elements found, initializing...');
+    
     function openSidebar() {
+        console.log('[MOBILE MENU] Opening sidebar...');
         sidebar.classList.add('is-open');
         // Ne pas forcer display en inline - laisser la CSS gérer
         body.style.overflow = 'hidden';
@@ -514,9 +518,11 @@ function initMobileMenu() {
             icon.classList.remove('fa-bars'); 
             icon.classList.add('fa-times');
         }
+        console.log('[MOBILE MENU] Sidebar class:', sidebar.className);
     }
     
     function closeSidebar() {
+        console.log('[MOBILE MENU] Closing sidebar...');
         sidebar.classList.remove('is-open');
         // Ne pas forcer display en inline - laisser la CSS gérer
         body.style.overflow = '';
@@ -525,10 +531,12 @@ function initMobileMenu() {
             icon.classList.add('fa-bars'); 
             icon.classList.remove('fa-times');
         }
+        console.log('[MOBILE MENU] Sidebar class:', sidebar.className);
     }
     
     // Event listener pour le bouton hamburger
     mobileMenuToggle.addEventListener('click', function() {
+        console.log('[MOBILE MENU] Hamburger clicked, is-open?', sidebar.classList.contains('is-open'));
         if (sidebar.classList.contains('is-open')) {
             closeSidebar();
         } else {

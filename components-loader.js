@@ -181,8 +181,11 @@ async function loadComponents() {
     
     // Réinitialiser le menu mobile après chargement des composants (sidebar est maintenant dans le DOM)
     setTimeout(() => {
+        console.log('[COMPONENTS-LOADER] Reinitializing mobile menu after components loaded...');
         if (typeof initMobileMenu === 'function') {
             initMobileMenu();
+        } else {
+            console.error('[COMPONENTS-LOADER] initMobileMenu function not found!');
         }
     }, 150);
     
@@ -275,6 +278,7 @@ function adaptHeaderLinks() {
 // Fonction pour initialiser les composants après chargement
 function initializeComponents() {
     // Réinitialiser le menu mobile
+    console.log('[INITIALIZECOMPONENTS] Calling initMobileMenu...');
     if (typeof initMobileMenu === 'function') {
         initMobileMenu();
     }
