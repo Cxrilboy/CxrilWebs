@@ -24,6 +24,15 @@ document.addEventListener('DOMContentLoaded', function() {
             // silently ignore init errors in production
         }
     });
+    
+    // Réinitialiser Font Awesome après tous les initializers
+    setTimeout(() => {
+        if (typeof window.FontAwesome !== 'undefined' && window.FontAwesome.dom) {
+            window.FontAwesome.dom.i2svg();
+        } else if (typeof fontawesome !== 'undefined' && fontawesome.dom) {
+            fontawesome.dom.i2svg();
+        }
+    }, 200);
 });
 
 // ========== LOADING SCREEN ==========

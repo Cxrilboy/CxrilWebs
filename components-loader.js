@@ -1,5 +1,58 @@
 // ========== LOADER POUR LES COMPOSANTS HEADER ET FOOTER ==========
 
+// ⚠️ IMPORTANT: Attendre que Font Awesome soit chargé
+let fontAwesomeReady = false;
+let fontAwesomeCheckAttempts = 0;
+
+// Vérifier que Font Awesome est disponible
+function waitForFontAwesome() {
+    return new Promise((resolve) => {
+        const maxAttempts = 20; // 2 secondes max (20 × 100ms)
+        
+        const checkFA = () => {
+            if (typeof window.FontAwesome !== 'undefined' || typeof fontawesome !== 'undefined') {
+                fontAwesomeReady = true;
+                console.log('✓ Font Awesome est chargé');
+                resolve();
+            } else if (fontAwesomeCheckAttempts < maxAttempts) {
+                fontAwesomeCheckAttempts++;
+                setTimeout(checkFA, 100);
+            } else {
+                console.warn('⚠️ Font Awesome n\'a pas pu être chargé après 2s, continuant sans...');
+                resolve(); // Continuer anyway
+            }
+        };
+        
+        checkFA();
+    });
+}
+
+// Réinitialiser Font Awesome après insertion de contenu
+function reinitFontAwesome() {
+    try {
+        // Méthode 1: API FontAwesome v6
+        if (typeof window.FontAwesome !== 'undefined' && window.FontAwesome.dom) {
+            window.FontAwesome.dom.i2svg();
+            return true;
+        }
+        // Méthode 2: API fontawesome globale
+        if (typeof fontawesome !== 'undefined' && fontawesome.dom) {
+            fontawesome.dom.i2svg();
+            return true;
+        }
+        // Méthode 3: Chercher dans window
+        if (typeof window.fontawesome !== 'undefined' && window.fontawesome.dom) {
+            window.fontawesome.dom.i2svg();
+            return true;
+        }
+        console.warn('⚠️ Font Awesome API non trouvée');
+        return false;
+    } catch (error) {
+        console.warn('⚠️ Erreur réinitialisation Font Awesome:', error.message);
+        return false;
+    }
+}
+
 // Fonction pour charger un composant HTML (avec fallback pour file://)
 async function loadComponent(elementId, filePath) {
     try {
@@ -32,9 +85,10 @@ async function loadComponent(elementId, filePath) {
             container.innerHTML = html;
             console.log(`✓ Composant ${elementId} chargé avec succès depuis ${filePath}`);
             
-            // Réinitialiser les scripts si nécessaire (pour les icônes Font Awesome)
-            if (typeof fontawesome !== 'undefined') {
-                fontawesome.dom.i2svg();
+            // Réinitialiser Font Awesome APRÈS insertion du contenu
+            const faInitialized = reinitFontAwesome();
+            if (!faInitialized) {
+                console.warn(`⚠️ Font Awesome n'a pas pu être réinitialisé pour ${elementId}`);
             }
             
             // Déclencher un événement pour signaler que le composant est chargé
@@ -89,6 +143,9 @@ function loadComponentWithXHR(filePath) {
 async function loadComponents() {
     console.log('Début du chargement des composants...');
     
+    // Attendre que Font Awesome soit prêt
+    await waitForFontAwesome();
+    
     // Charger le header s'il y a un conteneur
     const headerContainer = document.getElementById('header-container');
     if (headerContainer) {
@@ -123,6 +180,13 @@ async function loadComponents() {
     // Réinitialiser les événements après le chargement
     initializeComponents();
     ensureHeaderConsistency();
+    
+    // Réinitialiser Font Awesome une dernière fois pour s'assurer que TOUTES les icônes sont converties
+    setTimeout(() => {
+        console.log('Réinitialisation finale de Font Awesome...');
+        reinitFontAwesome();
+    }, 100);
+    
     console.log('Chargement des composants terminé');
 }
 
@@ -166,10 +230,8 @@ async function loadGlobalControls() {
                 controlsContainer.innerHTML = html;
                 console.log('✓ Global controls loaded (optimized)');
 
-                // Forcer les scripts/icônes si nécessaire (FontAwesome)
-                if (typeof fontawesome !== 'undefined') {
-                    fontawesome.dom.i2svg();
-                }
+                // Réinitialiser Font Awesome pour les icônes
+                reinitFontAwesome();
 
             } else {
                 throw new Error('Contenu global-controls vide');
