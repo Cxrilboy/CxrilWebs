@@ -1264,6 +1264,12 @@ body.stop-hero-animation .marquee-track {
    RESPONSIVE
    ============================================================ */
 @media (max-width: 768px) {
+    .services-grid { grid-template-columns: 1fr !important; }
+    .service-card { width: 100%; max-width: 100%; min-width: 0; }
+    .service-card-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .service-icon { width: 60px; height: 60px; }
+    .service-title { font-size: 1.4rem; }
+    .service-description { font-size: 0.97rem; }
     .services-grid { grid-template-columns: 1fr; }
     .about-content { grid-template-columns: 1fr; gap: 3rem; }
     .about-visual { height: 400px; }
@@ -1320,7 +1326,10 @@ body.stop-hero-animation .marquee-track {
     .hero { padding: 5rem 1rem 3rem; }
     .hero-badge { font-size: 0.75rem; padding: 0.4rem 1rem; }
     .services, .contact-form-section, .about { padding: 4rem 1rem; }
-    .service-card { padding: 2rem 1.5rem; }
+    .service-card { padding: 2rem 1.5rem; width: 100%; max-width: 100%; min-width: 0; }
+    .service-card-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .service-icon { width: 58px; height: 58px; }
+    .service-description { font-size: 0.95rem; }
     .contact-form { padding: 2rem 1.25rem; }
     .about-visual { height: 300px; }
     .about-card { width: 120px; height: 120px; font-size: 2rem; }
