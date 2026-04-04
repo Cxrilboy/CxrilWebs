@@ -77,11 +77,12 @@ async function loadComponent(elementId, filePath) {
         
         if (html && html.trim() !== '') {
             container.innerHTML = html;
+            console.log(`✓ Component ${elementId} loaded (${html.length} chars)`);
             
             // Réinitialiser Font Awesome APRÈS insertion du contenu
             const faInitialized = reinitFontAwesome();
             if (!faInitialized) {
-                console.warn(`⚠️ Font Awesome n'a pas pu être réinitialisé pour ${elementId}`);
+                console.warn(`⚠️ Font Awesome couldn't be reinitialized for ${elementId}`);
             }
             
             // Déclencher un événement pour signaler que le composant est chargé
