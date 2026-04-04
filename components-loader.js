@@ -327,44 +327,6 @@ function initComponents() {
 // Initialiser immédiatement
 initComponents();
 
-// Système de rechargement automatique si les composants ne se chargent pas
-let retryCount = 0;
-const maxRetries = 5;
-
-function checkAndRetry() {
-    const headerContainer = document.getElementById('header-container');
-    const footerContainer = document.getElementById('footer-container');
-    
-    const headerEmpty = headerContainer && (headerContainer.innerHTML.trim() === '' || headerContainer.innerHTML.includes('Erreur'));
-    const footerEmpty = footerContainer && (footerContainer.innerHTML.trim() === '' || footerContainer.innerHTML.includes('Erreur'));
-    
-    if ((headerEmpty || footerEmpty) && retryCount < maxRetries) {
-        retryCount++;
-        console.log(`Tentative ${retryCount}/${maxRetries} de rechargement des composants...`);
-        
-        if (headerEmpty) {
-            loadComponent('header-container', 'header/header.html').then(() => {
-                adaptHeaderLinks();
-                initializeComponents();
-            }).catch(err => console.error('Erreur rechargement header:', err));
-        }
-        
-        if (footerEmpty) {
-            loadComponent('footer-container', 'footer/footer.html').then(() => {
-                initializeComponents();
-            }).catch(err => console.error('Erreur rechargement footer:', err));
-        }
-        
-        // Réessayer après 300ms
-        setTimeout(checkAndRetry, 300);
-    } else if (retryCount >= maxRetries) {
-        console.error('Impossible de charger les composants après plusieurs tentatives');
-    }
-}
-
-// Vérifier après 500ms si les composants sont chargés
-setTimeout(checkAndRetry, 500);
-
 // Exporter les fonctions pour utilisation externe
 window.loadComponents = loadComponents;
 window.loadComponent = loadComponent;
