@@ -278,12 +278,6 @@ function adaptHeaderLinks() {
 
 // Fonction pour initialiser les composants après chargement
 function initializeComponents() {
-    // Réinitialiser le menu mobile
-    console.log('[INITIALIZECOMPONENTS] Calling initMobileMenu...');
-    if (typeof initMobileMenu === 'function') {
-        initMobileMenu();
-    }
-    
     // Réinitialiser la navigation
     if (typeof initNavigation === 'function') {
         initNavigation();

@@ -492,7 +492,13 @@ function initNavigation() {
 }
 
 // ========== MENU MOBILE ==========
+let mobileMenuInitialized = false;
+
 function initMobileMenu() {
+    if (mobileMenuInitialized) {
+        return;
+    }
+
     const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
     const sidebar = document.getElementById('mobileSidebar');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -506,6 +512,7 @@ function initMobileMenu() {
         return;
     }
     
+    mobileMenuInitialized = true;
     console.log('[MOBILE MENU] ✓ All elements found, initializing...');
     
     function openSidebar() {
