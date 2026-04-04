@@ -527,7 +527,7 @@ function initMobileMenu() {
     function openSidebar() {
         console.log('📂 [SIDEBAR] Ouverture...');
         sidebar.classList.add('is-open');
-        sidebar.style.display = 'flex';
+        // Ne pas forcer display en inline - laisser la CSS gérer
         body.style.overflow = 'hidden';
         const icon = mobileMenuToggle.querySelector('i');
         if (icon) { 
@@ -541,7 +541,7 @@ function initMobileMenu() {
     function closeSidebar() {
         console.log('📁 [SIDEBAR] Fermeture...');
         sidebar.classList.remove('is-open');
-        sidebar.style.display = 'none';
+        // Ne pas forcer display en inline - laisser la CSS gérer
         body.style.overflow = '';
         const icon = mobileMenuToggle.querySelector('i');
         if (icon) { 
