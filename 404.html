@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="description" content="Page introuvable - CxrilWebs. Retournez à l'accueil pour trouver ce que vous cherchez.">
+    <title>404 — Page introuvable · CxrilWebs</title>
+    <link rel="icon" type="image/png" href="logo/logoCW-no-bg.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css?v=20260403">
+    <style>
+        .page-404 {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: var(--bg-primary);
+        }
+        .code-404 {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(6rem, 20vw, 12rem);
+            font-weight: 900;
+            line-height: 1;
+            background: linear-gradient(135deg, var(--color-blue) 0%, var(--color-orange) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: .25rem;
+            user-select: none;
+        }
+        .illus-404 {
+            width: min(280px, 80vw);
+            margin: 1rem auto;
+            animation: float 3.5s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%,100% { transform: translateY(0); }
+            50%      { transform: translateY(-14px); }
+        }
+        .title-404 {
+            font-size: clamp(1.3rem, 3vw, 2rem);
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: .6rem;
+        }
+        .subtitle-404 {
+            color: var(--text-muted);
+            font-size: 1rem;
+            max-width: 440px;
+            margin: 0 auto 2.25rem;
+            line-height: 1.6;
+        }
+        .actions-404 {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .actions-404 .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .8rem 1.75rem;
+            border-radius: .85rem;
+            font-weight: 700;
+            font-size: .95rem;
+            text-decoration: none;
+            transition: all .22s ease;
+        }
+        .btn-home-primary {
+            background: linear-gradient(135deg, var(--color-blue) 0%, #1a3d8a 100%);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(43,92,184,.3);
+        }
+        .btn-home-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(43,92,184,.4);
+        }
+        .btn-home-outline {
+            border: 2px solid rgba(43,92,184,.25);
+            color: var(--color-blue);
+            background: transparent;
+        }
+        .btn-home-outline:hover {
+            border-color: var(--color-blue);
+            background: rgba(43,92,184,.05);
+        }
+    </style>
+</head>
+<body>
+    <!-- Dark Mode Toggle -->
+    <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Basculer le mode sombre">
+        <i class="fas fa-moon"></i>
+        <i class="fas fa-sun"></i>
+    </button>
+
+    <main class="page-404" role="main">
+        <div class="code-404" aria-label="Erreur 404">404</div>
+
+        <!-- Illustration SVG inline -->
+        <svg class="illus-404" viewBox="0 0 280 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <!-- Écran cassé -->
+            <rect x="40" y="30" width="200" height="130" rx="12" fill="#2B5CB8" opacity=".12"/>
+            <rect x="48" y="38" width="184" height="114" rx="8" fill="#2B5CB8" opacity=".18"/>
+            <!-- Fissures -->
+            <polyline points="120,38 108,80 130,80 112,152" stroke="#FF7A00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <polyline points="160,38 148,65 170,65 155,100" stroke="#FF7A00" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity=".6"/>
+            <!-- Triste visage sur l'écran -->
+            <circle cx="140" cy="88" r="28" fill="#2B5CB8" opacity=".2"/>
+            <circle cx="128" cy="82" r="3.5" fill="#2B5CB8"/>
+            <circle cx="152" cy="82" r="3.5" fill="#2B5CB8"/>
+            <path d="M128 98 Q140 91 152 98" stroke="#2B5CB8" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <!-- Pied de l'écran -->
+            <rect x="118" y="160" width="44" height="8" rx="4" fill="#2B5CB8" opacity=".2"/>
+            <rect x="105" y="168" width="70" height="6" rx="3" fill="#2B5CB8" opacity=".15"/>
+            <!-- Étoiles/pixels perdus -->
+            <circle cx="60" cy="50"  r="4" fill="#FF7A00" opacity=".7"/>
+            <circle cx="220" cy="48" r="3" fill="#FF7A00" opacity=".55"/>
+            <circle cx="75" cy="155" r="2.5" fill="#2B5CB8" opacity=".5"/>
+            <circle cx="210" cy="152" r="3" fill="#FF7A00" opacity=".45"/>
+            <text x="50" y="30" font-family="monospace" font-size="11" fill="#FF7A00" opacity=".6">0x</text>
+            <text x="210" y="165" font-family="monospace" font-size="11" fill="#2B5CB8" opacity=".5">??</text>
+        </svg>
+
+        <h1 class="title-404">Oops, cette page n'est pas disponible !</h1>
+        <p class="subtitle-404">La page que vous cherchez n'existe pas, elle a été déplacée ou est en cours de maintenance.<br>Pas de panique, on vous ramène à l'accueil.</p>
+
+        <div class="actions-404">
+            <a href="index.html" class="btn btn-home-primary">
+                <i class="fas fa-home"></i>
+                Retour à l'accueil
+            </a>
+            <a href="index.html#contact" class="btn btn-home-outline">
+                <i class="fas fa-envelope"></i>
+                Nous contacter
+            </a>
+        </div>
+    </main>
+
+    <script src="script.js?v=20260403"></script>
+</body>
+</html>
+

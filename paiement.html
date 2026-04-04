@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Paiement sécurisé CxrilWebs - Réglez votre acompte ou abonnement en ligne via Stripe. Paiement 100% sécurisé, certifié PCI-DSS.">
+    <!-- Supabase : remplace VOTRE_CLE_ANON par la clé anon publique de ton projet Supabase -->
+    <meta name="supabase-url" content="https://vowwywqggybvsbhpdkxs.supabase.co">
+    <meta name="supabase-key" content="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZvd3d5d3FnZ3lidnNiaHBka3hzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwODczMjMsImV4cCI6MjA5MDY2MzMyM30.i45GxR0-vl0tnKLugpoy6xhfhCqioaD2VBUgP7OMNPY">
+    <meta property="og:title" content="Paiement sécurisé - CxrilWebs">
+    <meta property="og:description" content="Réglez votre acompte ou abonnement en toute sécurité via Stripe.">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="fr_FR">
+    <title>Paiement sécurisé - CxrilWebs</title>
+    <link rel="icon" type="image/png" href="logo/logoCW-no-bg.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css?v=20260403">
+    <link rel="stylesheet" href="paiement-styles.css?v=20260403">
+    <script src="js/pricing.js?v=20260403"></script>
+    <!-- Supabase CDN (compatible navigateur sans bundler) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+</head>
+<body>
+    <!-- Dark Mode Toggle -->
+    <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Basculer le mode sombre">
+        <i class="fas fa-moon"></i>
+        <i class="fas fa-sun"></i>
+    </button>
+
+    <!-- En-tête avec Navigation -->
+    <div id="header-container"></div>
+
+    <!-- Hero Paiement -->
+    <section class="pay-hero">
+        <div class="pay-hero-bg"></div>
+        <div class="container">
+            <div class="pay-breadcrumb">
+                <a href="index.html">Accueil</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Paiement sécurisé</span>
+            </div>
+            <div class="pay-hero-content">
+                <div class="pay-hero-icon">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h1 class="pay-hero-title">Paiement sécurisé</h1>
+                <p class="pay-hero-subtitle">Réglez votre acompte ou abonnement en toute confiance via notre plateforme sécurisée</p>
+            </div>
+            <div class="pay-trust-badges">
+                <div class="pay-trust-badge">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>PCI-DSS Niveau 1</span>
+                </div>
+                <div class="pay-trust-badge">
+                    <i class="fas fa-lock"></i>
+                    <span>Chiffrement SSL</span>
+                </div>
+                <div class="pay-trust-badge">
+                    <svg viewBox="0 0 60 25" width="36" height="15" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M59.64 14.28h-8.06c.19 1.93 1.6 2.55 3.2 2.55 1.64 0 2.96-.37 4.05-.95v3.32a10 10 0 0 1-4.56 1c-4.01 0-6.83-2.5-6.83-7.48 0-4.19 2.39-7.52 6.3-7.52 3.92 0 5.96 3.28 5.96 7.5 0 .4-.04 1.26-.06 1.58zm-5.92-5.62c-1.03 0-2.17.73-2.17 2.58h4.25c0-1.85-1.07-2.58-2.08-2.58zM40.95 20v-9.72c0-1.46-.49-2.46-1.96-2.46-1.54 0-2.19 1.32-2.19 2.8V20h-4.02V5.62h3.94v1.86c.64-1.14 1.96-2.1 3.78-2.1 2.69 0 4.47 1.74 4.47 5.01V20h-4.02zm-12.13 0V5.62h4.02V20h-4.02zm2.01-16.12c-1.28 0-2.07-.86-2.07-1.94 0-1.09.8-1.94 2.07-1.94s2.07.85 2.07 1.94c0 1.08-.8 1.94-2.07 1.94zM23.6 20l-4.73-6.8V20h-4.02V.1h4.02v12.24l4.47-6.72h4.74l-5.12 7.16 5.43 7.22H23.6zm-12.66 0c-2.85 0-4.34-1.47-4.34-4.38V9.04H4.5V5.62h2.1V1.87l4.02-1.18v4.93h3.23v3.42h-3.23v6.08c0 1.02.5 1.46 1.43 1.46.58 0 1.2-.15 1.8-.42V20c-.7.23-1.53.35-2.4.35z" fill="#635BFF"/>
+                    </svg>
+                    <span>Powered by Stripe</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sélection du service -->
+    <section class="pay-section">
+        <div class="container">
+
+            <!-- Mode Express (si paramètres URL présents) -->
+            <div class="pay-express-mode" id="payExpressMode" style="display:none;">
+                <h3>Devis en attente de paiement</h3>
+                <p id="payExpressModeText">—</p>
+                <div class="pay-express-mode-buttons">
+                    <button class="btn btn-primary" id="payExpressPayBtn">
+                        <i class="fas fa-credit-card"></i> Payer maintenant
+                    </button>
+                    <button class="btn btn-secondary" id="payExpressModifyBtn">
+                        <i class="fas fa-edit"></i> Modifier
+                    </button>
+                </div>
+            </div>
+
+            <!-- Étape 1 : Choix du service -->
+            <div class="pay-step" id="payStep1">
+                <div class="pay-step-header">
+                    <span class="pay-step-number">1</span>
+                    <h2 class="pay-step-title">Choisissez votre service</h2>
+                </div>
+
+                <div class="pay-services-grid">
+                    <!-- Création Web -->
+                    <div class="pay-service-card" data-service="web">
+                        <div class="pay-service-icon"><i class="fas fa-laptop-code"></i></div>
+                        <h3>Création de Site Web</h3>
+                        <p>Sites express, vitrines, e-commerce & applications web</p>
+                        <span class="pay-service-price">À partir de 290€</span>
+                        <span class="pay-service-deposit">Acompte 30%</span>
+                    </div>
+
+                    <!-- Maintenance -->
+                    <div class="pay-service-card" data-service="maintenance">
+                        <div class="pay-service-icon"><i class="fas fa-tools"></i></div>
+                        <h3>Maintenance Informatique</h3>
+                        <p>Contrats mensuels & annuels sans engagement</p>
+                        <span class="pay-service-price">À partir de 150€/mois</span>
+                        <span class="pay-service-deposit">Abonnement récurrent</span>
+                    </div>
+
+                    <!-- Réseaux Sociaux -->
+                    <div class="pay-service-card" data-service="reseaux-sociaux">
+                        <div class="pay-service-icon"><i class="fas fa-share-alt"></i></div>
+                        <h3>Gestion Réseaux Sociaux</h3>
+                        <p>Stratégie social media & création de contenu</p>
+                        <span class="pay-service-price">À partir de 299€</span>
+                        <span class="pay-service-deposit">Audit ou mensuel</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Étape 2 : Choix de la formule (dynamique) -->
+            <div class="pay-step" id="payStep2" style="display:none">
+                <div class="pay-step-header">
+                    <span class="pay-step-number">2</span>
+                    <h2 class="pay-step-title">Choisissez votre formule</h2>
+                </div>
+
+                <!-- Web options -->
+                <div class="pay-options-panel" id="pay-options-web" style="display:none">
+                    <div class="pay-options-grid">
+                        <div class="pay-option-card" data-key="web_express">
+                            <div class="pay-option-badge">🚀 Express</div>
+                            <h3>Site Express</h3>
+                            <div class="pay-option-price" data-price-key="web.express.price">290€</div>
+                            <ul class="pay-option-features">
+                                <li><i class="fas fa-check"></i> 1 page unique (one-page)</li>
+                                <li><i class="fas fa-check"></i> Design responsive</li>
+                                <li><i class="fas fa-check"></i> Formulaire de contact</li>
+                                <li><i class="fas fa-check"></i> Livraison sous 7 jours</li>
+                            </ul>
+                            <div class="pay-option-deposit">
+                                <span class="pay-deposit-label">Acompte 30%</span>
+                                <span class="pay-deposit-amount">87€</span>
+                            </div>
+                        </div>
+                        <div class="pay-option-card" data-key="web_vitrine">
+                            <div class="pay-option-badge">Essentiel</div>
+                            <h3>Site Vitrine</h3>
+                            <div class="pay-option-price" data-price-key="web.vitrine.price">890€</div>
+                            <ul class="pay-option-features">
+                                <li><i class="fas fa-check"></i> Jusqu'à 5 pages</li>
+                                <li><i class="fas fa-check"></i> Design responsive</li>
+                                <li><i class="fas fa-check"></i> Formulaire de contact</li>
+                                <li><i class="fas fa-check"></i> SEO de base</li>
+                            </ul>
+                            <div class="pay-option-deposit">
+                                <span class="pay-deposit-label">Acompte 30%</span>
+                                <span class="pay-deposit-amount">267€</span>
+                            </div>
+                        </div>
+                        <div class="pay-option-card pay-option-featured" data-key="web_ecommerce">
+                            <div class="pay-option-badge">⭐ Populaire</div>
+                            <h3>Site E-commerce</h3>
+                            <div class="pay-option-price" data-price-key="web.ecommerce.price">1 690€</div>
+                            <ul class="pay-option-features">
+                                <li><i class="fas fa-check"></i> Jusqu'à 10 pages</li>
+                                <li><i class="fas fa-check"></i> Design premium sur mesure</li>
+                                <li><i class="fas fa-check"></i> SEO avancé + Analytics</li>
+                                <li><i class="fas fa-check"></i> Blog intégré</li>
+                            </ul>
+                            <div class="pay-option-deposit">
+                                <span class="pay-deposit-label">Acompte 30%</span>
+                                <span class="pay-deposit-amount">507€</span>
+                            </div>
+                        </div>
+                        <div class="pay-option-card pay-option-disabled" data-key="web_app">
+                            <div class="pay-option-badge">Sur devis</div>
+                            <h3>Projet web sur mesure</h3>
+                            <div class="pay-option-price">Sur devis</div>
+                            <ul class="pay-option-features">
+                                <li><i class="fas fa-check"></i> Application sur mesure</li>
+                                <li><i class="fas fa-check"></i> Architecture complète</li>
+                                <li><i class="fas fa-check"></i> Support 6 mois inclus</li>
+                                <li><i class="fas fa-check"></i> Formation incluse</li>
+                            </ul>
+                            <div class="pay-option-deposit">
+                                <a href="index.html#contact" class="btn btn-primary btn-full">Contactez-moi</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Maintenance options -->
+                <div class="pay-options-panel" id="pay-options-maintenance" style="display:none">
+                    <div class="pay-options-grid pay-options-2col">
+
+                        <!-- Site Web — Mensuel -->
+                        <div class="pay-option-card" data-key="maintenance_site_mensuel">
+                            <div class="pay-option-badge"><i class="fas fa-globe" style="margin-right:.35em"></i> Site Web</div>
+                            <h3>Mensuel — Site Web</h3>
+                            <div class="pay-option-price">150€<span class="pay-price-period">/mois</span></div>
+                            <ul class="pay-option-features">
+                                <li><i class="fas fa-check"></i> Mises à jour CMS & plugins</li>
+                                <li><i class="fas fa-check"></i> Sauvegarde hebdomadaire</li>
+                                <li><i class="fas fa-check"></i> Monitoring uptime 24/7</li>
+                                <li><i class="fas fa-check"></i> Support technique inclus</li>
+                                <li><i class="fas fa-check"></i> Sans engagement</li>
+                            </ul>
+                            <div class="pay-option-deposit pay-option-subscription">
+                                <span class="pay-deposit-label">Abonnement mensuel</span>
+                                <span class="pay-deposit-amount">150€/mois</span>
+                            </div>
+                        </div>
+
+                        <!-- Site Web — Annuel -->
+                        <div class="pay-option-card pay-option-featured" data-key="maintenance_site_annuel">
+                            <div class="pay-option-badge">⭐ Site Web — Meilleur rapport</div>
+                            <h3>Annuel — Site Web</h3>
+                            <div class="pay-option-price">1 490€<span class="pay-price-period">/an</span></div>
+                            <ul class="pay-option-features">
+                                <li><i class="fas fa-check"></i> Tout le mensuel inclus</li>
+                                <li><i class="fas fa-check"></i> 2 mois offerts</li>
+                                <li><i class="fas fa-check"></i> Audit sécurité annuel</li>
+                                <li><i class="fas fa-check"></i> Sauvegarde cloud incluse</li>
+                                <li><i class="fas fa-check"></i> Intervention prioritaire</li>
+                            </ul>
+                            <div class="pay-option-deposit pay-option-subscription">
+                                <span class="pay-deposit-label">Paiement annuel</span>
+                                <span class="pay-deposit-amount">1 490€/an</span>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <!-- Réseau options -->
+                <!-- Réseaux Sociaux options -->
+                <div class="pay-options-panel" id="pay-options-reseaux-sociaux" style="display:none">
+                    <div class="pay-options-grid pay-options-2col">
+                        <div class="pay-option-card" data-key="rs_basic">
+                            <div class="pay-option-badge">Offre de lancement</div>
+                            <h3>Forfait Basic</h3>
+                            <p>4 publications/mois — 1 post/semaine</p>
+                            <div class="pay-option-price">160€</div>
+                            <p style="margin:.35rem 0 0;font-size:.9rem;color:var(--color-gray);">puis 200€/mois</p>
+                            <ul class="pay-option-features">
+                                <li><i class="fas fa-check"></i> 4 visuels</li>
+                                <li><i class="fas fa-check"></i> Textes d'accroches</li>
+                                <li><i class="fas fa-check"></i> Description des services</li>
+                                <li><i class="fas fa-check"></i> Hashtags</li>
+                                <li><i class="fas fa-check"></i> Modération commentaires</li>
+                                <li><i class="fas fa-check"></i> Calendrier éditorial</li>
+                                <li><i class="fas fa-check"></i> Rapport et suivi</li>
+                            </ul>
+                            <div class="pay-option-deposit pay-option-subscription">
+                                <span class="pay-deposit-label">Abonnement</span>
+                                <span class="pay-deposit-amount">160€/mois</span>
+                            </div>
+                        </div>
+                        <div class="pay-option-card pay-option-featured" data-key="rs_plus">
+                            <div class="pay-option-badge">⭐ Populaire</div>
+                            <h3>Forfait Plus</h3>
+                            <p>8 publications/mois — 2 posts/semaine</p>
+                            <div class="pay-option-price">320€</div>
+                            <p style="margin:.35rem 0 0;font-size:.9rem;color:var(--color-gray);">puis 400€/mois</p>
+                            <ul class="pay-option-features">
+                                <li><i class="fas fa-check"></i> 8 visuels</li>
+                                <li><i class="fas fa-check"></i> Textes d'accroches</li>
+                                <li><i class="fas fa-check"></i> Description des services</li>
+                                <li><i class="fas fa-check"></i> Hashtags</li>
+                                <li><i class="fas fa-check"></i> Modération commentaires</li>
+                                <li><i class="fas fa-check"></i> Calendrier éditorial</li>
+                                <li><i class="fas fa-check"></i> Rapport et suivi</li>
+                            </ul>
+                            <div class="pay-option-deposit pay-option-subscription">
+                                <span class="pay-deposit-label">Abonnement</span>
+                                <span class="pay-deposit-amount">320€/mois</span>
+                            </div>
+                        </div>
+                        <div class="pay-option-card" data-key="rs_facebook">
+                            <h3>Création Page Facebook</h3>
+                            <p>Page professionnelle</p>
+                            <div class="pay-option-price">120€</div>
+                            <ul class="pay-option-features">
+                                <li><i class="fas fa-check"></i> Profil complet (nom, bio, liens)</li>
+                                <li><i class="fas fa-check"></i> Logo + photo de couverture</li>
+                                <li><i class="fas fa-check"></i> Description entreprise</li>
+                                <li><i class="fas fa-check"></i> Infos de contact</li>
+                                <li><i class="fas fa-check"></i> Boutons d'appel à l'action</li>
+                            </ul>
+                            <div class="pay-option-deposit">
+                                <span class="pay-deposit-label">Paiement unique</span>
+                                <span class="pay-deposit-amount">120€</span>
+                            </div>
+                        </div>
+                        <div class="pay-option-card" data-key="rs_instagram">
+                            <h3>Création Compte Instagram</h3>
+                            <p>Compte professionnel</p>
+                            <div class="pay-option-price">100€</div>
+                            <ul class="pay-option-features">
+                                <li><i class="fas fa-check"></i> Profil complet (nom, bio, liens)</li>
+                                <li><i class="fas fa-check"></i> Logo</li>
+                                <li><i class="fas fa-check"></i> Infos de contact (adresse, téléphone, email)</li>
+                            </ul>
+                            <div class="pay-option-deposit">
+                                <span class="pay-deposit-label">Paiement unique</span>
+                                <span class="pay-deposit-amount">100€</span>
+                            </div>
+                        </div>
+                        <div class="pay-option-card" data-key="rs_tiktok">
+                            <h3>Création Page TikTok</h3>
+                            <p>Page professionnelle</p>
+                            <div class="pay-option-price">150€</div>
+                            <ul class="pay-option-features">
+                                <li><i class="fas fa-check"></i> Présence optimisée</li>
+                                <li><i class="fas fa-check"></i> Paramétrage du profil</li>
+                                <li><i class="fas fa-check"></i> Stratégie de publication</li>
+                            </ul>
+                            <div class="pay-option-deposit">
+                                <span class="pay-deposit-label">Paiement unique</span>
+                                <span class="pay-deposit-amount">150€</span>
+                            </div>
+                        </div>
+                        <div class="pay-option-card" data-key="rs_ads">
+                            <div class="pay-option-badge">🎯 75 € de budget pub inclus !</div>
+                            <h3>Campagnes Publicitaires</h3>
+                            <p>Facebook & Instagram</p>
+                            <div class="pay-option-price">400€</div>
+                            <ul class="pay-option-features">
+                                <li><i class="fas fa-check"></i> 15 jours de campagne</li>
+                                <li><i class="fas fa-check"></i> Budget 75 € (5 €/jour)</li>
+                                <li><i class="fas fa-check"></i> 2 visuels + tests A/B</li>
+                                <li><i class="fas fa-check"></i> Rédaction / configuration / gestion</li>
+                                <li><i class="fas fa-check"></i> Rapports mensuels (impressions, clics, conversions)</li>
+                            </ul>
+                            <div class="pay-option-deposit">
+                                <span class="pay-deposit-label">Paiement unique</span>
+                                <span class="pay-deposit-amount">400€</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <button class="pay-back-btn" id="payBackBtn">
+                    <i class="fas fa-arrow-left"></i> Changer de service
+                </button>
+            </div>
+
+            <!-- Étape 3 : Récapitulatif + Paiement -->
+            <div class="pay-step" id="payStep3" style="display:none">
+                <div class="pay-step-header">
+                    <span class="pay-step-number">3</span>
+                    <h2 class="pay-step-title">Récapitulatif & Paiement</h2>
+                </div>
+
+                <div class="pay-checkout-card">
+                    <div class="pay-checkout-summary">
+                        <div class="pay-checkout-service">
+                            <i class="fas fa-tag" id="payCheckoutIcon"></i>
+                            <div>
+                                <h3 id="payCheckoutTitle">—</h3>
+                                <p id="payCheckoutDesc">—</p>
+                            </div>
+                        </div>
+                        <div class="pay-checkout-divider"></div>
+                        <div class="pay-checkout-row">
+                            <span>Prix total du service</span>
+                            <span class="pay-checkout-total" id="payCheckoutTotal">—</span>
+                        </div>
+                        <div class="pay-checkout-row pay-checkout-highlight">
+                            <span id="payCheckoutDepositLabel">Acompte dû maintenant</span>
+                            <span class="pay-checkout-deposit" id="payCheckoutDeposit">—</span>
+                        </div>
+                        <div class="pay-checkout-row pay-checkout-muted">
+                            <span id="payCheckoutBalanceLabel">Solde à la livraison</span>
+                            <span id="payCheckoutBalance">—</span>
+                        </div>
+                    </div>
+
+                    <a href="#" id="payCheckoutBtn" class="pay-checkout-btn" target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 60 25" width="24" height="10" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
+                            <path d="M59.64 14.28h-8.06c.19 1.93 1.6 2.55 3.2 2.55 1.64 0 2.96-.37 4.05-.95v3.32a10 10 0 0 1-4.56 1c-4.01 0-6.83-2.5-6.83-7.48 0-4.19 2.39-7.52 6.3-7.52 3.92 0 5.96 3.28 5.96 7.5 0 .4-.04 1.26-.06 1.58zm-5.92-5.62c-1.03 0-2.17.73-2.17 2.58h4.25c0-1.85-1.07-2.58-2.08-2.58zM40.95 20v-9.72c0-1.46-.49-2.46-1.96-2.46-1.54 0-2.19 1.32-2.19 2.8V20h-4.02V5.62h3.94v1.86c.64-1.14 1.96-2.1 3.78-2.1 2.69 0 4.47 1.74 4.47 5.01V20h-4.02zm-12.13 0V5.62h4.02V20h-4.02zm2.01-16.12c-1.28 0-2.07-.86-2.07-1.94 0-1.09.8-1.94 2.07-1.94s2.07.85 2.07 1.94c0 1.08-.8 1.94-2.07 1.94zM23.6 20l-4.73-6.8V20h-4.02V.1h4.02v12.24l4.47-6.72h4.74l-5.12 7.16 5.43 7.22H23.6zm-12.66 0c-2.85 0-4.34-1.47-4.34-4.38V9.04H4.5V5.62h2.1V1.87l4.02-1.18v4.93h3.23v3.42h-3.23v6.08c0 1.02.5 1.46 1.43 1.46.58 0 1.2-.15 1.8-.42V20c-.7.23-1.53.35-2.4.35z" fill="white"/>
+                        </svg>
+                        <span id="payCheckoutBtnText">Payer maintenant</span>
+                    </a>
+
+                    <div class="pay-checkout-security">
+                        <p>🔒 Paiement 100% sécurisé par Stripe · Certifié PCI-DSS · Données chiffrées SSL</p>
+                        <p>Vos données bancaires ne transitent jamais par nos serveurs.</p>
+                    </div>
+
+                    <button class="pay-back-btn" id="payBackBtn2">
+                        <i class="fas fa-arrow-left"></i> Changer de formule
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bloc Besoin d'aide -->
+            <div class="pay-help-block">
+                <div class="pay-help-icon"><i class="fas fa-headset"></i></div>
+                <div class="pay-help-text">
+                    <h3>Besoin d'un devis personnalisé ?</h3>
+                    <p>Si votre projet nécessite des options supplémentaires, utilisez notre générateur de devis pour une estimation sur mesure.</p>
+                </div>
+                <div class="pay-help-actions">
+                    <a href="devis.html" class="pay-help-btn">
+                        <i class="fas fa-file-invoice"></i> Générer un devis
+                    </a>
+                    <a href="https://wa.me/590690752430?text=Bonjour%2C%20j'ai%20une%20question%20sur%20le%20paiement" class="pay-help-btn pay-help-btn-outline" target="_blank" rel="noopener noreferrer">
+                        <i class="fab fa-whatsapp"></i> Nous contacter
+                    </a>
+                </div>
+            </div>
+
+            <!-- Réassurance -->
+            <div class="pay-reassurance">
+                <div class="pay-reassurance-item">
+                    <i class="fas fa-undo"></i>
+                    <h4>Satisfaction garantie</h4>
+                    <p>Projet non conforme ? Nous corrigeons gratuitement</p>
+                </div>
+                <div class="pay-reassurance-item">
+                    <i class="fas fa-credit-card"></i>
+                    <h4>Paiement flexible</h4>
+                    <p>Possibilité de payer en plusieurs fois sans frais</p>
+                </div>
+                <div class="pay-reassurance-item">
+                    <i class="fas fa-handshake"></i>
+                    <h4>1er RDV offert</h4>
+                    <p>Consultation gratuite avant tout engagement</p>
+                </div>
+                <div class="pay-reassurance-item">
+                    <i class="fas fa-file-contract"></i>
+                    <h4>Devis gratuit</h4>
+                    <p>Estimation transparente, sans surprise</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="footer-container"></div>
+
+    <!-- WhatsApp -->
+    <a href="https://wa.me/590690752430?text=Bonjour%2C%20je%20souhaite%20un%20devis" class="whatsapp-btn" aria-label="Nous contacter sur WhatsApp" target="_blank" rel="noopener noreferrer">
+        <i class="fab fa-whatsapp"></i>
+        <span class="whatsapp-tooltip">Nous contacter sur WhatsApp</span>
+    </a>
+
+    <script src="components-loader.js?v=20260403"></script>
+    <script src="script.js?v=20260403"></script>
+    <script src="js/checkout.js?v=20260403"></script>
+    <script src="js/supabase-client.js?v=20260403"></script>
+    <script>
+    (function () {
+        'use strict';
+
+        // ── DOM refs ──────────────────────────────────────────────────────────
+        var serviceCards  = document.querySelectorAll('.pay-service-card');
+        var optionCards   = document.querySelectorAll('.pay-option-card');
+        var step1         = document.getElementById('payStep1');
+        var step2         = document.getElementById('payStep2');
+        var step3         = document.getElementById('payStep3');
+        var backBtn       = document.getElementById('payBackBtn');
+        var backBtn2      = document.getElementById('payBackBtn2');
+        var expressMode   = document.getElementById('payExpressMode');
+        var expressModeText  = document.getElementById('payExpressModeText');
+        var expressPayBtn    = document.getElementById('payExpressPayBtn');
+        var expressModifyBtn = document.getElementById('payExpressModifyBtn');
+
+        var selectedService = null;
+        var selectedKey     = null;
+        var urlParams = new URLSearchParams(window.location.search);
+
+        // ── STEP 1 → 2 : sélectionner un service ─────────────────────────────
+        function selectService(service) {
+            var valid = ['web', 'maintenance', 'reseaux-sociaux'];
+            if (valid.indexOf(service) === -1) return;
+            selectedService = service;
+
+            // Mettre en valeur la carte du service sélectionné
+            serviceCards.forEach(function (c) {
+                c.classList.toggle('selected', c.dataset.service === service);
+            });
+
+            // Masquer tous les panneaux de formules, afficher le bon
+            document.querySelectorAll('.pay-options-panel').forEach(function (p) {
+                p.style.display = 'none';
+            });
+            var panel = document.getElementById('pay-options-' + service);
+            if (panel) panel.style.display = 'block';
+
+            step1.style.display = 'none';
+            step2.style.display = 'block';
+            step2.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // ── PREFILL depuis devis.html (?service=&formula=&amount=&description=) ─
+        function prefillFromDevis(amount, description, formula) {
+            if (!formula || !selectedService) return;
+
+            var keyMap = {
+                web:               { express: 'web_express', vitrine: 'web_vitrine', ecommerce: 'web_ecommerce', app: 'web_app', appweb: 'web_app' },
+                maintenance:       { mensuel: 'maintenance_site_mensuel', annuel: 'maintenance_site_annuel', site_mensuel: 'maintenance_site_mensuel', site_annuel: 'maintenance_site_annuel' },
+                'reseaux-sociaux': { basic: 'rs_basic', plus: 'rs_plus', facebook: 'rs_facebook', instagram: 'rs_instagram', tiktok: 'rs_tiktok', ads: 'rs_ads', audit: 'rs_audit', mensuel: 'rs_mensuel', annuel: 'rs_annuel' }
+            };
+            var serviceMap = (keyMap[selectedService] || {});
+            var key = serviceMap[formula.toLowerCase()] || null;
+            if (!key) return;
+
+            selectedKey = key;
+            // Sélectionner visuellement la carte
+            optionCards.forEach(function (c) { c.classList.remove('selected'); });
+            var target = document.querySelector('.pay-option-card[data-key="' + key + '"]');
+            if (target) target.classList.add('selected');
+
+            showCheckout(selectedService, key, amount ? parseInt(amount) : null);
+        }
+
+        // ── Initialisation depuis les paramètres URL ──────────────────────────
+        function initFromURL() {
+            var paramService     = urlParams.get('service');
+            var paramTotal       = urlParams.get('total');
+            var paramAcompte     = urlParams.get('acompte');
+            var paramAmount      = urlParams.get('amount');
+            var paramDescription = urlParams.get('description');
+            var paramFormula     = urlParams.get('formula');
+
+            var paramMode        = urlParams.get('mode');
+
+            // Cas A : mode express (devis quick-link avec total + acompte)
+            if (paramService && paramTotal && paramAcompte) {
+                var valid = ['web', 'maintenance', 'reseaux-sociaux'];
+                if (valid.indexOf(paramService) === -1) return;
+
+                selectedService = paramService;
+                var totalNum   = parseInt(paramTotal);
+                var acompteNum = parseInt(paramAcompte);
+                var serviceNames = { web: 'Site Web', maintenance: 'Maintenance', 'reseaux-sociaux': 'Gestion Réseaux Sociaux' };
+
+                expressModeText.innerHTML = 'Vous avez un devis de <strong>' + acompteNum + '€</strong>'
+                    + ' d\'acompte pour <strong>' + serviceNames[paramService] + '</strong>'
+                    + ' — Continuez vers le paiement sécurisé.';
+                expressMode.style.display = 'block';
+                step1.style.display = 'none';
+                step2.style.display = 'none';
+                step3.style.display = 'none';
+
+                expressPayBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    showExpressCheckout(paramService, totalNum, acompteNum, paramMode, paramDescription);
+                });
+                expressModifyBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    expressMode.style.display = 'none';
+                    step1.style.display = 'block';
+                    step1.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+                return;
+            }
+
+            // Cas B : ?service= seul ou avec formula/total/amount/description (depuis index ou devis)
+            if (paramService) {
+                selectService(paramService);
+                if (paramFormula) {
+                    prefillFromDevis(paramAmount || paramTotal || '0', paramDescription || '', paramFormula);
+                }
+            }
+        }
+
+        // ── Clic sur une carte Service (étape 1 → 2) ─────────────────────────
+        serviceCards.forEach(function (card) {
+            card.addEventListener('click', function () {
+                selectService(card.dataset.service);
+            });
+        });
+
+        // ── Clic sur une carte Formule (étape 2 → 3) ─────────────────────────
+        optionCards.forEach(function (card) {
+            card.addEventListener('click', function () {
+                // Ignorer si le panneau parent est masqué (= mauvais service)
+                var panel = card.closest('.pay-options-panel');
+                if (panel && panel.style.display === 'none') return;
+
+                optionCards.forEach(function (c) { c.classList.remove('selected'); });
+                card.classList.add('selected');
+
+                selectedKey = card.dataset.key;
+                showCheckout(selectedService, selectedKey, null);
+            });
+        });
+
+        // ── Boutons retour ────────────────────────────────────────────────────
+        if (backBtn) {
+            backBtn.addEventListener('click', function () {
+                step2.style.display = 'none';
+                step1.style.display = 'block';
+                step1.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        }
+        if (backBtn2) {
+            backBtn2.addEventListener('click', function () {
+                step3.style.display = 'none';
+                step2.style.display = 'block';
+                step2.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        }
+
+        // ── Afficher l'étape 3 (récapitulatif) ───────────────────────────────
+        function showCheckout(service, key, customAmount) {
+            var config = getOptionConfig(key);
+            if (!config) {
+                console.error('[Checkout] option inconnue', key);
+                alert('Erreur interne : formule inconnue. Merci de recharger la page.');
+                return;
+            }
+
+            document.getElementById('payCheckoutIcon').className = 'fas fa-' + config.icon;
+            document.getElementById('payCheckoutTitle').textContent  = config.title;
+            var descText = config.desc || '';
+            if (config.recurring) descText += ' (' + config.recurring + ' à partir du 2e mois)';
+            document.getElementById('payCheckoutDesc').textContent   = descText;
+            
+                // Afficher le prix correct : si customAmount (depuis devis), l'utiliser ; sinon config.total
+            document.getElementById('payCheckoutTotal').textContent  = customAmount ? customAmount + '€' : config.total;
+
+            // Ajouter la sélection type maintenance (via query string)
+            if (service === 'maintenance') {
+                var urlFormula = new URLSearchParams(window.location.search).get('formula') || '';
+                if (urlFormula) {
+                    document.getElementById('payCheckoutDesc').textContent += ' — ' + urlFormula.replace(/_/g, ' ');
+                }
+            }
+
+            // Remplacer le bouton pour éviter les doubles listeners
+            var oldBtn = document.getElementById('payCheckoutBtn');
+            var newBtn = oldBtn.cloneNode(true);
+            oldBtn.parentNode.replaceChild(newBtn, oldBtn);
+
+            // Montant et mode à passer à startCheckout
+            var checkoutAmount, checkoutMode, checkoutDesc;
+
+            if (config.isQuote) {
+                document.getElementById('payCheckoutDepositLabel').textContent = 'Tarif';
+                document.getElementById('payCheckoutDeposit').textContent      = 'Sur devis - à définir en rendez-vous';
+                document.getElementById('payCheckoutBalanceLabel').textContent = '';
+                document.getElementById('payCheckoutBalance').textContent      = '';
+                document.getElementById('payCheckoutBtnText').textContent      = 'Nous contacter sur WhatsApp';
+
+                var waHref = 'https://wa.me/590690752430?text=Bonjour%2C%20je%20souhaite%20un%20devis%20pour%20une%20page%20TikTok';
+                newBtn.href = waHref;
+                newBtn.setAttribute('target', '_blank');
+                newBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    window.open(waHref, '_blank');
+                });
+
+                step2.style.display = 'none';
+                step3.style.display = 'block';
+                step3.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                return;
+            }
+
+            if (config.isSubscription) {
+                var amount = Number(config.depositRaw);
+                if (isNaN(amount) || amount <= 0) {
+                    console.error('[Checkout] montant d abonnement invalide', config);
+                    alert('Montant de l abonnement non valide. Contactez le support.');
+                    return;
+                }
+                checkoutAmount = amount;
+                checkoutMode   = 'subscription';
+                checkoutDesc   = config.title + ' — Abonnement CxrilWebs';
+
+                document.getElementById('payCheckoutDepositLabel').textContent = 'Montant de l\'abonnement';
+                document.getElementById('payCheckoutDeposit').textContent      = config.deposit;
+                document.getElementById('payCheckoutBalanceLabel').textContent = 'Renouvellement automatique';
+                document.getElementById('payCheckoutBalance').textContent      = 'Sans engagement';
+                document.getElementById('payCheckoutBtnText').textContent      = 'S\'abonner maintenant — ' + config.deposit;
+            } else {
+                var pricingKey = key; // ex. web_vitrine
+                var pricingService = service === 'reseaux-sociaux' ? 'social' : service;
+                var pricingFormula = key.replace(pricingService + '_', '').replace('rs_', '');
+                var pricingCfg = (PRICING_CONFIG[pricingService] || {})[pricingFormula] || {};
+                var rate       = typeof config.acompteRate === 'number' ? config.acompteRate
+                               : (typeof pricingCfg.acompte === 'number' ? pricingCfg.acompte : 0.30);
+                var pct        = Math.round(rate * 100);
+                
+                // Si customAmount est fourni (depuis devis.html), c'est le TOTAL du devis personnalisé
+                // On calcule l'acompte comme 30% du total
+                if (customAmount) {
+                    var totalCustom = Number(customAmount);
+                    if (isNaN(totalCustom) || totalCustom < 10) {
+                        console.error('[Checkout] montant invalide', totalCustom);
+                        alert('Montant invalide pour le paiement. Merci de contacter le support.');
+                        return;
+                    }
+                    var amount = Math.round(totalCustom * rate); // Acompte = 30% du total
+                    var bal    = Math.round(totalCustom * (1 - rate)); // Solde = 70% du total
+                } else {
+                    var amount = Number(config.depositRaw);
+                    var bal    = Number(config.balanceRaw);
+                }
+                
+                if (isNaN(amount) || amount < 0.5) {
+                    console.error('[Checkout] montant de paiement invalide', amount, config);
+                    alert('Montant invalide pour le paiement. Merci de contacter le support.');
+                    return;
+                }
+                checkoutAmount = amount;
+                checkoutMode   = 'payment';
+                checkoutDesc   = config.title + (pct >= 100 ? ' — CxrilWebs' : ' — Acompte CxrilWebs');
+
+                if (pct >= 100) {
+                    document.getElementById('payCheckoutDepositLabel').textContent = 'Montant total dû maintenant';
+                    document.getElementById('payCheckoutDeposit').textContent      = amount + '€';
+                    document.getElementById('payCheckoutBalanceLabel').textContent = 'Paiement unique';
+                    document.getElementById('payCheckoutBalance').textContent      = '—';
+                    document.getElementById('payCheckoutBtnText').textContent      = 'Payer ' + amount + '€';
+                } else {
+                    document.getElementById('payCheckoutDepositLabel').textContent = 'Acompte ' + pct + '% dû maintenant';
+                    document.getElementById('payCheckoutDeposit').textContent      = amount + '€';
+                    document.getElementById('payCheckoutBalanceLabel').textContent = 'Solde ' + (100 - pct) + '% à la livraison';
+                    document.getElementById('payCheckoutBalance').textContent      = (isNaN(bal) ? '—' : bal + '€');
+                    document.getElementById('payCheckoutBtnText').textContent      = 'Payer l\'acompte de ' + amount + '€';
+                }
+            }
+
+            newBtn.href = '#';
+            newBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                startCheckout({ amount: checkoutAmount, description: checkoutDesc, mode: checkoutMode });
+            });
+
+            step2.style.display = 'none';
+            step3.style.display = 'block';
+            step3.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // ── Mode express : récapitulatif depuis devis quick-link ──────────────
+        function showExpressCheckout(service, total, acompte, mode, description) {
+            var serviceNames = { web: 'Site Web', maintenance: 'Maintenance', 'reseaux-sociaux': 'Gestion Réseaux Sociaux' };
+            var balance      = total - acompte;
+            var checkoutMode = mode || (service === 'maintenance' ? 'subscription' : 'payment');
+            var checkoutDesc = (description ? decodeURIComponent(description) : serviceNames[service]) + ' — Acompte CxrilWebs';
+
+            document.getElementById('payCheckoutIcon').className     = 'fas fa-tag';
+            document.getElementById('payCheckoutTitle').textContent  = description ? decodeURIComponent(description) : (serviceNames[service] + ' — Devis personnalisé');
+            document.getElementById('payCheckoutDesc').textContent   = 'Acompte à verser pour démarrer votre projet';
+            document.getElementById('payCheckoutTotal').textContent  = total + '€';
+
+            var oldBtn = document.getElementById('payCheckoutBtn');
+            var newBtn = oldBtn.cloneNode(true);
+            oldBtn.parentNode.replaceChild(newBtn, oldBtn);
+
+            if (checkoutMode === 'subscription') {
+                document.getElementById('payCheckoutDepositLabel').textContent = 'Montant de l\'abonnement';
+                document.getElementById('payCheckoutDeposit').textContent      = acompte + '€';
+                document.getElementById('payCheckoutBalanceLabel').textContent = 'Renouvellement';
+                document.getElementById('payCheckoutBalance').textContent      = 'Automatique';
+                document.getElementById('payCheckoutBtnText').textContent      = 'S\'abonner — ' + acompte + '€';
+            } else {
+                var pct = total > 0 ? Math.round((acompte / total) * 100) : 30;
+                document.getElementById('payCheckoutDepositLabel').textContent = 'Acompte ' + pct + '% dû maintenant';
+                document.getElementById('payCheckoutDeposit').textContent      = acompte + '€';
+                document.getElementById('payCheckoutBalanceLabel').textContent = 'Solde ' + (100 - pct) + '% à la livraison';
+                var totalBalance = Number(balance);
+                if (isNaN(totalBalance) || totalBalance <= 0) {
+                    document.getElementById('payCheckoutBalance').textContent = '—';
+                } else {
+                    document.getElementById('payCheckoutBalance').textContent = totalBalance + '€';
+                }
+                document.getElementById('payCheckoutBtnText').textContent      = 'Payer l\'acompte — ' + acompte + '€';
+            }
+
+            newBtn.href = '#';
+            newBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                startCheckout({ amount: acompte, description: checkoutDesc, mode: checkoutMode });
+            });
+
+            expressMode.style.display = 'none';
+            step3.style.display = 'block';
+            step3.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // ── Données des formules ──────────────────────────────────────────────
+        function getOptionConfig(key) {
+            var opts = {                web_express:         { icon: 'laptop-code', title: 'Site Express',       desc: 'Site one-page express livré sous 7 jours',    total: '290€',      totalRaw: 290,  deposit: '87€',       depositRaw: 87,   balance: '203€', balanceRaw: 203 },                web_vitrine:         { icon: 'laptop-code', title: 'Site Vitrine',       desc: 'Création de site vitrine jusqu\'à 5 pages',    total: '890€',      totalRaw: 890,  deposit: '267€',      depositRaw: 267,  balance: '623€', balanceRaw: 623 },
+                web_ecommerce:       { icon: 'laptop-code', title: 'Site E-commerce',    desc: 'Site e-commerce complet avec design premium',   total: '1 690€',    totalRaw: 1690, deposit: '507€',      depositRaw: 507,  balance: '1 183€', balanceRaw: 1183 },
+                web_app:             { icon: 'laptop-code', title: 'Projet web sur mesure', desc: 'Projet web sur mesure — Sur devis',           total: 'Sur devis', totalRaw: 0, deposit: 'Sur devis',  depositRaw: 0,  balance: '—', onDemand: true },
+                maintenance_site_mensuel: { icon: 'globe',   title: 'Maintenance Site Web — Mensuel',   desc: 'Contrat mensuel de maintenance de site web',                  total: '150€/mois',  totalRaw: 150,  deposit: '150€/mois',  depositRaw: 150,  balance: '—', isSubscription: true  },
+                maintenance_site_annuel:  { icon: 'globe',   title: 'Maintenance Site Web — Annuel',    desc: 'Contrat annuel de maintenance de site web (2 mois offerts)',  total: '1 490€/an', totalRaw: 1490, deposit: '1 490€/an', depositRaw: 1490, balance: '—', balanceRaw: 0, acompteRate: 1.0, isSubscription: false },
+                rs_basic:            { icon: 'share-alt',   title: 'Forfait Basic',       desc: '4 publications/mois — Abonnement',             total: '160€',      totalRaw: 160,  deposit: '160€',      depositRaw: 160,  balance: '—', isSubscription: true, recurring: '200€/mois' },
+                rs_plus:             { icon: 'share-alt',   title: 'Forfait Plus',        desc: '8 publications/mois — Abonnement',             total: '320€',      totalRaw: 320,  deposit: '320€',      depositRaw: 320,  balance: '—', isSubscription: true, recurring: '400€/mois' },
+                rs_facebook:         { icon: 'share-alt',   title: 'Création Facebook',   desc: 'Page Facebook professionnelle',                 total: '120€',      totalRaw: 120,  deposit: '120€',      depositRaw: 120,  balance: '—' },
+                rs_instagram:        { icon: 'share-alt',   title: 'Création Instagram',  desc: 'Compte Instagram professionnel',                total: '100€',      totalRaw: 100,  deposit: '100€',      depositRaw: 100,  balance: '—' },
+                rs_tiktok:           { icon: 'share-alt',   title: 'Création TikTok',    desc: 'Page TikTok professionnelle',                   total: '150€',      totalRaw: 150, deposit: '150€',      depositRaw: 150, balance: '—' },
+                rs_mensuel:          { icon: 'share-alt',   title: 'Gestion Réseaux Sos. Mensuelle', desc: 'Abonnement mensuel (Basic/Plus)',            total: '160€',      totalRaw: 160,  deposit: '160€',      depositRaw: 160,  balance: '—', isSubscription: true, recurring: '200€/mois' },
+                rs_annuel:           { icon: 'share-alt',   title: 'Gestion Réseaux Sos. Annuelle',  desc: 'Abonnement annuel',                          total: '1920€',     totalRaw: 1920, deposit: '1920€',     depositRaw: 1920, balance: '—', isSubscription: true, recurring: '2400€/an' },
+                rs_ads:              { icon: 'share-alt',   title: 'Campagnes Pub',      desc: 'Campagnes Facebook & Instagram',                total: '400€',      totalRaw: 400,  deposit: '400€',      depositRaw: 400,  balance: '—' },
+                rs_audit:            { icon: 'share-alt',   title: 'Audit Social Media', desc: 'Audit complet de vos réseaux sociaux',          total: '299€',      totalRaw: 299,  deposit: '299€',      depositRaw: 299,  balance: '—' }
+            };
+            return opts[key] || null;
+        }
+
+        // ── Lancer l'initialisation ───────────────────────────────────────────
+        initFromURL();
+    })();
+    </script>
+</body>
+</html>

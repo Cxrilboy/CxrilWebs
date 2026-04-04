@@ -1,0 +1,25 @@
+# Dépendances
+node_modules/
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Variables d'environnement
+.env
+.env.local
+.env.production
+
+# Fichiers temporaires et inutiles
+*.jpeg
+*.jpg
+*.png
+*.gif
+SUPABASE_SETUP.md
+prompt-*.md
+database/
+.vscode/
+*.log
+.cache/
+.next/
+dist/

@@ -1,0 +1,12 @@
+{
+  "name": "cxrilwebs",
+  "version": "1.0.0",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.101.1",
+    "sharp": "^0.34.5",
+    "stripe": "^20.4.1"
+  },
+  "devDependencies": {
+    "dotenv": "^17.3.1"
+  }
+}
