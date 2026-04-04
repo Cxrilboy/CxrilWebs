@@ -56,9 +56,10 @@ function reinitFontAwesome() {
 // Fonction pour charger un composant HTML (avec fallback pour file://)
 async function loadComponent(elementId, filePath) {
     try {
+        console.log(`📦 [LOADCOMPONENT] Chargement ${elementId} de ${filePath}...`);
         const container = document.getElementById(elementId);
         if (!container) {
-            console.warn(`Conteneur ${elementId} introuvable`);
+            console.warn(`⚠️ Conteneur ${elementId} introuvable`);
             return;
         }
 
@@ -77,13 +78,24 @@ async function loadComponent(elementId, filePath) {
             html = await response.text();
         } catch (fetchError) {
             // Fallback: utiliser XMLHttpRequest si fetch() échoue (par exemple avec file://)
-            console.warn(`Fetch() a échoué pour ${filePath}, utilisation de XMLHttpRequest:`, fetchError.message);
+            console.warn(`⚠️ Fetch() a échoué pour ${filePath}, utilisation de XMLHttpRequest:`, fetchError.message);
             html = await loadComponentWithXHR(filePath);
         }
         
         if (html && html.trim() !== '') {
             container.innerHTML = html;
-            console.log(`✓ Composant ${elementId} chargé avec succès depuis ${filePath}`);
+            console.log(`✅ Composant ${elementId} chargé avec succès depuis ${filePath}`);
+            console.log(`   - Taille du contenu: ${html.length} caractères`);
+            
+            // Vérifier que les éléments markdown sont présents
+            if (elementId === 'header-container') {
+                const mobileSidebar = document.getElementById('mobileSidebar');
+                console.log(`   - mobileSidebar présent dans le DOM:`, !!mobileSidebar);
+                if (mobileSidebar) {
+                    console.log(`   - mobileSidebar classes:`, mobileSidebar.className);
+                    console.log(`   - mobileSidebar style.display:`, window.getComputedStyle(mobileSidebar).display);
+                }
+            }
             
             // Réinitialiser Font Awesome APRÈS insertion du contenu
             const faInitialized = reinitFontAwesome();
@@ -96,7 +108,7 @@ async function loadComponent(elementId, filePath) {
                 detail: { elementId, filePath } 
             }));
         } else {
-            console.error(`Le fichier ${filePath} est vide`);
+            console.error(`❌ Le fichier ${filePath} est vide`);
         }
     } catch (error) {
         console.error(`Impossible de charger le composant ${filePath}:`, error);
@@ -190,8 +202,10 @@ async function loadComponents() {
     // Réinitialiser le menu mobile après chargement des composants (sidebar est maintenant dans le DOM)
     setTimeout(() => {
         if (typeof initMobileMenu === 'function') {
-            console.log('Réinitialisation du menu mobile après chargement des composants...');
+            console.log('🔄 [COMPONENTS-LOADER] Réinitialisation du menu mobile après chargement des composants...');
             initMobileMenu();
+        } else {
+            console.error('❌ [COMPONENTS-LOADER] Fonction initMobileMenu non trouvée!');
         }
     }, 150);
     

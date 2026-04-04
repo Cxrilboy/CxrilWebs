@@ -493,55 +493,109 @@ function initNavigation() {
 
 // ========== MENU MOBILE ==========
 function initMobileMenu() {
-    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-    const sidebar = document.getElementById('mobileSidebar');
-    const sidebarOverlay = document.getElementById('sidebarOverlay');
-    const sidebarClose = document.getElementById('sidebarClose');
-    const sidebarLinks = document.querySelectorAll('.sidebar-link');
-    const body = document.body;
+    console.group('🔍 [MOBILE MENU] Initialisation');
     
-    if (!mobileMenuToggle || !sidebar || !sidebarOverlay) return;
+    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+    console.log('✓ mobileMenuToggle trouvé:', !!mobileMenuToggle, mobileMenuToggle);
+    
+    const sidebar = document.getElementById('mobileSidebar');
+    console.log('✓ sidebar (mobileSidebar) trouvé:', !!sidebar, sidebar);
+    
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    console.log('✓ sidebarOverlay trouvé:', !!sidebarOverlay, sidebarOverlay);
+    
+    const sidebarClose = document.getElementById('sidebarClose');
+    console.log('✓ sidebarClose trouvé:', !!sidebarClose, sidebarClose);
+    
+    const sidebarLinks = document.querySelectorAll('.sidebar-link');
+    console.log('✓ sidebarLinks trouvés:', sidebarLinks.length, sidebarLinks);
+    
+    const body = document.body;
+    console.log('✓ body trouvé:', !!body);
+    
+    if (!mobileMenuToggle || !sidebar || !sidebarOverlay) {
+        console.error('❌ ERREUR: Éléments manquants pour initialiser le menu mobile');
+        console.error('  - mobileMenuToggle:', !!mobileMenuToggle);
+        console.error('  - sidebar:', !!sidebar);
+        console.error('  - sidebarOverlay:', !!sidebarOverlay);
+        console.groupEnd();
+        return;
+    }
+    
+    console.log('✓ Tous les éléments requis sont présents, initialisation en cours...');
     
     function openSidebar() {
+        console.log('📂 [SIDEBAR] Ouverture...');
         sidebar.classList.add('is-open');
         sidebar.style.display = 'flex';
         body.style.overflow = 'hidden';
         const icon = mobileMenuToggle.querySelector('i');
-        if (icon) { icon.classList.remove('fa-bars'); icon.classList.add('fa-times'); }
+        if (icon) { 
+            icon.classList.remove('fa-bars'); 
+            icon.classList.add('fa-times');
+            console.log('✓ Icône changée de fa-bars à fa-times');
+        }
+        console.log('✓ Sidebar ouverte, classes:', sidebar.className);
     }
     
     function closeSidebar() {
+        console.log('📁 [SIDEBAR] Fermeture...');
         sidebar.classList.remove('is-open');
         sidebar.style.display = 'none';
         body.style.overflow = '';
         const icon = mobileMenuToggle.querySelector('i');
-        if (icon) { icon.classList.add('fa-bars'); icon.classList.remove('fa-times'); }
+        if (icon) { 
+            icon.classList.add('fa-bars'); 
+            icon.classList.remove('fa-times');
+            console.log('✓ Icône changée de fa-times à fa-bars');
+        }
+        console.log('✓ Sidebar fermée, classes:', sidebar.className);
     }
     
+    // Event listener pour le bouton hamburger
     mobileMenuToggle.addEventListener('click', function() {
+        console.log('👆 [CLICK] Hamburger cliqué, état actuel:', sidebar.classList.contains('is-open'));
         if (sidebar.classList.contains('is-open')) {
             closeSidebar();
         } else {
             openSidebar();
         }
     });
+    console.log('✓ Event listener ajouté au mobileMenuToggle');
     
     if (sidebarClose) {
-        sidebarClose.addEventListener('click', closeSidebar);
+        sidebarClose.addEventListener('click', function() {
+            console.log('👆 [CLICK] Bouton close cliqué');
+            closeSidebar();
+        });
+        console.log('✓ Event listener ajouté au sidebarClose');
     }
     
-    sidebarLinks.forEach(link => {
-        link.addEventListener('click', closeSidebar);
+    sidebarLinks.forEach((link, index) => {
+        link.addEventListener('click', function() {
+            console.log('👆 [CLICK] Lien sidebar cliqué:', link.href);
+            closeSidebar();
+        });
     });
+    console.log('✓ Event listeners ajoutés aux', sidebarLinks.length, 'liens sidebar');
 
-    sidebarOverlay.addEventListener('click', closeSidebar);
+    sidebarOverlay.addEventListener('click', function() {
+        console.log('👆 [CLICK] Overlay cliqué');
+        closeSidebar();
+    });
+    console.log('✓ Event listener ajouté au sidebarOverlay');
 
     // Fermer la sidebar avec la touche ESC
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' || e.key === 'Esc') {
+            console.log('⌨️ [KEY] Échap appuyé');
             if (sidebar.classList.contains('is-open')) closeSidebar();
         }
     });
+    console.log('✓ Event listener ajouté pour la touche Échap');
+    
+    console.log('✅ Menu mobile initialisé avec succès');
+    console.groupEnd();
 }
 
 // ========== ANIMATIONS HÉRO ==========
