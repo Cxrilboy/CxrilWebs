@@ -187,6 +187,14 @@ async function loadComponents() {
         reinitFontAwesome();
     }, 100);
     
+    // Réinitialiser le menu mobile après chargement des composants (sidebar est maintenant dans le DOM)
+    setTimeout(() => {
+        if (typeof initMobileMenu === 'function') {
+            console.log('Réinitialisation du menu mobile après chargement des composants...');
+            initMobileMenu();
+        }
+    }, 150);
+    
     console.log('Chargement des composants terminé');
 }
 
