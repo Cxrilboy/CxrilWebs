@@ -601,7 +601,7 @@
                 card.classList.add('selected');
 
                 selectedKey = card.dataset.key;
-                showCheckout(selectedService, selectedKey, null);
+                showCheckout(selectedService, selectedKey, null, true);
             });
         });
 
@@ -622,7 +622,7 @@
         }
 
         // ── Afficher l'étape 3 (récapitulatif) ───────────────────────────────
-        function showCheckout(service, key, customAmount) {
+        function showCheckout(service, key, customAmount, autoRedirect) {
             var config = getOptionConfig(key);
             if (!config) {
                 console.error('[Checkout] option inconnue', key);
@@ -750,6 +750,10 @@
             step2.style.display = 'none';
             step3.style.display = 'block';
             step3.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            if (autoRedirect && !config.isQuote) {
+                startCheckout({ amount: checkoutAmount, description: checkoutDesc, mode: checkoutMode });
+            }
         }
 
         // ── Mode express : récapitulatif depuis devis quick-link ──────────────
