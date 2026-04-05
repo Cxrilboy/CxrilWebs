@@ -615,13 +615,17 @@
 .pay-reassurance-item svg circle,
 .pay-reassurance-item svg rect,
 .pay-reassurance-item i::before {
-    font-size: 2rem;
+    font-size: 1.75rem;
+    width: 48px;
+    height: 48px;
     color: #635BFF !important;
     fill: #635BFF !important;
     stroke: #635BFF !important;
     opacity: 1 !important;
-    margin-bottom: .75rem;
-    display: block;
+    margin: 0 auto 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 .pay-reassurance-item h4 {
     font-size: .9rem;
