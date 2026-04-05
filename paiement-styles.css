@@ -606,14 +606,20 @@
     border: 1px solid rgba(43, 92, 184, .06);
 }
 .pay-reassurance-item i,
-.pay-reassurance-item i.fas,
-.pay-reassurance-item i.fas svg,
-.pay-reassurance-item i.fas svg *,
+.pay-reassurance-item svg,
+.pay-reassurance-item svg *,
+.pay-reassurance-item svg path,
+.pay-reassurance-item svg polygon,
+.pay-reassurance-item svg polyline,
+.pay-reassurance-item svg line,
+.pay-reassurance-item svg circle,
+.pay-reassurance-item svg rect,
 .pay-reassurance-item i::before {
     font-size: 2rem;
     color: #635BFF !important;
     fill: #635BFF !important;
     stroke: #635BFF !important;
+    opacity: 1 !important;
     margin-bottom: .75rem;
     display: block;
 }
