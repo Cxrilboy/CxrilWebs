@@ -605,9 +605,11 @@
     background: var(--card-bg);
     border: 1px solid rgba(43, 92, 184, .06);
 }
-.pay-reassurance-item i {
+.pay-reassurance-item i,
+.pay-reassurance-item i::before {
     font-size: 2rem;
-    color: #635BFF;
+    color: #635BFF !important;
+    fill: #635BFF !important;
     margin-bottom: .75rem;
     display: block;
 }
@@ -615,12 +617,10 @@
     font-size: .9rem;
     font-weight: 700;
     font-family: var(--font-heading);
-    color: #635BFF;
     margin-bottom: .35rem;
 }
 .pay-reassurance-item p {
     font-size: .78rem;
-    color: #635BFF;
     line-height: 1.5;
 }
 
