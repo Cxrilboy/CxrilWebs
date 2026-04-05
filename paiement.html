@@ -601,7 +601,7 @@
                 card.classList.add('selected');
 
                 selectedKey = card.dataset.key;
-                showCheckout(selectedService, selectedKey, null, true);
+                showCheckout(selectedService, selectedKey, null);
             });
         });
 
@@ -622,7 +622,7 @@
         }
 
         // ── Afficher l'étape 3 (récapitulatif) ───────────────────────────────
-        function showCheckout(service, key, customAmount, autoRedirect) {
+        function showCheckout(service, key, customAmount) {
             var config = getOptionConfig(key);
             if (!config) {
                 console.error('[Checkout] option inconnue', key);
@@ -663,16 +663,7 @@
                 document.getElementById('payCheckoutBtnText').textContent      = 'Nous contacter sur WhatsApp';
 
                 var waHref = 'https://wa.me/590690752430?text=Bonjour%2C%20je%20souhaite%20un%20devis%20pour%20une%20page%20TikTok';
-                newBtn.href = waHref;
-                newBtn.setAttribute('target', '_blank');
-                newBtn.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    window.open(waHref, '_blank');
-                });
-
-                step2.style.display = 'none';
-                step3.style.display = 'block';
-                step3.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                window.open(waHref, '_blank');
                 return;
             }
 
@@ -741,19 +732,7 @@
                 }
             }
 
-            newBtn.href = '#';
-            newBtn.addEventListener('click', function (e) {
-                e.preventDefault();
-                startCheckout({ amount: checkoutAmount, description: checkoutDesc, mode: checkoutMode });
-            });
-
-            step2.style.display = 'none';
-            step3.style.display = 'block';
-            step3.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-            if (autoRedirect && !config.isQuote) {
-                startCheckout({ amount: checkoutAmount, description: checkoutDesc, mode: checkoutMode });
-            }
+            startCheckout({ amount: checkoutAmount, description: checkoutDesc, mode: checkoutMode });
         }
 
         // ── Mode express : récapitulatif depuis devis quick-link ──────────────
