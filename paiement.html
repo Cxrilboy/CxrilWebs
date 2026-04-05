@@ -584,10 +584,18 @@
 
         // ── Clic sur une carte Formule (étape 2 → 3) ─────────────────────────
         optionCards.forEach(function (card) {
-            card.addEventListener('click', function () {
+            card.addEventListener('click', function (e) {
                 // Ignorer si le panneau parent est masqué (= mauvais service)
                 var panel = card.closest('.pay-options-panel');
                 if (panel && panel.style.display === 'none') return;
+
+                // Ignorer les cartes désactivées (laisser le lien <a> gérer la navigation)
+                if (card.classList.contains('pay-option-disabled')) {
+                    return;
+                }
+
+                // Empêcher la propagation si on clique sur un lien interne
+                if (e.target.closest('a')) return;
 
                 optionCards.forEach(function (c) { c.classList.remove('selected'); });
                 card.classList.add('selected');

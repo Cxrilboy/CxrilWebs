@@ -229,6 +229,14 @@
     transform: translateY(-6px);
     box-shadow: 0 12px 32px rgba(99, 91, 255, .12);
 }
+.pay-option-card.selected {
+    border-color: #635BFF;
+    background: rgba(99, 91, 255, .06);
+    box-shadow: 0 12px 32px rgba(99, 91, 255, .15);
+}
+.pay-option-card.selected h3 {
+    color: #635BFF;
+}
 
 .pay-option-featured {
     border-color: var(--color-orange);
@@ -607,12 +615,12 @@
     font-size: .9rem;
     font-weight: 700;
     font-family: var(--font-heading);
-    color: var(--text-primary);
+    color: #635BFF;
     margin-bottom: .35rem;
 }
 .pay-reassurance-item p {
     font-size: .78rem;
-    color: var(--text-muted);
+    color: #635BFF;
     line-height: 1.5;
 }
 
