@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Générateur de devis automatique CxrilWebs - Obtenez une estimation instantanée pour vos projets IT : site web, gestion de vos réseaux, maintenance.">
+    <!-- Supabase : remplace VOTRE_CLE_ANON par la clé anon publique de ton projet Supabase -->
+    <meta name="supabase-url" content="https://vowwywqggybvsbhpdkxs.supabase.co">
+    <meta name="supabase-key" content="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZvd3d5d3FnZ3lidnNiaHBka3hzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwODczMjMsImV4cCI6MjA5MDY2MzMyM30.i45GxR0-vl0tnKLugpoy6xhfhCqioaD2VBUgP7OMNPY">
+    <meta property="og:title" content="Générateur de Devis - CxrilWebs">
+    <meta property="og:description" content="Obtenez une estimation instantanée pour vos projets IT en Guadeloupe : site web, gestion de vos réseaux, maintenance.">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="fr_FR">
+    <title>Générateur de Devis - CxrilWebs</title>
+    <link rel="icon" type="image/png" href="logo/logoCW-no-bg.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css?v=20260403">
+    <link rel="stylesheet" href="devis-styles.css?v=20260403">
+    <script src="js/pricing.js?v=20260403"></script>
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+</head>
+<body>
+    <!-- Dark Mode Toggle -->
+    <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Basculer le mode sombre">
+        <i class="fas fa-moon"></i>
+        <i class="fas fa-sun"></i>
+    </button>
+
+    <div id="header-container"></div>
+
+    <!-- Hero Devis -->
+    <section class="devis-hero">
+        <div class="container">
+            <div class="devis-breadcrumb">
+                <a href="index.html">Accueil</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Générateur de devis</span>
+            </div>
+            <h1 class="devis-hero-title">
+                <i class="fas fa-file-invoice"></i>
+                Générateur de devis
+            </h1>
+            <p class="devis-hero-subtitle">Obtenez une estimation personnalisée en quelques clics</p>
+        </div>
+    </section>
+
+    <!-- Générateur de Devis -->
+    <section class="devis-section">
+        <div class="devis-layout">
+            <!-- Formulaire multi-étapes -->
+            <div class="devis-form-wrapper">
+                <!-- Barre de progression -->
+                <div class="devis-progress">
+                    <div class="progress-steps">
+                        <div class="progress-step active" data-step="1">
+                            <div class="step-circle">1</div>
+                            <span class="step-label">Service</span>
+                        </div>
+                        <div class="progress-line"></div>
+                        <div class="progress-step" data-step="2">
+                            <div class="step-circle">2</div>
+                            <span class="step-label">Options</span>
+                        </div>
+                        <div class="progress-line"></div>
+                        <div class="progress-step" data-step="3">
+                            <div class="step-circle">3</div>
+                            <span class="step-label">Coordonnées</span>
+                        </div>
+                        <div class="progress-line"></div>
+                        <div class="progress-step" data-step="4">
+                            <div class="step-circle">4</div>
+                            <span class="step-label">Récapitulatif</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar-track">
+                        <div class="progress-bar-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <form class="devis-form" id="devisForm" novalidate>
+
+                    <!-- ÉTAPE 1 : Choix du service -->
+                    <div class="devis-step active" id="step1">
+                        <h2 class="step-title">Quel service souhaitez-vous ?</h2>
+                        <p class="step-subtitle">Sélectionnez le type de prestation pour votre projet</p>
+                        <div class="service-cards-grid">
+                            <label class="service-select-card" for="svc-web">
+                                <input type="radio" name="service" id="svc-web" value="web">
+                                <div class="svc-card-inner">
+                                    <div class="svc-icon"><i class="fas fa-laptop-code"></i></div>
+                                    <h3>Création de site web</h3>
+                                    <p>Site vitrine, e-commerce ou projet web sur mesure</p>
+                                </div>
+                            </label>
+                            <label class="service-select-card" for="svc-maintenance">
+                                <input type="radio" name="service" id="svc-maintenance" value="maintenance">
+                                <div class="svc-card-inner">
+                                    <div class="svc-icon"><i class="fas fa-tools"></i></div>
+                                    <h3>Maintenance informatique</h3>
+                                    <p>Maintenance de site web : mises à jour, sauvegardes, monitoring</p>
+                                </div>
+                            </label>
+                            <label class="service-select-card" for="svc-reseaux-sociaux">
+                                <input type="radio" name="service" id="svc-reseaux-sociaux" value="reseaux-sociaux">
+                                <div class="svc-card-inner">
+                                    <div class="svc-icon"><i class="fas fa-hashtag"></i></div>
+                                    <h3>Réseaux Sociaux</h3>
+                                    <p>Création de pages, community management et campagnes publicitaires</p>
+                                </div>
+                            </label>
+                        </div>
+                        <span class="step-error" id="error-step1"></span>
+                    </div>
+
+                    <!-- ÉTAPE 2 : Options (contenus dynamiques) -->
+                    <div class="devis-step" id="step2">
+                        <h2 class="step-title">Personnalisez votre projet</h2>
+                        <p class="step-subtitle">Vous ne payez que ce dont vous avez besoin — ajoutez ou retirez des options à tout moment</p>
+
+                        <!-- ═══════════════════════════════════════════════ -->
+                        <!-- Options SITE WEB                              -->
+                        <!-- ═══════════════════════════════════════════════ -->
+                        <div class="options-panel" id="options-web">
+                            <div class="option-group">
+                                <h3 class="option-group-title">Type de site</h3>
+                                <div class="radio-cards">
+                                    <label class="radio-card" for="web-express">
+                                        <input type="radio" name="web-type" id="web-express" value="express" data-price="290">
+                                        <span class="radio-card-label">Express<span class="radio-price">290€</span></span>
+                                    </label>
+                                    <label class="radio-card" for="web-vitrine">
+                                        <input type="radio" name="web-type" id="web-vitrine" value="vitrine" data-price="890">
+                                        <span class="radio-card-label">Vitrine<span class="radio-price">890€</span></span>
+                                    </label>
+                                    <label class="radio-card" for="web-ecommerce">
+                                        <input type="radio" name="web-type" id="web-ecommerce" value="ecommerce" data-price="1690">
+                                        <span class="radio-card-label">E-commerce<span class="radio-price">1 690€</span></span>
+                                    </label>
+                                    <label class="radio-card" for="web-app">
+                                        <input type="radio" name="web-type" id="web-app" value="app" data-price="2990">
+                                        <span class="radio-card-label">Application web<span class="radio-price">2 990€</span></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Cartes inclus — Création -->
+                            <div class="inclus-card" id="inclus-express" style="display:none">
+                                <p class="inclus-titre">✅ Inclus dans le site Express (290€) :</p>
+                                <ul>
+                                    <li>1 page unique (one-page) responsive</li>
+                                    <li>Design moderne et professionnel</li>
+                                    <li>Formulaire de contact basique</li>
+                                    <li>Optimisation SEO de base</li>
+                                    <li>Mise en ligne incluse</li>
+                                    <li>Livraison sous 7 jours</li>
+                                </ul>
+                                <p class="inclus-note">Idéal pour lancer votre activité rapidement.</p>
+                            </div>
+                            <div class="inclus-card" id="inclus-vitrine" style="display:none">
+                                <p class="inclus-titre">✅ Inclus dans le site vitrine (890€) :</p>
+                                <ul>
+                                    <li>Design responsive sur mesure (mobile, tablette, desktop)</li>
+                                    <li>Jusqu'à 5 pages incluses</li>
+                                    <li>Formulaire de contact basique</li>
+                                    <li>Optimisation SEO de base (balises, structure)</li>
+                                    <li>Mise en ligne + configuration hébergement</li>
+                                    <li>Garantie 1 an incluse</li>
+                                </ul>
+                                <p class="inclus-note">Options supplémentaires disponibles ci-dessous.</p>
+                            </div>
+                            <div class="inclus-card" id="inclus-ecom" style="display:none">
+                                <p class="inclus-titre">✅ Inclus dans le site e-commerce (1 690€) :</p>
+                                <ul>
+                                    <li>Design responsive sur mesure</li>
+                                    <li>Catalogue produits (jusqu'à 20 références)</li>
+                                    <li>Panier et tunnel de commande</li>
+                                    <li>Intégration paiement Stripe de base</li>
+                                    <li>Optimisation SEO de base</li>
+                                    <li>Garantie 1 an incluse</li>
+                                </ul>
+                                <p class="inclus-note">Options supplémentaires disponibles ci-dessous.</p>
+                            </div>
+                            <div class="inclus-card" id="inclus-app" style="display:none">
+                                <p class="inclus-titre">✅ Inclus dans l'application web (2 990€) :</p>
+                                <ul>
+                                    <li>Architecture technique sur mesure</li>
+                                    <li>Interface responsive et accessible</li>
+                                    <li>Authentification utilisateur de base</li>
+                                    <li>Déploiement et configuration serveur</li>
+                                    <li>Garantie 1 an incluse</li>
+                                </ul>
+                                <p class="inclus-note">Options supplémentaires disponibles ci-dessous.</p>
+                            </div>
+
+                            <div class="option-group">
+                                <h3 class="option-group-title">Nombre de pages</h3>
+                                <div class="radio-cards">
+                                    <label class="radio-card" for="web-pages-5">
+                                        <input type="radio" name="web-pages" id="web-pages-5" value="1-5" data-price="0">
+                                        <span class="radio-card-label">1–5 pages<span class="radio-price">Inclus</span></span>
+                                    </label>
+                                    <label class="radio-card" for="web-pages-10">
+                                        <input type="radio" name="web-pages" id="web-pages-10" value="6-10" data-price="90">
+                                        <span class="radio-card-label">6–10 pages<span class="radio-price">+90€</span></span>
+                                    </label>
+                                    <label class="radio-card" for="web-pages-more">
+                                        <input type="radio" name="web-pages" id="web-pages-more" value="10+" data-price="190">
+                                        <span class="radio-card-label">10+ pages<span class="radio-price">+190€</span></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Options contextuelles par type de site -->
+                            <div class="options-group" id="opts-express" style="display:none">
+                                <h4 class="option-group-title">Options supplémentaires — Express</h4>
+                                <div class="checkbox-options">
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-web" data-opt="seo-avance" data-price="190"> <span>SEO avancé — optimisation complète <em>+190€</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-web" data-opt="formulaire-avance" data-price="60"> <span>Formulaire de contact avancé <em>+60€</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-web" data-opt="animations" data-price="80"> <span>Animations &amp; effets visuels <em>+80€</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-web" data-opt="hebergement" data-price="60"> <span>Hébergement 1 an inclus <em>+60€</em></span></label>
+                                </div>
+                            </div>
+                            <div class="options-group" id="opts-vitrine" style="display:none">
+                                <h4 class="option-group-title">Options supplémentaires — Vitrine</h4>
+                                <div class="checkbox-options">
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-web" data-opt="seo-avance" data-price="190"> <span>SEO avancé — optimisation complète <em>+190€</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-web" data-opt="blog" data-price="120"> <span>Blog intégré <em>+120€</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-web" data-opt="galerie" data-price="90"> <span>Galerie photos <em>+90€</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-web" data-opt="formulaire-avance" data-price="60"> <span>Formulaire de contact avancé <em>+60€</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-web" data-opt="animations" data-price="80"> <span>Animations &amp; effets visuels <em>+80€</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-web" data-opt="hebergement" data-price="60"> <span>Hébergement 1 an inclus <em>+60€</em></span></label>
+                                </div>
+                            </div>
+                            <div class="options-group" id="opts-ecom" style="display:none">
+                                <h4 class="option-group-title">Options supplémentaires — E-commerce</h4>
+                                <div class="checkbox-options">
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-web" data-opt="stock-avance" data-price="120"> <span>Gestion de stock avancée <em>+120€</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-web" data-opt="fiches-avancees" data-price="100"> <span>Fiches produits enrichies <em>+100€</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-web" data-opt="multidevise" data-price="80"> <span>Multi-devises <em>+80€</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-web" data-opt="seo-ecom" data-price="190"> <span>SEO e-commerce avancé <em>+190€</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-web" data-opt="avis-clients" data-price="70"> <span>Système d'avis clients <em>+70€</em></span></label>
+                                </div>
+                            </div>
+                            <div class="options-group" id="opts-app" style="display:none">
+                                <h4 class="option-group-title">Options supplémentaires — Application web</h4>
+                                <div class="checkbox-options">
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-web" data-opt="bdd-avancee" data-price="200"> <span>Base de données avancée <em>+200€</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-web" data-opt="espace-membre" data-price="150"> <span>Espace membre / tableau de bord <em>+150€</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-web" data-opt="api-integration" data-price="180"> <span>Intégration API tierce <em>+180€</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-web" data-opt="notifications" data-price="100"> <span>Système de notifications <em>+100€</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-web" data-opt="export-data" data-price="90"> <span>Export de données (PDF/Excel) <em>+90€</em></span></label>
+                                </div>
+                            </div>
+
+                            <div class="devis-reassurance-bar">
+                                <span><i class="fas fa-info-circle"></i> Un site Express démarre à <strong>290€</strong> — un site vitrine avec options de <strong>890€</strong> à <strong>1 500€+</strong> selon les choix.</span>
+                            </div>
+                        </div>
+
+                        <!-- ═══════════════════════════════════════════════ -->
+                        <!-- Options MAINTENANCE (site web uniquement)      -->
+                        <!-- ═══════════════════════════════════════════════ -->
+                        <div class="options-panel" id="options-maintenance" style="display:none">
+                            <div class="option-group">
+                                <h3 class="option-group-title">Type de contrat</h3>
+                                <div class="radio-cards">
+                                    <label class="radio-card" for="maint-ponctuel">
+                                        <input type="radio" name="contrat-maintenance" id="maint-ponctuel" value="ponctuelle" data-price="80">
+                                        <span class="radio-card-label">Intervention ponctuelle<span class="radio-price">80€</span></span>
+                                    </label>
+                                    <label class="radio-card" for="maint-mensuel">
+                                        <input type="radio" name="contrat-maintenance" id="maint-mensuel" value="mensuelle" data-price="150">
+                                        <span class="radio-card-label">Contrat mensuel<span class="radio-price">150€/mois</span></span>
+                                    </label>
+                                    <label class="radio-card" for="maint-annuel">
+                                        <input type="radio" name="contrat-maintenance" id="maint-annuel" value="annuelle" data-price="1490">
+                                        <span class="radio-card-label">Contrat annuel<span class="radio-price">1 490€/an</span></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Cartes inclus — Maintenance -->
+                            <div class="inclus-card" id="inclus-ponctuelle" style="display:none">
+                                <p class="inclus-titre">✅ Inclus dans l'intervention ponctuelle (80€) :</p>
+                                <ul>
+                                    <li>1 intervention ciblée sur votre site web</li>
+                                    <li>Diagnostic et correction du problème signalé</li>
+                                    <li>Rapport d'intervention par email</li>
+                                </ul>
+                                <p class="inclus-note">⚠️ Ne comprend pas : monitoring continu, sauvegardes automatiques, mises à jour régulières. Ces options sont disponibles ci-dessous.</p>
+                            </div>
+                            <div class="inclus-card" id="inclus-mensuelle" style="display:none">
+                                <p class="inclus-titre">✅ Inclus dans le contrat mensuel (150€/mois) :</p>
+                                <ul>
+                                    <li>Surveillance de disponibilité du site (uptime)</li>
+                                    <li>1 intervention corrective par mois incluse</li>
+                                    <li>Mises à jour de sécurité de base</li>
+                                    <li>Support technique par email sous 24h</li>
+                                </ul>
+                                <p class="inclus-note">Options supplémentaires disponibles ci-dessous.</p>
+                            </div>
+                            <div class="inclus-card" id="inclus-annuelle" style="display:none">
+                                <p class="inclus-titre">✅ Inclus dans le contrat annuel (1 490€ HT/an) :</p>
+                                <ul>
+                                    <li>Surveillance de disponibilité du site (uptime)</li>
+                                    <li>Interventions correctives illimitées</li>
+                                    <li>Mises à jour de sécurité prioritaires</li>
+                                    <li>Support technique prioritaire sous 4h</li>
+                                    <li>Économie équivalente à ~2 mois offerts vs mensuel</li>
+                                </ul>
+                                <p class="inclus-note">Options supplémentaires disponibles ci-dessous.</p>
+                            </div>
+
+                            <div class="option-group">
+                                <h3 class="option-group-title">Options supplémentaires <span class="option-group-hint">— facultatives</span></h3>
+                                <div id="opts-maintenance" class="checkbox-options">
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-maint" data-opt="monitoring" data-price="20"> <span>Monitoring uptime 24/7 <em>+20€/mois</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-maint" data-opt="sauvegardes-auto" data-price="15"> <span>Sauvegardes automatiques quotidiennes <em>+15€/mois</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-maint" data-opt="maj-cms" data-price="25"> <span>Mises à jour CMS &amp; plugins <em>+25€/mois</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-maint" data-opt="rapport-mensuel" data-price="10"> <span>Rapport mensuel détaillé <em>+10€/mois</em></span></label>
+                                </div>
+                            </div>
+
+                            <div class="option-group">
+                                <h3 class="option-group-title">Services à la demande <span class="option-group-hint">— ponctuels</span></h3>
+                                <div id="opts-maintenance-forfait" class="checkbox-options">
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-maint-forfait" data-opt="modification-fonctionnalites" data-price="120"> <span>Modification de fonctionnalités existantes <em>120€ (forfaitaire)</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-maint-forfait" data-opt="ajout-fonctionnalites" data-price="150"> <span>Ajout de nouvelles fonctionnalités <em>150€ (forfaitaire)</em></span></label>
+                                </div>
+                            </div>
+
+                            <div class="devis-reassurance-bar">
+                                <span><i class="fas fa-info-circle"></i> Un contrat mensuel avec options courantes revient à environ <strong>150€ – 220€/mois</strong>. Toute intervention dépassant 1h fera l'objet d'un devis séparé.</span>
+                            </div>
+                        </div>
+
+                        <!-- ═══════════════════════════════════════════════ -->
+                        <!-- Options RÉSEAUX SOCIAUX                        -->
+                        <!-- ═══════════════════════════════════════════════ -->
+                        <div class="options-panel" id="options-reseaux-sociaux" style="display:none">
+
+                            <!-- Étape 1 : Plateforme (sélection unique) -->
+                            <div class="option-group">
+                                <h3 class="option-group-title">Sur quel réseau souhaitez-vous être présent ?</h3>
+                                <div class="radio-cards">
+                                    <label class="radio-card" for="rs-facebook">
+                                        <input type="radio" name="plateforme-rs" id="rs-facebook" value="facebook" data-price-creation="120">
+                                        <span class="radio-card-label"><i class="fab fa-facebook-f" style="color:#1877F2;margin-right:.4em"></i> Facebook<span class="radio-price">120€</span></span>
+                                    </label>
+                                    <label class="radio-card" for="rs-instagram">
+                                        <input type="radio" name="plateforme-rs" id="rs-instagram" value="instagram" data-price-creation="100">
+                                        <span class="radio-card-label"><i class="fab fa-instagram" style="color:#E1306C;margin-right:.4em"></i> Instagram<span class="radio-price">100€</span></span>
+                                    </label>
+                                    <label class="radio-card" for="rs-tiktok">
+                                        <input type="radio" name="plateforme-rs" id="rs-tiktok" value="tiktok" data-price-creation="150">
+                                        <span class="radio-card-label"><i class="fab fa-tiktok" style="color:#010101;margin-right:.4em"></i> TikTok<span class="radio-price">150€</span></span>
+                                    </label>
+                                    <label class="radio-card" for="rs-linkedin">
+                                        <input type="radio" name="plateforme-rs" id="rs-linkedin" value="linkedin" data-price-creation="80">
+                                        <span class="radio-card-label"><i class="fab fa-linkedin-in" style="color:#0A66C2;margin-right:.4em"></i> LinkedIn<span class="radio-price">80€</span></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Message TikTok -->
+                            <div class="inclus-card" id="msg-tiktok" style="display:none">
+                                <p class="inclus-titre">✅ TikTok — 150€</p>
+                                <p>Création et configuration de votre page TikTok professionnelle avec profil optimisé.</p>
+                            </div>
+
+                            <!-- Étape 2 : Objectif -->
+                            <div class="option-group" id="rs-group-objectif" style="display:none">
+                                <h3 class="option-group-title">Que souhaitez-vous faire ?</h3>
+                                <div class="radio-cards">
+                                    <label class="radio-card" for="rs-obj-creation">
+                                        <input type="radio" name="objectif-rs" id="rs-obj-creation" value="creation">
+                                        <span class="radio-card-label">Créer ma présence en ligne<span class="radio-price"><small>Pages &amp; comptes professionnels</small></span></span>
+                                    </label>
+                                    <label class="radio-card" for="rs-obj-gestion">
+                                        <input type="radio" name="objectif-rs" id="rs-obj-gestion" value="gestion">
+                                        <span class="radio-card-label">Gérer mes publications<span class="radio-price"><small>Community management</small></span></span>
+                                    </label>
+                                    <label class="radio-card" for="rs-obj-pack">
+                                        <input type="radio" name="objectif-rs" id="rs-obj-pack" value="pack">
+                                        <span class="radio-card-label">Pack Création + Gestion<span class="radio-price"><small>Solution complète</small></span></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Étape 3 : Forfait (visible si gestion ou pack) -->
+                            <div id="bloc-forfait-rs" style="display:none">
+                                <div class="option-group">
+                                    <h3 class="option-group-title">Choisissez votre forfait de gestion</h3>
+                                    <div class="radio-cards">
+                                        <label class="radio-card" for="rs-forfait-basic">
+                                            <input type="radio" name="forfait-rs" id="rs-forfait-basic" value="basic" data-price="160">
+                                            <span class="radio-card-label">Forfait Basic<span class="radio-price">4 posts/mois · 160€/mois</span></span>
+                                        </label>
+                                        <label class="radio-card" for="rs-forfait-plus">
+                                            <input type="radio" name="forfait-rs" id="rs-forfait-plus" value="plus" data-price="320">
+                                            <span class="radio-card-label">Forfait Plus<span class="radio-price">8 posts/mois · 320€/mois</span></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Cartes inclus — Forfaits RS -->
+                                <div class="inclus-card" id="inclus-basic" style="display:none">
+                                    <p class="inclus-titre">✅ Inclus dans le Forfait Basic (160€/mois) :</p>
+                                    <ul>
+                                        <li>4 publications par mois sur la/les plateforme(s) choisie(s)</li>
+                                        <li>Création des visuels &amp; rédaction des légendes</li>
+                                        <li>Planification et publication aux meilleurs horaires</li>
+                                    </ul>
+                                    <p class="inclus-note">Options supplémentaires disponibles ci-dessous.</p>
+                                </div>
+                                <div class="inclus-card" id="inclus-plus" style="display:none">
+                                    <p class="inclus-titre">✅ Inclus dans le Forfait Plus (320€/mois) :</p>
+                                    <ul>
+                                        <li>8 publications par mois sur la/les plateforme(s) choisie(s)</li>
+                                        <li>Création des visuels &amp; rédaction des légendes</li>
+                                        <li>Planification, publication et modération des commentaires</li>
+                                        <li>Rapport mensuel de performances inclus</li>
+                                    </ul>
+                                    <p class="inclus-note">Options supplémentaires disponibles ci-dessous.</p>
+                                </div>
+                            </div>
+
+                            <!-- Étape 4 : Options supplémentaires par réseau (visible si gestion ou pack) -->
+                            <div class="options-group" id="opts-rs-facebook" style="display:none">
+                                <h4 class="option-group-title">Options supplémentaires — Facebook</h4>
+                                <div class="checkbox-options">
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-rs" data-opt="pub-fb" data-price="150"> <span>Campagne publicitaire Facebook <em>+150€/mois</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-rs" data-opt="moderation-rs" data-price="50"> <span>Modération active des commentaires <em>+50€/mois</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-rs" data-opt="stories-fb" data-price="60"> <span>Stories hebdomadaires <em>+60€/mois</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-rs" data-opt="groupe-fb" data-price="80"> <span>Création &amp; animation de groupe <em>+80€/mois</em></span></label>
+                                </div>
+                            </div>
+                            <div class="options-group" id="opts-rs-instagram" style="display:none">
+                                <h4 class="option-group-title">Options supplémentaires — Instagram</h4>
+                                <div class="checkbox-options">
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-rs" data-opt="pub-ig" data-price="150"> <span>Campagne publicitaire Instagram <em>+150€/mois</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-rs" data-opt="stories-ig" data-price="60"> <span>Stories hebdomadaires <em>+60€/mois</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-rs" data-opt="reels" data-price="100"> <span>Création de Reels <em>+100€/mois</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-rs" data-opt="moderation-rs" data-price="50"> <span>Modération active des commentaires <em>+50€/mois</em></span></label>
+                                </div>
+                            </div>
+                            <div class="options-group" id="opts-rs-tiktok" style="display:none">
+                                <h4 class="option-group-title">Options supplémentaires — TikTok</h4>
+                                <div class="checkbox-options">
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-rs" data-opt="montage-tiktok" data-price="120"> <span>Montage vidéo professionnel <em>+120€/mois</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-rs" data-opt="trends-tiktok" data-price="80"> <span>Veille tendances &amp; hashtags <em>+80€/mois</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-rs" data-opt="moderation-rs" data-price="50"> <span>Modération active des commentaires <em>+50€/mois</em></span></label>
+                                </div>
+                            </div>
+                            <div class="options-group" id="opts-rs-linkedin" style="display:none">
+                                <h4 class="option-group-title">Options supplémentaires — LinkedIn</h4>
+                                <div class="checkbox-options">
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-rs" data-opt="articles-linkedin" data-price="100"> <span>Rédaction d'articles LinkedIn <em>+100€/mois</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-rs" data-opt="networking" data-price="80"> <span>Stratégie de networking ciblé <em>+80€/mois</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-rs" data-opt="moderation-rs" data-price="50"> <span>Modération active des commentaires <em>+50€/mois</em></span></label>
+                                </div>
+                            </div>
+
+                            <div class="devis-reassurance-bar">
+                                <span><i class="fas fa-info-circle"></i> La création d'une page démarre à <strong>80€</strong>. La gestion est facturée par abonnement.</span>
+                            </div>
+
+                        </div>
+
+                        <!-- Blocs de paiement conditionnels -->
+                        <div id="bloc-acompte" style="display:none">
+                            <div class="devis-reassurance-bar">
+                                <span><i class="fas fa-credit-card"></i> Acompte de 30% à la commande · Solde à la livraison</span>
+                            </div>
+                        </div>
+                        <div id="bloc-abonnement" style="display:none">
+                            <div class="devis-reassurance-bar">
+                                <span><i class="fas fa-sync-alt"></i> Ce service fonctionne par abonnement. Pas d'acompte — paiement au début de chaque période.</span>
+                            </div>
+                        </div>
+
+                        <!-- Note récapitulative -->
+                        <p class="devis-note" id="recap-note" style="display:none"></p>
+
+                        <span class="step-error" id="error-step2"></span>
+                    </div>
+
+                    <!-- ÉTAPE 3 : Coordonnées -->
+                    <div class="devis-step" id="step3">
+                        <h2 class="step-title">Vos coordonnées</h2>
+                        <p class="step-subtitle">Pour vous envoyer votre devis détaillé</p>
+                        <div class="devis-form-fields">
+                            <div class="devis-field">
+                                <label for="d-nom">Nom complet *</label>
+                                <input type="text" id="d-nom" name="d-nom" placeholder="Jean Dupont" required autocomplete="name">
+                                <span class="field-error" id="err-nom"></span>
+                            </div>
+                            <div class="devis-field">
+                                <label for="d-email">Email *</label>
+                                <input type="email" id="d-email" name="d-email" placeholder="jean@exemple.fr" required autocomplete="email">
+                                <span class="field-error" id="err-email"></span>
+                            </div>
+                            <div class="devis-field">
+                                <label for="d-tel">Téléphone <span class="optional">(optionnel)</span></label>
+                                <input type="tel" id="d-tel" name="d-tel" placeholder="+590 690 XX XX XX" autocomplete="tel">
+                            </div>
+                            <div class="devis-field full">
+                                <label for="d-message">Précisions sur votre projet <span class="optional">(optionnel)</span></label>
+                                <textarea id="d-message" name="d-message" rows="4" placeholder="Décrivez votre projet, vos contraintes, vos délais..."></textarea>
+                            </div>
+                            <div class="devis-field full">
+                                <label class="rgpd-label">
+                                    <input type="checkbox" id="d-rgpd" name="d-rgpd" required>
+                                    <span>J'accepte que mes données soient utilisées pour traiter ma demande de devis conformément à la <a href="mentions-legales.html" target="_blank">politique de confidentialité</a> *</span>
+                                </label>
+                                <span class="field-error" id="err-rgpd"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ÉTAPE 4 : Récapitulatif -->
+                    <div class="devis-step" id="step4">
+                        <h2 class="step-title">Votre devis estimatif</h2>
+                        <p class="step-subtitle">Récapitulatif de votre projet</p>
+
+                        <!-- Invoice professionnelle -->
+                        <div class="invoice" id="recapContent">
+                            <!-- Généré dynamiquement par devis.js -->
+                        </div>
+
+                        <div class="recap-disclaimer">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Devis indicatif généré automatiquement. Le tarif définitif sera établi après étude complète de votre projet lors d'un premier rendez-vous gratuit.</p>
+                        </div>
+                        <div class="recap-actions">
+                            <button type="button" class="btn btn-print" id="btnPrint" onclick="var t=document.title;document.title=' ';window.print();document.title=t;">
+                                <i class="fas fa-download"></i>
+                                <span>Télécharger le devis PDF</span>
+                            </button>
+                            <a id="btn-payer" href="paiement.html" class="btn btn-primary" style="cursor: pointer;">
+                                <i class="fas fa-credit-card"></i>
+                                <span>Procéder au paiement</span>
+                            </a>
+                            <button type="submit" class="btn btn-primary" id="devisSubmitBtn">
+                                <span class="btn-text">Envoyer ma demande</span>
+                                <span class="btn-loader" style="display:none"><i class="fas fa-spinner fa-spin"></i></span>
+                            </button>
+                        </div>
+                        <!-- Bloc paiement Stripe -->
+                        <div class="stripe-payment-block" id="stripePaymentBlock" style="display:none;">
+                            <div class="stripe-payment-separator">
+                                <span>ou</span>
+                            </div>
+
+                            <div class="stripe-payment-card">
+                                <div class="stripe-payment-header">
+                                    <div class="stripe-payment-logo">
+                                        <svg viewBox="0 0 60 25" width="48" height="20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                                            <rect width="60" height="25" rx="4" fill="#635BFF" />
+                                            <text x="30" y="17" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#ffffff">Stripe</text>
+                                        </svg>
+                                    </div>
+                                    <p class="stripe-payment-title">Confirmer votre commande maintenant</p>
+                                    <p class="stripe-payment-subtitle">Réglez l'acompte en ligne et démarrez votre projet immédiatement</p>
+                                </div>
+
+                                <div class="stripe-payment-amounts">
+                                    <div class="stripe-amount-row acompte">
+                                        <span class="stripe-amount-label" id="stripeAcompteLabel">Acompte 30% dû maintenant</span>
+                                        <span class="stripe-amount-value" id="stripeAcompteValue">—</span>
+                                    </div>
+                                    <div class="stripe-amount-row solde">
+                                        <span class="stripe-amount-label" id="stripeSoldeLabel">Solde 70% à la livraison</span>
+                                        <span class="stripe-amount-value" id="stripeSoldeValue">—</span>
+                                    </div>
+                                </div>
+
+                                <a href="#" id="stripePayBtn" class="btn btn-stripe" target="_blank" rel="noopener noreferrer">
+                                    <i class="fas fa-credit-card" style="flex-shrink:0"></i>
+                                    <span id="stripePayBtnText">Payer l'acompte de — €</span>
+                                </a>
+
+                                <p class="stripe-payment-note">
+                                    🔒 Paiement 100% sécurisé par Stripe · Certifié PCI-DSS · Données chiffrées SSL
+                                </p>
+                                <p class="stripe-alt-link">
+                                    Préférez-vous passer par notre <a href="paiement.html" target="_blank" id="stripeAltLinkHref">page de paiement dédiée</a> ?
+                                </p>
+
+                                <!-- Cas maintenance : abonnement -->
+                                <div id="stripeSubscriptionBlock" style="display:none;">
+                                    <p class="stripe-subscription-note">
+                                        Ce service fonctionne par abonnement. Pas d'acompte — votre premier paiement démarre à la signature du contrat.
+                                    </p>
+                                    <a href="#" id="stripeSubscribeBtn" class="btn btn-stripe" target="_blank" rel="noopener noreferrer">
+                                        S'abonner maintenant
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="devis-success" id="devisSuccess" role="alert"></div>
+                    </div>
+
+                    <!-- Navigation entre étapes -->
+                    <div class="devis-nav">
+                        <button type="button" class="btn btn-step-prev" id="prevBtn" style="display:none">
+                            <i class="fas fa-arrow-left"></i>
+                            <span>Précédent</span>
+                        </button>
+                        <button type="button" class="btn btn-step-next" id="nextBtn">
+                            <span>Suivant</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Encart prix sticky -->
+            <aside class="devis-price-panel" id="priceSidebar">
+                <div class="price-panel-inner">
+                    <div class="price-panel-header">
+                        <i class="fas fa-calculator"></i>
+                        <h3>Estimation en temps réel</h3>
+                    </div>
+                    <div class="price-display">
+                        <span class="price-label">Estimation totale</span>
+                        <span class="price-amount" id="totalPrice">0€</span>
+                        <span id="totalPriceTTC" style="display:none;">0</span>
+                        <p class="mention-tva">TVA non applicable — art. 293 B du CGI</p>
+                    </div>
+                    <div class="price-breakdown" id="priceBreakdown">
+                        <p class="price-placeholder">Sélectionnez un service pour voir l'estimation</p>
+                    </div>
+                    <div class="price-reassurance">
+                        <p class="price-note"><i class="fas fa-shield-alt"></i> Devis gratuit & sans engagement</p>
+                        <p class="price-note"><i class="fas fa-credit-card"></i> Paiement en plusieurs fois possible</p>
+                        <p class="price-note"><i class="fas fa-handshake"></i> 1er RDV de consultation offert</p>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </section>
+
+    <!-- Print zone (masqué à l'écran, visible à l'impression) -->
+    <div class="print-only" id="printZone" aria-hidden="true"></div>
+
+    <div id="footer-container"></div>
+
+    <!-- Bouton WhatsApp -->
+    <a href="https://wa.me/590690752430?text=Bonjour%2C%20je%20souhaite%20un%20devis" class="whatsapp-btn" aria-label="Nous contacter sur WhatsApp" target="_blank" rel="noopener noreferrer">
+        <i class="fab fa-whatsapp"></i>
+        <span class="whatsapp-tooltip">Nous contacter sur WhatsApp</span>
+    </a>
+
+    <script src="components-loader.js?v=20260403" defer></script>
+    <script src="js/supabase-client.js?v=20260403"></script>
+    <script src="script.js?v=20260403"></script>
+    <script src="devis.js?v=20260403"></script>
+    <script src="js/devis-payment-links.js" defer></script>
+
+</body>
+</html>
