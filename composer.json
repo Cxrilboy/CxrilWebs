@@ -1,0 +1,14 @@
+{
+  "name": "cxrilwebs/o2switch-production",
+  "description": "API PHP de production pour CxrilWebs",
+  "type": "project",
+  "require": {
+    "php": ">=8.1",
+    "phpmailer/phpmailer": "^6.9",
+    "stripe/stripe-php": "^17.0"
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "sort-packages": true
+  }
+}

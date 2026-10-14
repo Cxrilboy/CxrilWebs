@@ -45,7 +45,7 @@ const PRICING_CONFIG = {
   // Affichage index.html #tarifs uniquement
   tarifs: {
     web:         { price: 290,  display: 'À partir de 290€' },
-    maintenance: { price: 80,   display: 'À partir de 80€' },
+    maintenance: { price: 150,  display: 'À partir de 150€/mois' },
     social:      { price: 80,   display: 'À partir de 80€' },
     essentiel:   { price: 890,  display: 'À partir de 890€' },
     pro:         { price: 1690, display: 'À partir de 1 690€' },

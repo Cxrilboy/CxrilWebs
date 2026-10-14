@@ -4,25 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Paiement sécurisé CxrilWebs - Réglez votre acompte ou abonnement en ligne via Stripe. Paiement 100% sécurisé, certifié PCI-DSS.">
-    <!-- Supabase : remplace VOTRE_CLE_ANON par la clé anon publique de ton projet Supabase -->
-    <meta name="supabase-url" content="https://vowwywqggybvsbhpdkxs.supabase.co">
-    <meta name="supabase-key" content="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZvd3d5d3FnZ3lidnNiaHBka3hzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwODczMjMsImV4cCI6MjA5MDY2MzMyM30.i45GxR0-vl0tnKLugpoy6xhfhCqioaD2VBUgP7OMNPY">
     <meta property="og:title" content="Paiement sécurisé - CxrilWebs">
     <meta property="og:description" content="Réglez votre acompte ou abonnement en toute sécurité via Stripe.">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="fr_FR">
+    <meta property="og:url" content="https://cxrilwebs.fr/paiement.html">
+    <meta property="og:image" content="https://cxrilwebs.fr/og-image.jpg">
     <title>Paiement sécurisé - CxrilWebs</title>
+    <link rel="canonical" href="https://cxrilwebs.fr/paiement.html">
     <link rel="icon" type="image/png" href="logo/logoCW-no-bg.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/js/all.min.js"></script>
-    <link rel="stylesheet" href="styles.css?v=20260403">
-    <link rel="stylesheet" href="paiement-styles.css?v=20260403">
+    <link rel="stylesheet" href="styles.css?v=20260929">
+    <link rel="stylesheet" href="paiement-styles.css?v=20260929">
     <script src="js/pricing.js?v=20260403"></script>
-    <!-- Supabase CDN (compatible navigateur sans bundler) -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 </head>
 <body>
     <!-- Dark Mode Toggle -->
@@ -118,8 +115,8 @@
                         <div class="pay-service-icon"><i class="fas fa-share-alt"></i></div>
                         <h3>Gestion Réseaux Sociaux</h3>
                         <p>Stratégie social media & création de contenu</p>
-                        <span class="pay-service-price">À partir de 299€</span>
-                        <span class="pay-service-deposit">Audit ou mensuel</span>
+                        <span class="pay-service-price">À partir de 80€</span>
+                        <span class="pay-service-deposit">Création ou forfait</span>
                     </div>
                 </div>
             </div>
@@ -245,22 +242,18 @@
                 <div class="pay-options-panel" id="pay-options-reseaux-sociaux" style="display:none">
                     <div class="pay-options-grid pay-options-2col">
                         <div class="pay-option-card" data-key="rs_basic">
-                            <div class="pay-option-badge">Offre de lancement</div>
                             <h3>Forfait Basic</h3>
                             <p>4 publications/mois — 1 post/semaine</p>
-                            <div class="pay-option-price">160€</div>
-                            <p style="margin:.35rem 0 0;font-size:.9rem;color:var(--color-gray);">puis 200€/mois</p>
+                            <div class="pay-option-price">160€<span>/mois</span></div>
                             <ul class="pay-option-features">
-                                <li><i class="fas fa-check"></i> 4 visuels</li>
-                                <li><i class="fas fa-check"></i> Textes d'accroches</li>
-                                <li><i class="fas fa-check"></i> Description des services</li>
-                                <li><i class="fas fa-check"></i> Hashtags</li>
-                                <li><i class="fas fa-check"></i> Modération commentaires</li>
+                                <li><i class="fas fa-check"></i> 4 publications par mois</li>
+                                <li><i class="fas fa-check"></i> Création des visuels</li>
+                                <li><i class="fas fa-check"></i> Rédaction des légendes</li>
+                                <li><i class="fas fa-check"></i> Planification et publication</li>
                                 <li><i class="fas fa-check"></i> Calendrier éditorial</li>
-                                <li><i class="fas fa-check"></i> Rapport et suivi</li>
                             </ul>
                             <div class="pay-option-deposit pay-option-subscription">
-                                <span class="pay-deposit-label">Abonnement</span>
+                                <span class="pay-deposit-label">Abonnement mensuel</span>
                                 <span class="pay-deposit-amount">160€/mois</span>
                             </div>
                         </div>
@@ -268,19 +261,18 @@
                             <div class="pay-option-badge">⭐ Populaire</div>
                             <h3>Forfait Plus</h3>
                             <p>8 publications/mois — 2 posts/semaine</p>
-                            <div class="pay-option-price">320€</div>
-                            <p style="margin:.35rem 0 0;font-size:.9rem;color:var(--color-gray);">puis 400€/mois</p>
+                            <div class="pay-option-price">320€<span>/mois</span></div>
                             <ul class="pay-option-features">
-                                <li><i class="fas fa-check"></i> 8 visuels</li>
-                                <li><i class="fas fa-check"></i> Textes d'accroches</li>
-                                <li><i class="fas fa-check"></i> Description des services</li>
-                                <li><i class="fas fa-check"></i> Hashtags</li>
-                                <li><i class="fas fa-check"></i> Modération commentaires</li>
+                                <li><i class="fas fa-check"></i> 8 publications par mois</li>
+                                <li><i class="fas fa-check"></i> Création des visuels</li>
+                                <li><i class="fas fa-check"></i> Rédaction des légendes</li>
+                                <li><i class="fas fa-check"></i> Planification et publication</li>
+                                <li><i class="fas fa-check"></i> Modération des commentaires</li>
+                                <li><i class="fas fa-check"></i> Rapport mensuel de performances</li>
                                 <li><i class="fas fa-check"></i> Calendrier éditorial</li>
-                                <li><i class="fas fa-check"></i> Rapport et suivi</li>
                             </ul>
                             <div class="pay-option-deposit pay-option-subscription">
-                                <span class="pay-deposit-label">Abonnement</span>
+                                <span class="pay-deposit-label">Abonnement mensuel</span>
                                 <span class="pay-deposit-amount">320€/mois</span>
                             </div>
                         </div>
@@ -326,6 +318,21 @@
                             <div class="pay-option-deposit">
                                 <span class="pay-deposit-label">Paiement unique</span>
                                 <span class="pay-deposit-amount">150€</span>
+                            </div>
+                        </div>
+                        <div class="pay-option-card" data-key="rs_linkedin">
+                            <h3>Création Page LinkedIn</h3>
+                            <p>Page professionnelle</p>
+                            <div class="pay-option-price">80€</div>
+                            <ul class="pay-option-features">
+                                <li><i class="fas fa-check"></i> Profil complet (nom, bio, liens)</li>
+                                <li><i class="fas fa-check"></i> Logo et informations entreprise</li>
+                                <li><i class="fas fa-check"></i> Mise en place CTA</li>
+                                <li><i class="fas fa-check"></i> Configuration professionnelle</li>
+                            </ul>
+                            <div class="pay-option-deposit">
+                                <span class="pay-deposit-label">Paiement unique</span>
+                                <span class="pay-deposit-amount">80€</span>
                             </div>
                         </div>
                         <div class="pay-option-card" data-key="rs_ads">
@@ -456,8 +463,7 @@
 
     <script src="components-loader.js?v=20260403"></script>
     <script src="script.js?v=20260403"></script>
-    <script src="js/checkout.js?v=20260403"></script>
-    <script src="js/supabase-client.js?v=20260403"></script>
+    <script src="js/checkout.js?v=20261014"></script>
     <script>
     (function () {
         'use strict';
@@ -503,12 +509,13 @@
         }
 
         // ── PREFILL depuis devis.html (?service=&formula=&amount=&description=) ─
-        function prefillFromDevis(amount, description, formula) {
+        // Les montants issus de l'URL sont volontairement ignorés : ils ne sont pas fiables.
+        function prefillFromDevis(formula) {
             if (!formula || !selectedService) return;
 
             var keyMap = {
                 web:               { express: 'web_express', vitrine: 'web_vitrine', ecommerce: 'web_ecommerce', app: 'web_app', appweb: 'web_app' },
-                maintenance:       { mensuel: 'maintenance_site_mensuel', annuel: 'maintenance_site_annuel', site_mensuel: 'maintenance_site_mensuel', site_annuel: 'maintenance_site_annuel' },
+                maintenance:       { mensuel: 'maintenance_site_mensuel', mensuelle: 'maintenance_site_mensuel', annuel: 'maintenance_site_annuel', annuelle: 'maintenance_site_annuel', site_mensuel: 'maintenance_site_mensuel', site_mensuelle: 'maintenance_site_mensuel', site_annuel: 'maintenance_site_annuel', site_annuelle: 'maintenance_site_annuel' },
                 'reseaux-sociaux': { basic: 'rs_basic', plus: 'rs_plus', facebook: 'rs_facebook', instagram: 'rs_instagram', tiktok: 'rs_tiktok', ads: 'rs_ads', audit: 'rs_audit', mensuel: 'rs_mensuel', annuel: 'rs_annuel' }
             };
             var serviceMap = (keyMap[selectedService] || {});
@@ -521,57 +528,18 @@
             var target = document.querySelector('.pay-option-card[data-key="' + key + '"]');
             if (target) target.classList.add('selected');
 
-            showCheckout(selectedService, key, amount ? parseInt(amount) : null);
+            showCheckout(selectedService, key);
         }
 
         // ── Initialisation depuis les paramètres URL ──────────────────────────
         function initFromURL() {
             var paramService     = urlParams.get('service');
-            var paramTotal       = urlParams.get('total');
-            var paramAcompte     = urlParams.get('acompte');
-            var paramAmount      = urlParams.get('amount');
-            var paramDescription = urlParams.get('description');
             var paramFormula     = urlParams.get('formula');
 
-            var paramMode        = urlParams.get('mode');
-
-            // Cas A : mode express (devis quick-link avec total + acompte)
-            if (paramService && paramTotal && paramAcompte) {
-                var valid = ['web', 'maintenance', 'reseaux-sociaux'];
-                if (valid.indexOf(paramService) === -1) return;
-
-                selectedService = paramService;
-                var totalNum   = parseInt(paramTotal);
-                var acompteNum = parseInt(paramAcompte);
-                var serviceNames = { web: 'Site Web', maintenance: 'Maintenance', 'reseaux-sociaux': 'Gestion Réseaux Sociaux' };
-
-                expressModeText.innerHTML = 'Vous avez un devis de <strong>' + acompteNum + '€</strong>'
-                    + ' d\'acompte pour <strong>' + serviceNames[paramService] + '</strong>'
-                    + ' — Continuez vers le paiement sécurisé.';
-                expressMode.style.display = 'block';
-                step1.style.display = 'none';
-                step2.style.display = 'none';
-                step3.style.display = 'none';
-
-                expressPayBtn.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    showExpressCheckout(paramService, totalNum, acompteNum, paramMode, paramDescription);
-                });
-                expressModifyBtn.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    expressMode.style.display = 'none';
-                    step1.style.display = 'block';
-                    step1.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                });
-                return;
-            }
-
-            // Cas B : ?service= seul ou avec formula/total/amount/description (depuis index ou devis)
+            // Seule une formule du catalogue peut être pré-sélectionnée.
             if (paramService) {
                 selectService(paramService);
-                if (paramFormula) {
-                    prefillFromDevis(paramAmount || paramTotal || '0', paramDescription || '', paramFormula);
-                }
+                if (paramFormula) prefillFromDevis(paramFormula);
             }
         }
 
@@ -605,6 +573,24 @@
             });
         });
 
+        // ── Accessibilité clavier sur les cards ───────────────────────────────
+        optionCards.forEach(function (card) {
+            if (!card.classList.contains('pay-option-disabled')) {
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('role', 'button');
+            }
+            card.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
+            });
+        });
+        serviceCards.forEach(function (card) {
+            card.setAttribute('tabindex', '0');
+            card.setAttribute('role', 'button');
+            card.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
+            });
+        });
+
         // ── Boutons retour ────────────────────────────────────────────────────
         if (backBtn) {
             backBtn.addEventListener('click', function () {
@@ -622,7 +608,7 @@
         }
 
         // ── Afficher l'étape 3 (récapitulatif) ───────────────────────────────
-        function showCheckout(service, key, customAmount) {
+        function showCheckout(service, key) {
             var config = getOptionConfig(key);
             if (!config) {
                 console.error('[Checkout] option inconnue', key);
@@ -630,14 +616,19 @@
                 return;
             }
 
-            document.getElementById('payCheckoutIcon').className = 'fas fa-' + config.icon;
+            var payCheckoutIconEl = document.getElementById('payCheckoutIcon');
+            if (payCheckoutIconEl) {
+                var newIcon = document.createElement('i');
+                newIcon.id = 'payCheckoutIcon';
+                newIcon.className = 'fas fa-' + config.icon;
+                payCheckoutIconEl.parentNode.replaceChild(newIcon, payCheckoutIconEl);
+            }
             document.getElementById('payCheckoutTitle').textContent  = config.title;
             var descText = config.desc || '';
             if (config.recurring) descText += ' (' + config.recurring + ' à partir du 2e mois)';
             document.getElementById('payCheckoutDesc').textContent   = descText;
             
-                // Afficher le prix correct : si customAmount (depuis devis), l'utiliser ; sinon config.total
-            document.getElementById('payCheckoutTotal').textContent  = customAmount ? customAmount + '€' : config.total;
+            document.getElementById('payCheckoutTotal').textContent  = config.total;
 
             // Ajouter la sélection type maintenance (via query string)
             if (service === 'maintenance') {
@@ -692,21 +683,8 @@
                                : (typeof pricingCfg.acompte === 'number' ? pricingCfg.acompte : 0.30);
                 var pct        = Math.round(rate * 100);
                 
-                // Si customAmount est fourni (depuis devis.html), c'est le TOTAL du devis personnalisé
-                // On calcule l'acompte comme 30% du total
-                if (customAmount) {
-                    var totalCustom = Number(customAmount);
-                    if (isNaN(totalCustom) || totalCustom < 10) {
-                        console.error('[Checkout] montant invalide', totalCustom);
-                        alert('Montant invalide pour le paiement. Merci de contacter le support.');
-                        return;
-                    }
-                    var amount = Math.round(totalCustom * rate); // Acompte = 30% du total
-                    var bal    = Math.round(totalCustom * (1 - rate)); // Solde = 70% du total
-                } else {
-                    var amount = Number(config.depositRaw);
-                    var bal    = Number(config.balanceRaw);
-                }
+                var amount = Number(config.depositRaw);
+                var bal    = Number(config.balanceRaw);
                 
                 if (isNaN(amount) || amount < 0.5) {
                     console.error('[Checkout] montant de paiement invalide', amount, config);
@@ -732,7 +710,15 @@
                 }
             }
 
-            startCheckout({ amount: checkoutAmount, description: checkoutDesc, mode: checkoutMode });
+            newBtn.href = '#';
+            newBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                startCheckout({ priceKey: key });
+            });
+
+            step2.style.display = 'none';
+            step3.style.display = 'block';
+            step3.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         // ── Mode express : récapitulatif depuis devis quick-link ──────────────
@@ -742,7 +728,13 @@
             var checkoutMode = mode || (service === 'maintenance' ? 'subscription' : 'payment');
             var checkoutDesc = (description ? decodeURIComponent(description) : serviceNames[service]) + ' — Acompte CxrilWebs';
 
-            document.getElementById('payCheckoutIcon').className     = 'fas fa-tag';
+            var iconEl = document.getElementById('payCheckoutIcon');
+            if (iconEl) {
+                var freshIcon = document.createElement('i');
+                freshIcon.id = 'payCheckoutIcon';
+                freshIcon.className = 'fas fa-tag';
+                iconEl.parentNode.replaceChild(freshIcon, iconEl);
+            }
             document.getElementById('payCheckoutTitle').textContent  = description ? decodeURIComponent(description) : (serviceNames[service] + ' — Devis personnalisé');
             document.getElementById('payCheckoutDesc').textContent   = 'Acompte à verser pour démarrer votre projet';
             document.getElementById('payCheckoutTotal').textContent  = total + '€';
@@ -774,7 +766,9 @@
             newBtn.href = '#';
             newBtn.addEventListener('click', function (e) {
                 e.preventDefault();
-                startCheckout({ amount: acompte, description: checkoutDesc, mode: checkoutMode });
+                // Les anciens liens express pouvaient contenir un montant modifié.
+                // Une validation manuelle est nécessaire avant tout paiement sur devis.
+                window.location.assign('devis.html');
             });
 
             expressMode.style.display = 'none';
@@ -789,11 +783,12 @@
                 web_app:             { icon: 'laptop-code', title: 'Projet web sur mesure', desc: 'Projet web sur mesure — Sur devis',           total: 'Sur devis', totalRaw: 0, deposit: 'Sur devis',  depositRaw: 0,  balance: '—', onDemand: true },
                 maintenance_site_mensuel: { icon: 'globe',   title: 'Maintenance Site Web — Mensuel',   desc: 'Contrat mensuel de maintenance de site web',                  total: '150€/mois',  totalRaw: 150,  deposit: '150€/mois',  depositRaw: 150,  balance: '—', isSubscription: true  },
                 maintenance_site_annuel:  { icon: 'globe',   title: 'Maintenance Site Web — Annuel',    desc: 'Contrat annuel de maintenance de site web (2 mois offerts)',  total: '1 490€/an', totalRaw: 1490, deposit: '1 490€/an', depositRaw: 1490, balance: '—', balanceRaw: 0, acompteRate: 1.0, isSubscription: false },
-                rs_basic:            { icon: 'share-alt',   title: 'Forfait Basic',       desc: '4 publications/mois — Abonnement',             total: '160€',      totalRaw: 160,  deposit: '160€',      depositRaw: 160,  balance: '—', isSubscription: true, recurring: '200€/mois' },
-                rs_plus:             { icon: 'share-alt',   title: 'Forfait Plus',        desc: '8 publications/mois — Abonnement',             total: '320€',      totalRaw: 320,  deposit: '320€',      depositRaw: 320,  balance: '—', isSubscription: true, recurring: '400€/mois' },
+                rs_basic:            { icon: 'share-alt',   title: 'Forfait Basic',       desc: '4 publications/mois — Abonnement',             total: '160€',      totalRaw: 160,  deposit: '160€',      depositRaw: 160,  balance: '—', isSubscription: true, recurring: '160€/mois' },
+                rs_plus:             { icon: 'share-alt',   title: 'Forfait Plus',        desc: '8 publications/mois — Abonnement',             total: '320€',      totalRaw: 320,  deposit: '320€',      depositRaw: 320,  balance: '—', isSubscription: true, recurring: '320€/mois' },
                 rs_facebook:         { icon: 'share-alt',   title: 'Création Facebook',   desc: 'Page Facebook professionnelle',                 total: '120€',      totalRaw: 120,  deposit: '120€',      depositRaw: 120,  balance: '—' },
                 rs_instagram:        { icon: 'share-alt',   title: 'Création Instagram',  desc: 'Compte Instagram professionnel',                total: '100€',      totalRaw: 100,  deposit: '100€',      depositRaw: 100,  balance: '—' },
-                rs_tiktok:           { icon: 'share-alt',   title: 'Création TikTok',    desc: 'Page TikTok professionnelle',                   total: '150€',      totalRaw: 150, deposit: '150€',      depositRaw: 150, balance: '—' },
+                rs_tiktok:           { icon: 'share-alt',   title: 'Création TikTok',    desc: 'Page TikTok professionnelle',                   total: '150€',      totalRaw: 150, deposit: '150€',      depositRaw: 150, balance: '—', balanceRaw: 0, acompteRate: 1.0 },
+                rs_linkedin:         { icon: 'share-alt',   title: 'Création LinkedIn',  desc: 'Page LinkedIn professionnelle',                 total: '80€',       totalRaw: 80,  deposit: '80€',       depositRaw: 80,  balance: '—', balanceRaw: 0, acompteRate: 1.0 },
                 rs_mensuel:          { icon: 'share-alt',   title: 'Gestion Réseaux Sos. Mensuelle', desc: 'Abonnement mensuel (Basic/Plus)',            total: '160€',      totalRaw: 160,  deposit: '160€',      depositRaw: 160,  balance: '—', isSubscription: true, recurring: '200€/mois' },
                 rs_annuel:           { icon: 'share-alt',   title: 'Gestion Réseaux Sos. Annuelle',  desc: 'Abonnement annuel',                          total: '1920€',     totalRaw: 1920, deposit: '1920€',     depositRaw: 1920, balance: '—', isSubscription: true, recurring: '2400€/an' },
                 rs_ads:              { icon: 'share-alt',   title: 'Campagnes Pub',      desc: 'Campagnes Facebook & Instagram',                total: '400€',      totalRaw: 400,  deposit: '400€',      depositRaw: 400,  balance: '—' },

@@ -51,34 +51,13 @@
             setTimeout(function() {
                 try {
                     var totalEl = document.getElementById('totalPrice');
-                    var ttcEl = document.getElementById('totalPriceTTC');
-                    var acompteEl = document.getElementById('stripeAcompteValue');
-                    if (!totalEl || !ttcEl) return;
-
-                    var ttcText = ttcEl.textContent;
-                    var ttc = parseFloat(ttcText) || 0;
+                    if (!totalEl) return;
                     var service = (document.querySelector('input[name="service"]:checked') || {}).value || 'web';
                     var formula = getFormula(service);
-                    var description = getDescription(service, formula);
-
-                    // Lien mode express (stripeAltLink)
-                    if (stripeAltLink && ttc > 0) {
-                        var modeAlt = getMode(service, formula);
-                        var acompte = Math.round(ttc * 0.30);
-                        stripeAltLink.href = 'paiement.html?service=' + service
-                                + '&total=' + ttc + '&acompte=' + acompte + '&mode=' + modeAlt;
-                    }
-
-                    // Bouton "Procéder au paiement" (avec formula + description)
-                    if (btnPayer && ttc > 0) {
-                        var mode = getMode(service, formula);
-                        var href = 'paiement.html?service=' + service + '&total=' + ttc;
-                        if (formula) href += '&formula=' + encodeURIComponent(formula);
-                        if (description) href += '&description=' + encodeURIComponent(description);
-                        href += '&mode=' + mode;
-                        btnPayer.href = href;
-                        btnPayer.style.display = '';
-                    }
+                    var href = 'paiement.html?service=' + encodeURIComponent(service);
+                    if (formula) href += '&formula=' + encodeURIComponent(formula);
+                    if (stripeAltLink) stripeAltLink.href = href;
+                    if (btnPayer) { btnPayer.href = href; btnPayer.style.display = ''; }
                 } catch (e) {
                     console.error('Erreur mise à jour liens paiement:', e);
                 }

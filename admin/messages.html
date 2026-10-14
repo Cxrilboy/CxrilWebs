@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages — CxrilWebs Admin</title>
+    <meta name="supabase-url" content="https://vowwywqggybvsbhpdkxs.supabase.co">
+    <meta name="supabase-key" content="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZvd3d5d3FnZ3lidnNiaHBka3hzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwODczMjMsImV4cCI6MjA5MDY2MzMyM30.i45GxR0-vl0tnKLugpoy6xhfhCqioaD2VBUgP7OMNPY">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="../logo/logoCW-no-bg.png">
+    <link rel="stylesheet" href="admin-styles.css">
+</head>
+<body>
+
+    <!-- ══ Sidebar ══ -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <img src="../logo/logoCW-no-bg.png" alt="Logo CxrilWebs">
+            <div>
+                <span class="sidebar-brand">CxrilWebs</span>
+                <span class="sidebar-role">Administration</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                Dashboard
+            </a>
+            <a href="messages.html" class="nav-item active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                Messages
+            </a>
+            <a href="factures.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+                Factures
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="admin-info">
+                <div class="admin-avatar" id="adminAvatar">C</div>
+                <div>
+                    <div class="admin-name" id="adminName">Chargement…</div>
+                    <div class="admin-role-label">Administrateur</div>
+                </div>
+            </div>
+            <button class="btn-signout" id="btnSignout" title="Se déconnecter" aria-label="Se déconnecter">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            </button>
+        </div>
+    </aside>
+
+    <!-- ══ Contenu ══ -->
+    <main class="main-content">
+        <header class="page-header">
+            <div>
+                <h1 class="page-title">Messages &amp; Leads</h1>
+                <p class="page-sub">Toutes les soumissions de formulaires reçues.</p>
+            </div>
+            <button class="btn-icon" id="btnToggleSidebar" aria-label="Menu">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
+        </header>
+
+        <!-- Filtres -->
+        <div class="filters-bar">
+            <select id="filterStatut" class="filter-select" aria-label="Filtrer par statut">
+                <option value="">Tous les statuts</option>
+                <option value="false">Non traités</option>
+                <option value="true">Traités</option>
+            </select>
+            <select id="filterType" class="filter-select" aria-label="Filtrer par type">
+                <option value="">Tous les types</option>
+                <option value="contact">Contact</option>
+                <option value="devis">Devis</option>
+                <option value="autre">Autre</option>
+            </select>
+            <input type="search" id="filterSearch" class="filter-input" placeholder="Rechercher nom, email…" aria-label="Rechercher">
+        </div>
+
+        <section class="card">
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Email / Tél.</th>
+                            <th>Type</th>
+                            <th>Sujet</th>
+                            <th>Date</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="msgTableBody">
+                        <tr><td colspan="7" class="loading-row">Chargement…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination" id="pagination"></div>
+        </section>
+    </main>
+
+    <!-- ══ Modal : détail d'un message ══ -->
+    <div class="modal-overlay" id="msgModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modalTitle">Détail du message</h3>
+                <button class="modal-close" id="modalClose" aria-label="Fermer">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="modalClose2">Fermer</button>
+                <button class="btn btn-success" id="btnMarkDone">Marquer traité</button>
+                <button class="btn btn-danger" id="btnDeleteMsg">Supprimer (Droit à l'oubli)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ Modal : confirmation suppression RGPD ══ -->
+    <div class="modal-overlay" id="confirmModal" role="dialog" aria-modal="true">
+        <div class="modal modal-sm">
+            <div class="modal-header">
+                <h3>Confirmer la suppression</h3>
+            </div>
+            <div class="modal-body">
+                <p>Cette action est <strong>irréversible</strong>. Toutes les données personnelles de ce contact seront définitivement supprimées, conformément au RGPD (droit à l'oubli).</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="confirmCancel">Annuler</button>
+                <button class="btn btn-danger" id="confirmDelete">Supprimer définitivement</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/messages.js"></script>
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factures — CxrilWebs Admin</title>
+    <meta name="supabase-url" content="https://vowwywqggybvsbhpdkxs.supabase.co">
+    <meta name="supabase-key" content="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZvd3d5d3FnZ3lidnNiaHBka3hzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwODczMjMsImV4cCI6MjA5MDY2MzMyM30.i45GxR0-vl0tnKLugpoy6xhfhCqioaD2VBUgP7OMNPY">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="../logo/logoCW-no-bg.png">
+    <link rel="stylesheet" href="admin-styles.css">
+</head>
+<body>
+
+    <!-- ══ Sidebar ══ -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <img src="../logo/logoCW-no-bg.png" alt="Logo CxrilWebs">
+            <div>
+                <span class="sidebar-brand">CxrilWebs</span>
+                <span class="sidebar-role">Administration</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                Dashboard
+            </a>
+            <a href="messages.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                Messages
+            </a>
+            <a href="factures.html" class="nav-item active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+                Factures
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="admin-info">
+                <div class="admin-avatar" id="adminAvatar">C</div>
+                <div>
+                    <div class="admin-name" id="adminName">Chargement…</div>
+                    <div class="admin-role-label">Administrateur</div>
+                </div>
+            </div>
+            <button class="btn-signout" id="btnSignout" title="Se déconnecter" aria-label="Se déconnecter">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            </button>
+        </div>
+    </aside>
+
+    <!-- ══ Contenu ══ -->
+    <main class="main-content">
+        <header class="page-header">
+            <div>
+                <h1 class="page-title">Factures</h1>
+                <p class="page-sub">Créez, gérez et suivez vos factures.</p>
+            </div>
+            <div style="display:flex;gap:.75rem;align-items:center;">
+                <button class="btn-icon" id="btnToggleSidebar" aria-label="Menu">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+                <button class="btn btn-primary" id="btnNewInvoice">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Nouvelle facture
+                </button>
+            </div>
+        </header>
+
+        <!-- Filtres -->
+        <div class="filters-bar">
+            <select id="filterStatut" class="filter-select" aria-label="Filtrer par statut">
+                <option value="">Tous les statuts</option>
+                <option value="brouillon">Brouillon</option>
+                <option value="envoyee">Envoyée</option>
+                <option value="payee">Payée</option>
+                <option value="annulee">Annulée</option>
+            </select>
+            <input type="search" id="filterSearch" class="filter-input" placeholder="Rechercher client, n° facture…" aria-label="Rechercher">
+        </div>
+
+        <section class="card">
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>N° Facture</th>
+                            <th>Client</th>
+                            <th>Description</th>
+                            <th>Montant TTC</th>
+                            <th>Statut</th>
+                            <th>Émission</th>
+                            <th>Échéance</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="invTableBody">
+                        <tr><td colspan="8" class="loading-row">Chargement…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination" id="pagination"></div>
+        </section>
+    </main>
+
+    <!-- ══ Modal : créer / modifier une facture ══ -->
+    <div class="modal-overlay" id="invoiceModal" role="dialog" aria-modal="true" aria-labelledby="invoiceModalTitle">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3 id="invoiceModalTitle">Nouvelle facture</h3>
+                <button class="modal-close" id="invoiceModalClose" aria-label="Fermer">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="invoiceForm" novalidate>
+                    <!-- Numéro & statut -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="f_numero">N° Facture *</label>
+                            <input type="text" id="f_numero" placeholder="FAC-2026-001" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="f_statut">Statut *</label>
+                            <select id="f_statut" required>
+                                <option value="brouillon">Brouillon</option>
+                                <option value="envoyee">Envoyée</option>
+                                <option value="payee">Payée</option>
+                                <option value="annulee">Annulée</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Client -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="f_client_nom">Nom du client *</label>
+                            <input type="text" id="f_client_nom" placeholder="Jean Dupont" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="f_client_email">Email client *</label>
+                            <input type="email" id="f_client_email" placeholder="jean@exemple.fr" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="f_client_tel">Téléphone</label>
+                            <input type="tel" id="f_client_tel" placeholder="+590 690 000 000">
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="form-group">
+                        <label for="f_description">Description *</label>
+                        <textarea id="f_description" rows="2" placeholder="Création de site web vitrine…" required></textarea>
+                    </div>
+
+                    <!-- Lignes de facturation -->
+                    <div class="form-group">
+                        <label>Lignes de facturation</label>
+                        <div id="lignesContainer"></div>
+                        <button type="button" class="btn btn-secondary btn-sm" id="btnAddLigne" style="margin-top:.5rem;">
+                            + Ajouter une ligne
+                        </button>
+                    </div>
+
+                    <!-- Totaux calculés automatiquement -->
+                    <div class="totaux-box">
+                        <div class="total-row">
+                            <span>Total HT</span>
+                            <strong id="totalHT">0,00 €</strong>
+                        </div>
+                        <div class="total-row">
+                            <span>TVA (<input type="number" id="f_tva" value="20" min="0" max="100" step="0.1" class="tva-input" aria-label="Taux TVA"> %)</span>
+                            <strong id="totalTVA">0,00 €</strong>
+                        </div>
+                        <div class="total-row total-ttc">
+                            <span>Total TTC</span>
+                            <strong id="totalTTC">0,00 €</strong>
+                        </div>
+                    </div>
+
+                    <!-- Dates -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="f_date_emission">Date d'émission</label>
+                            <input type="date" id="f_date_emission">
+                        </div>
+                        <div class="form-group">
+                            <label for="f_date_echeance">Date d'échéance</label>
+                            <input type="date" id="f_date_echeance">
+                        </div>
+                    </div>
+
+                    <!-- Notes internes -->
+                    <div class="form-group">
+                        <label for="f_notes">Notes internes</label>
+                        <textarea id="f_notes" rows="2" placeholder="Conditions de paiement, remarques…"></textarea>
+                    </div>
+
+                    <div class="alert error" id="formError"></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="invoiceModalClose2">Annuler</button>
+                <button class="btn btn-primary" id="btnSaveInvoice">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ Modal : confirmation suppression ══ -->
+    <div class="modal-overlay" id="confirmModal" role="dialog" aria-modal="true">
+        <div class="modal modal-sm">
+            <div class="modal-header"><h3>Supprimer la facture ?</h3></div>
+            <div class="modal-body">
+                <p>Cette action est irréversible. La facture sera définitivement supprimée.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="confirmCancel">Annuler</button>
+                <button class="btn btn-danger"    id="confirmDelete">Supprimer</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/factures.js"></script>
+</body>
+</html>

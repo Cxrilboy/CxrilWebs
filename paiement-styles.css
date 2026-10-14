@@ -229,6 +229,14 @@
     transform: translateY(-6px);
     box-shadow: 0 12px 32px rgba(99, 91, 255, .12);
 }
+.pay-option-card:focus-visible {
+    outline: 3px solid #635BFF;
+    outline-offset: 3px;
+}
+.pay-service-card:focus-visible {
+    outline: 3px solid #635BFF;
+    outline-offset: 3px;
+}
 .pay-option-card.selected {
     border-color: #635BFF;
     background: rgba(99, 91, 255, .06);

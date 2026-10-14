@@ -873,7 +873,7 @@
         return 0;
     }
 
-    /* ── Envoi Supabase ───────────────────────────────────── */
+    /* ── Envoi sécurisé du devis ───────────────────────────── */
     async function handleSubmit(e) {
         e.preventDefault();
         if (!validateContactFields()) return;
@@ -895,18 +895,26 @@
         const total = computeTotal(svc);
 
         try {
-            if (typeof window.sbEnsureUser !== 'function') {
-                throw new Error('Client Supabase non initialisé — vérifie les meta tags supabase-url / supabase-key dans le <head>.');
-            }
-            const userId = await window.sbEnsureUser(nom, eml, tel);
-            const devis  = await window.sbCreateDevis(userId, svc, total, {
-                message: msg,
-                options: collectSelectedOptionsText(svc).join(', ')
+            const response = await fetch('/api/devis.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    nom,
+                    email: eml,
+                    telephone: tel,
+                    message: msg,
+                    service: svc,
+                    montantHt: total,
+                    rgpd: document.getElementById('d-rgpd')?.checked === true,
+                    options: collectSelectedOptionsText(svc).join(', '),
+                    website: document.getElementById('d-website')?.value || '',
+                }),
             });
-            if (!devis) throw new Error('createDevis a retourné null — vérifie la connexion Supabase.');
+            const data = await response.json().catch(function() { return {}; });
+            if (!response.ok || !data.ok) throw new Error(data.error || 'Envoi impossible');
 
             successEl.className = 'devis-success show success';
-            successEl.innerHTML = '<i class="fas fa-check-circle"></i> Votre demande a bien été envoyée ! Nous vous répondrons sous 24h.';
+            successEl.innerHTML = '<i class="fas fa-check-circle"></i> Votre demande a bien été envoyée ! Je vous répondrai sous 24h.';
             form.reset();
         } catch (err) {
             console.error('[Devis] Erreur envoi:', err.message);
@@ -936,6 +944,13 @@
         block.classList.remove('stripe-fadeIn');
         void block.offsetWidth;
         block.classList.add('stripe-fadeIn');
+
+        // Un devis web peut inclure des options sur mesure : son total doit être
+        // validé avant tout acompte, jamais transmis directement à Stripe.
+        if (service === 'web') {
+            block.style.display = 'none';
+            return;
+        }
 
         const isAbonnement = service === 'maintenance' || service === 'reseaux-sociaux';
 
@@ -973,41 +988,7 @@
 
     async function initiateCheckout(e) {
         e.preventDefault();
-        const service = getSelectedService();
-        const total   = computeTotal(service);
-        const ttcText = document.getElementById('totalPriceTTC').textContent;
-        const ttc     = parseFloat(ttcText) || 0;
-        if (!service || !ttc) return;
-
-        const btn     = document.getElementById('stripePayBtn');
-        const origHTML= btn.innerHTML;
-        const acompte = Math.round(ttc * 0.30);
-
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Redirection sécurisée...';
-        btn.disabled  = true;
-
-        try {
-            const res = await fetch('/.netlify/functions/create-checkout-session', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ amount: acompte, description: 'Devis ' + service + ' — Acompte CxrilWebs', mode: 'payment', currency: 'eur' }),
-            });
-            const text = await res.text();
-            var data;
-            try { data = text ? JSON.parse(text) : {}; }
-            catch (parseErr) { throw new Error('Réponse serveur invalide : ' + text.substring(0, 200)); }
-            if (!res.ok) {
-                var serverError = (data && data.error) ? data.error : 'Erreur HTTP ' + res.status;
-                throw new Error('Erreur Stripe : ' + serverError);
-            }
-            if (data.url) window.location.href = data.url;
-            else throw new Error(data.error || 'Pas d\'URL de paiement reçue');
-        } catch (err) {
-            console.error('Erreur Stripe:', err);
-            alert('Erreur lors de la redirection. Veuillez réessayer.');
-            btn.innerHTML = origHTML;
-            btn.disabled  = false;
-        }
+        alert('Votre devis est prêt. Nous validons d’abord les options avec vous avant de demander un acompte sécurisé.');
     }
 
     /* ── XSS escape ───────────────────────────────────────── */
@@ -1020,31 +1001,24 @@
     init();
 
     // ════════════════════════════════════════════════════════════════
-    // EVENT LISTENER — Bouton "Procéder au paiement"
+    // Le paiement d'un devis personnalisé est validé manuellement : seules les
+    // formules affichées par paiement.html peuvent être envoyées à Stripe.
     // ════════════════════════════════════════════════════════════════
     const btnPayer = document.getElementById('btn-payer');
     if (btnPayer) {
-        // Override du href par un event listener qui construit les paramètres correctement
         btnPayer.addEventListener('click', function(e) {
             const service = getSelectedService();
             if (!service) return; // Pas de service sélectionné, laisser le href par défaut
-            
-            const total = computeTotal(service);
             const contrat = form.querySelector('input[name="contrat-maintenance"]:checked');
             const webType = form.querySelector('input[name="web-type"]:checked');
-            
-            // Construire les paramètres query
+
             let url = 'paiement.html?service=' + encodeURIComponent(service);
-            url += '&total=' + encodeURIComponent(total);
-            
-            // Ajouter des paramètres contextuels selon le service
             if (service === 'web' && webType) {
-                url += '&type=' + encodeURIComponent(webType.value);
+                url += '&formula=' + encodeURIComponent(webType.value);
             } else if (service === 'maintenance' && contrat) {
-                url += '&contrat=' + encodeURIComponent(contrat.value);
+                url += '&formula=' + encodeURIComponent('site_' + contrat.value);
             }
-            
-            // Naviguer vers la page de paiement
+            e.preventDefault();
             window.location.href = url;
         });
     }

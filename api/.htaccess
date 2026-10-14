@@ -1,0 +1,8 @@
+Options -Indexes
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+    Header always set Cache-Control "no-store, private"
+</IfModule>

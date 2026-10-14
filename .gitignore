@@ -9,12 +9,16 @@ Thumbs.db
 .env
 .env.local
 .env.production
+/config/.env
+/vendor/
+/config/ratelimit/
 
 # Fichiers temporaires et inutiles
 *.jpeg
 *.jpg
 *.png
 *.gif
+!og-image.jpg
 SUPABASE_SETUP.md
 prompt-*.md
 database/

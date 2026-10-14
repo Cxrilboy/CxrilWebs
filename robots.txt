@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /config/
+Disallow: /merci.html
+
+Sitemap: https://cxrilwebs.fr/sitemap.xml

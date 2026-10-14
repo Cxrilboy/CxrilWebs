@@ -137,39 +137,24 @@ function loadComponentWithXHR(filePath) {
 async function loadComponents() {
     console.log('Début du chargement des composants...');
     
-    // Attendre que Font Awesome soit prêt
-    await waitForFontAwesome();
-    
-    // Charger le header s'il y a un conteneur
+    // Charger le header, le footer et les contrôles en parallèle pour réduire le rendu bloquant
     const headerContainer = document.getElementById('header-container');
-    if (headerContainer) {
-        console.log('Chargement du header...');
-        try {
-            await loadComponent('header-container', 'header/header.html');
-            // Adapter les liens du header selon la page
-            adaptHeaderLinks();
-        } catch (error) {
-            console.error('Erreur lors du chargement du header:', error);
-        }
-    } else {
-        console.warn('Conteneur header-container introuvable');
-    }
-    
-    // Charger le footer s'il y a un conteneur
     const footerContainer = document.getElementById('footer-container');
-    if (footerContainer) {
+
+    const headerPromise = headerContainer ? (async () => {
+        console.log('Chargement du header...');
+        await loadComponent('header-container', 'header/header.html');
+        adaptHeaderLinks();
+    })() : Promise.resolve();
+
+    const footerPromise = footerContainer ? (async () => {
         console.log('Chargement du footer...');
-        try {
-            await loadComponent('footer-container', 'footer/footer.html');
-        } catch (error) {
-            console.error('Erreur lors du chargement du footer:', error);
-        }
-    } else {
-        console.warn('Conteneur footer-container introuvable');
-    }
-    
-    // Charger les contrôles utilitaires (dark mode / back-to-top / WhatsApp)
-    await loadGlobalControls();
+        await loadComponent('footer-container', 'footer/footer.html');
+    })() : Promise.resolve();
+
+    const globalControlsPromise = loadGlobalControls();
+
+    await Promise.all([headerPromise, footerPromise, globalControlsPromise]);
 
     // Réinitialiser les événements après le chargement
     initializeComponents();

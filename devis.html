@@ -4,25 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Générateur de devis automatique CxrilWebs - Obtenez une estimation instantanée pour vos projets IT : site web, gestion de vos réseaux, maintenance.">
-    <!-- Supabase : remplace VOTRE_CLE_ANON par la clé anon publique de ton projet Supabase -->
-    <meta name="supabase-url" content="https://vowwywqggybvsbhpdkxs.supabase.co">
-    <meta name="supabase-key" content="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZvd3d5d3FnZ3lidnNiaHBka3hzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwODczMjMsImV4cCI6MjA5MDY2MzMyM30.i45GxR0-vl0tnKLugpoy6xhfhCqioaD2VBUgP7OMNPY">
     <meta property="og:title" content="Générateur de Devis - CxrilWebs">
     <meta property="og:description" content="Obtenez une estimation instantanée pour vos projets IT en Guadeloupe : site web, gestion de vos réseaux, maintenance.">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="fr_FR">
+    <meta property="og:url" content="https://cxrilwebs.fr/devis.html">
+    <meta property="og:image" content="https://cxrilwebs.fr/og-image.jpg">
     <title>Générateur de Devis - CxrilWebs</title>
+    <link rel="canonical" href="https://cxrilwebs.fr/devis.html">
     <link rel="icon" type="image/png" href="logo/logoCW-no-bg.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/js/all.min.js"></script>
-    <link rel="stylesheet" href="styles.css?v=20260403">
-    <link rel="stylesheet" href="devis-styles.css?v=20260403">
+    <link rel="stylesheet" href="styles.css?v=20260929">
+    <link rel="stylesheet" href="devis-styles.css?v=20260929">
     <script src="js/pricing.js?v=20260403"></script>
-    <!-- Supabase CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 </head>
 <body>
     <!-- Dark Mode Toggle -->
@@ -495,6 +492,10 @@
                         <h2 class="step-title">Vos coordonnées</h2>
                         <p class="step-subtitle">Pour vous envoyer votre devis détaillé</p>
                         <div class="devis-form-fields">
+                            <div class="contact-honeypot" aria-hidden="true">
+                                <label for="d-website">Site web</label>
+                                <input type="text" id="d-website" name="website" tabindex="-1" autocomplete="off">
+                            </div>
                             <div class="devis-field">
                                 <label for="d-nom">Nom complet *</label>
                                 <input type="text" id="d-nom" name="d-nom" placeholder="Jean Dupont" required autocomplete="name">
@@ -560,8 +561,9 @@
                             <div class="stripe-payment-card">
                                 <div class="stripe-payment-header">
                                     <div class="stripe-payment-logo">
-                                        <svg viewBox="0 0 60 25" width="48" height="20" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M59.64 14.28h-8.06c.19 1.93 1.6 2.55 3.2 2.55 1.64 0 2.96-.37 4.05-.95v3.32a10 10 0 0 1-4.56 1c-4.01 0-6.83-2.5-6.83-7.48 0-4.19 2.39-7.52 6.3-7.52 3.92 0 5.96 3.28 5.96 7.5 0 .4-.04 1.26-.06 1.58zm-5.92-5.62c-1.03 0-2.17.73-2.58h4.25c0-1.85-1.07-2.58-2.08-2.58zM40.95 20v-9.72c0-1.46-.49-2.46-1.96-2.46-1.54 0-2.19 1.32-2.19 2.8V20h-4.02V5.62h3.94v1.86c.64-1.14 1.96-2.1 3.78-2.1 2.69 0 4.47 1.74 4.47 5.01V20h-4.02zm-12.13 0V5.62h4.02V20h-4.02zm2.01-16.12c-1.28 0-2.07-.86-2.07-1.94 0-1.09.8-1.94 2.07-1.94s2.07.85 2.07 1.94c0 1.08-.8 1.94-2.07 1.94zM23.6 20l-4.73-6.8V20h-4.02V.1h4.02v12.24l4.47-6.72h4.74l-5.12 7.16 5.43 7.22H23.6zm-12.66 0c-2.85 0-4.34-1.47-4.34-4.38V9.04H4.5V5.62h2.1V1.87l4.02-1.18v4.93h3.23v3.42h-3.23v6.08c0 1.02.5 1.46 1.43 1.46.58 0 1.2-.15 1.8-.42V20c-.7.23-1.53.35-2.4.35z" fill="#635BFF"/>
+                                        <svg viewBox="0 0 60 25" width="48" height="20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                                            <rect width="60" height="25" rx="4" fill="#635BFF" />
+                                            <text x="30" y="17" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="700" fill="#ffffff">Stripe</text>
                                         </svg>
                                     </div>
                                     <p class="stripe-payment-title">Confirmer votre commande maintenant</p>
@@ -657,7 +659,6 @@
     </a>
 
     <script src="components-loader.js?v=20260403" defer></script>
-    <script src="js/supabase-client.js?v=20260403"></script>
     <script src="script.js?v=20260403"></script>
     <script src="devis.js?v=20260403"></script>
     <script src="js/devis-payment-links.js" defer></script>

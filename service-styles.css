@@ -1,5 +1,20 @@
 /* ========== STYLES SPÉCIFIQUES POUR LES PAGES DE SERVICES ========== */
 
+/* Évite qu'un fond blanc du document apparaisse sous le footer de service-web. */
+body.service-web-page {
+    margin: 0;
+    background: #0f2a50;
+}
+
+body.service-web-page #footer-container {
+    margin: 0;
+    padding: 0;
+}
+
+body.service-web-page .service-cta {
+    margin-bottom: 0;
+}
+
 /* ========== HERO SECTION SERVICE ========== */
 .service-hero {
     padding: 8rem 2rem 6rem;
@@ -308,6 +323,36 @@
 
 [data-theme="dark"] .step-title {
     color: #E8F0FF !important;
+}
+
+[data-theme="dark"] .benefits-title,
+[data-theme="dark"] .process-title,
+[data-theme="dark"] .tech-title,
+[data-theme="dark"] .pricing-title,
+[data-theme="dark"] .types-title,
+[data-theme="dark"] .configs-title,
+[data-theme="dark"] .sidebar-title {
+    color: #8fb7ff;
+}
+
+[data-theme="dark"] .tech-item i,
+[data-theme="dark"] .type-card i {
+    color: #8fb7ff;
+}
+
+[data-theme="dark"] .pricing-name,
+[data-theme="dark"] .type-card h4,
+[data-theme="dark"] .config-name {
+    color: #d8e6ff;
+}
+
+[data-theme="dark"] .benefit-item,
+[data-theme="dark"] .tech-item,
+[data-theme="dark"] .pricing-card,
+[data-theme="dark"] .type-card,
+[data-theme="dark"] .config-card,
+[data-theme="dark"] .sidebar-card {
+    border-color: rgba(143, 183, 255, 0.18);
 }
 
 .step-text {

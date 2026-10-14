@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration — CxrilWebs</title>
+
+    <!-- Credentials Supabase -->
+    <meta name="supabase-url" content="https://vowwywqggybvsbhpdkxs.supabase.co">
+    <meta name="supabase-key" content="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZvd3d5d3FnZ3lidnNiaHBka3hzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwODczMjMsImV4cCI6MjA5MDY2MzMyM30.i45GxR0-vl0tnKLugpoy6xhfhCqioaD2VBUgP7OMNPY">
+
+    <!-- Bloquer l'indexation de l'espace admin -->
+    <meta name="robots" content="noindex, nofollow">
+
+    <link rel="icon" type="image/png" href="../logo/logoCW-no-bg.png">
+
+    <style>
+        /* ── Reset & variables ── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg-primary:   #0d0f14;
+            --bg-card:      #161a23;
+            --bg-input:     #1e2330;
+            --border:       #2a3044;
+            --accent:       #6366f1;
+            --accent-hover: #4f52d9;
+            --accent-glow:  rgba(99,102,241,.25);
+            --text-primary: #f0f2ff;
+            --text-muted:   #8892a4;
+            --error:        #f87171;
+            --success:      #34d399;
+            --radius:       12px;
+            --transition:   .2s ease;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            background-image:
+                linear-gradient(rgba(99,102,241,.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99,102,241,.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* ── Carte de connexion ── */
+        .login-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2.5rem 2rem;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 24px 64px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.03);
+        }
+
+        .login-logo {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            margin-bottom: 2rem;
+        }
+
+        .login-logo img {
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
+        }
+
+        .login-logo .brand { font-size: 1.1rem; font-weight: 700; letter-spacing: -.02em; }
+
+        .login-logo .badge {
+            font-size: .65rem;
+            font-weight: 600;
+            background: var(--accent);
+            color: #fff;
+            padding: .2rem .5rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+        }
+
+        h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -.03em; margin-bottom: .5rem; }
+
+        .subtitle { color: var(--text-muted); font-size: .9rem; margin-bottom: 2rem; }
+
+        /* ── Formulaire ── */
+        .form-group { margin-bottom: 1.25rem; }
+
+        label {
+            display: block;
+            font-size: .825rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: .45rem;
+            letter-spacing: .02em;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: .95rem;
+            padding: .7rem 1rem;
+            outline: none;
+            transition: border-color var(--transition), box-shadow var(--transition);
+        }
+
+        input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        /* ── Bouton principal ── */
+        .btn-login {
+            width: 100%;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: .8rem;
+            cursor: pointer;
+            margin-top: .5rem;
+            transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+        }
+
+        .btn-login:hover:not(:disabled) {
+            background: var(--accent-hover);
+            box-shadow: 0 8px 24px var(--accent-glow);
+        }
+
+        .btn-login:active:not(:disabled) { transform: scale(.98); }
+        .btn-login:disabled { opacity: .6; cursor: not-allowed; }
+
+        /* Spinner de chargement */
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255,255,255,.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin .6s linear infinite;
+            display: none;
+        }
+
+        .btn-login.loading .spinner  { display: block; }
+        .btn-login.loading .btn-text { display: none; }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Alertes ── */
+        .alert {
+            display: none;
+            padding: .75rem 1rem;
+            border-radius: 8px;
+            font-size: .875rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .alert.error   { background: rgba(248,113,113,.1); border: 1px solid rgba(248,113,113,.3); color: var(--error); }
+        .alert.success { background: rgba(52,211,153,.1);  border: 1px solid rgba(52,211,153,.3);  color: var(--success); }
+        .alert.visible { display: block; }
+
+        /* ── Footer ── */
+        .login-footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: .78rem;
+            color: var(--text-muted);
+        }
+
+        .login-footer a { color: var(--text-muted); text-decoration: none; }
+        .login-footer a:hover { color: var(--text-primary); }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="login-logo">
+            <img src="../logo/logoCW-no-bg.png" alt="CxrilWebs Logo">
+            <span class="brand">CxrilWebs</span>
+            <span class="badge">Admin</span>
+        </div>
+
+        <h1>Connexion</h1>
+        <p class="subtitle">Accès réservé aux administrateurs autorisés.</p>
+
+        <div class="alert error"   id="alertError"   role="alert"></div>
+        <div class="alert success" id="alertSuccess" role="alert"></div>
+
+        <form id="loginForm" novalidate>
+            <div class="form-group">
+                <label for="email">Adresse e-mail</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="admin@cxrilwebs.fr"
+                    autocomplete="username"
+                    required
+                >
+            </div>
+            <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="••••••••••••"
+                    autocomplete="current-password"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="btn-login" id="btnLogin">
+                <span class="btn-text">Se connecter</span>
+                <span class="spinner" aria-hidden="true"></span>
+            </button>
+        </form>
+
+        <div class="login-footer">
+            <a href="/">← Retour au site</a>
+        </div>
+    </div>
+
+    <script type="module">
+        import { supabase } from './js/supabase-admin.js';
+
+        // ── Si déjà connecté et admin, rediriger directement ──────────────────
+        (async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) return;
+
+            const { data: profile } = await supabase
+                .from('admin_profiles')
+                .select('id')
+                .eq('id', session.user.id)
+                .maybeSingle();
+
+            if (profile) {
+                window.location.replace('/admin/dashboard.html');
+            }
+        })();
+
+        // ── Éléments DOM ──────────────────────────────────────────────────────
+        const form     = document.getElementById('loginForm');
+        const btnLogin = document.getElementById('btnLogin');
+        const alertErr = document.getElementById('alertError');
+        const alertOk  = document.getElementById('alertSuccess');
+
+        function showError(msg) {
+            alertErr.textContent = msg;
+            alertErr.classList.add('visible');
+            alertOk.classList.remove('visible');
+        }
+
+        function showSuccess(msg) {
+            alertOk.textContent = msg;
+            alertOk.classList.add('visible');
+            alertErr.classList.remove('visible');
+        }
+
+        function setLoading(loading) {
+            btnLogin.disabled = loading;
+            btnLogin.classList.toggle('loading', loading);
+        }
+
+        // ── Soumission du formulaire ───────────────────────────────────────────
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            alertErr.classList.remove('visible');
+            alertOk.classList.remove('visible');
+
+            const email    = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            if (!email || !password) {
+                showError('Veuillez remplir tous les champs.');
+                return;
+            }
+
+            setLoading(true);
+
+            try {
+                // 1. Authentification Supabase Auth
+                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+                if (error) {
+                    // Message générique intentionnel (évite l'énumération d'utilisateurs)
+                    showError('Identifiants incorrects. Veuillez réessayer.');
+                    return;
+                }
+
+                // 2. Vérifier la présence dans admin_profiles
+                const { data: profile, error: profileErr } = await supabase
+                    .from('admin_profiles')
+                    .select('id, nom')
+                    .eq('id', data.user.id)
+                    .maybeSingle();
+
+                if (profileErr || !profile) {
+                    await supabase.auth.signOut();
+                    showError('Accès non autorisé.');
+                    return;
+                }
+
+                showSuccess(`Bienvenue, ${profile.nom} ! Redirection…`);
+                setTimeout(() => window.location.replace('/admin/dashboard.html'), 800);
+
+            } catch (err) {
+                console.error('[Admin Login]', err);
+                showError('Une erreur inattendue est survenue.');
+            } finally {
+                setLoading(false);
+            }
+        });
+    </script>
+</body>
+</html>

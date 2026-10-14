@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
         { name: 'portfolio-carousel', run: initPortfolioCarousel },
         { name: 'faq', run: initFAQ },
         { name: 'reveal-text', run: initRevealText },
-        { name: 'cookie-banner', run: initCookieBanner },
         { name: 'cta-buttons', run: initCTAButtons }
     ];
 
@@ -508,15 +507,12 @@ function initMobileMenu() {
     
     // Silently return if elements aren't found yet (they may load later)
     if (!mobileMenuToggle || !sidebar || !sidebarOverlay) {
-        console.log('[MOBILE MENU] Elements not found - will retry after components load');
         return;
     }
     
     mobileMenuInitialized = true;
-    console.log('[MOBILE MENU] ✓ All elements found, initializing...');
     
     function openSidebar() {
-        console.log('[MOBILE MENU] Opening sidebar...');
         sidebar.classList.add('is-open');
         // Ne pas forcer display en inline - laisser la CSS gérer
         body.style.overflow = 'hidden';
@@ -525,11 +521,9 @@ function initMobileMenu() {
             icon.classList.remove('fa-bars'); 
             icon.classList.add('fa-times');
         }
-        console.log('[MOBILE MENU] Sidebar class:', sidebar.className);
     }
     
     function closeSidebar() {
-        console.log('[MOBILE MENU] Closing sidebar...');
         sidebar.classList.remove('is-open');
         // Ne pas forcer display en inline - laisser la CSS gérer
         body.style.overflow = '';
@@ -538,12 +532,10 @@ function initMobileMenu() {
             icon.classList.add('fa-bars'); 
             icon.classList.remove('fa-times');
         }
-        console.log('[MOBILE MENU] Sidebar class:', sidebar.className);
     }
     
     // Event listener pour le bouton hamburger
     mobileMenuToggle.addEventListener('click', function() {
-        console.log('[MOBILE MENU] Hamburger clicked, is-open?', sidebar.classList.contains('is-open'));
         if (sidebar.classList.contains('is-open')) {
             closeSidebar();
         } else {
@@ -577,48 +569,7 @@ function initMobileMenu() {
 
 // ========== ANIMATIONS HÉRO ==========
 function initHeroAnimations() {
-    // Animation des compteurs
-    const statNumbers = document.querySelectorAll('.stat-number');
-    
-    const animateCounter = (element) => {
-        const target = parseInt(element.getAttribute('data-target'));
-        const duration = 2000;
-        const step = target / (duration / 16);
-        let current = 0;
-        
-        const updateCounter = () => {
-            current += step;
-            if (current < target) {
-                element.textContent = Math.floor(current) + (element.textContent.includes('%') ? '%' : '+');
-                requestAnimationFrame(updateCounter);
-            } else {
-                element.textContent = target + (element.textContent.includes('%') ? '%' : '+');
-            }
-        };
-        
-        updateCounter();
-    };
-    
-    // Observer pour déclencher l'animation quand visible
-    const observerOptions = {
-        threshold: 0.5,
-        rootMargin: '0px'
-    };
-    
-    const statObserver = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                animateCounter(entry.target);
-                statObserver.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-    
-    statNumbers.forEach(stat => {
-        statObserver.observe(stat);
-    });
-    
-    // Création de particules animées
+    // Les résultats sont immédiatement lisibles, sans effet de compteur à 0.
     createParticles();
 }
 
@@ -680,35 +631,6 @@ function initFormValidation() {
     
     if (!contactForm) return;
     
-    // Vérifier si Supabase est prêt - retries multiples pour mobile
-    let supabaseReady = false;
-    const checkSupabase = (attempt = 0) => {
-        const sbExists = typeof window.sbSaveContact === 'function';
-        const gcExists = typeof window.sbGetClient === 'function';
-        
-        if (sbExists && gcExists) {
-            try {
-                const client = window.sbGetClient();
-                if (client) {
-                    supabaseReady = true;
-                    return;
-                } else {
-                    // client is null
-                }
-            } catch(e) {
-                // test client error
-            }
-        }
-    };
-    
-    checkSupabase(0);
-    setTimeout(() => checkSupabase(1), 500);
-    setTimeout(() => checkSupabase(2), 1500);
-    setTimeout(() => checkSupabase(3), 3000);
-    setTimeout(() => checkSupabase(4), 5000);
-    setTimeout(() => checkSupabase(5), 8000);
-    setTimeout(() => checkSupabase(6), 10000);
-    
     // Validation en temps réel
     const formInputs = contactForm.querySelectorAll('input, select, textarea');
     
@@ -727,51 +649,6 @@ function initFormValidation() {
     // Soumission du formulaire
     contactForm.addEventListener('submit', async function(e) {
         e.preventDefault();
-        
-        // CORRECTION #2: Si Supabase pas encore prêt, attendre avant soumettre
-        if (!supabaseReady) {
-            
-            // Forcer relecture des meta tags via sbGetClient
-            if (typeof window.sbGetClient === 'function') {
-                const client = window.sbGetClient();
-                if (client) {
-                    supabaseReady = true;
-                }
-            }
-            
-            // Si toujours pas prêt, attendre max 3 secondes
-            if (!supabaseReady) {
-                const btnText = submitBtn.querySelector('.btn-text');
-                const btnLoader = submitBtn.querySelector('.btn-loader');
-                submitBtn.disabled = true;
-                if (btnText) btnText.style.display = 'none';
-                if (btnLoader) btnLoader.style.display = 'inline-block';
-                
-                await new Promise(resolve => {
-                    let waited = 0;
-                    const interval = setInterval(() => {
-                        waited += 300;
-                        if (typeof window.sbGetClient === 'function') {
-                            const client = window.sbGetClient();
-                            if (client) {
-                                supabaseReady = true;
-                                clearInterval(interval);
-                                resolve();
-                                return;
-                            }
-                        }
-                        if (waited >= 3000) {
-                            clearInterval(interval);
-                            resolve();
-                        }
-                    }, 300);
-                });
-                
-                submitBtn.disabled = false;
-                if (btnText) btnText.style.display = 'inline';
-                if (btnLoader) btnLoader.style.display = 'none';
-            }
-        }
         
         // Réinitialiser les erreurs
         clearErrors();
@@ -884,71 +761,41 @@ function initFormValidation() {
     async function submitForm() {
         const btnText = submitBtn.querySelector('.btn-text');
         const btnLoader = submitBtn.querySelector('.btn-loader');
-        
-        // Désactiver le bouton et les animations, afficher le loader
+
         submitBtn.disabled = true;
         submitBtn.classList.add('disabled');
         btnText.style.display = 'none';
         btnLoader.style.display = 'inline-block';
-        
-        // Simuler l'envoi (remplacer par votre logique d'envoi)
+
         try {
-            // Envoi via Supabase
             const nom     = contactForm.querySelector('#nom').value.trim();
             const email   = contactForm.querySelector('#email').value.trim();
             const serviceRaw = contactForm.querySelector('#service').value;
             const desc    = contactForm.querySelector('#description').value.trim();
-            // Mapper les valeurs du formulaire vers l'enum Supabase
             const serviceMap = { 'creation-site': 'web', 'maintenance': 'maintenance', 'reseaux-sociaux': 'reseaux-sociaux' };
             const serviceRef = serviceMap[serviceRaw] || null;
 
-            // Essayer d'envoyer via Supabase
-            let result = null;
-            let sentToDatabase = false;
-            
-            if (typeof window.sbSaveContact === 'function') {
-                try {
-                    // Appel correct: (nom, email, description, serviceRef)
-                    result = await window.sbSaveContact(nom, email, desc, serviceRef);
-                    if (result) {
-                        sentToDatabase = true;
-                    }
-                } catch (e) {
-                    // Supabase save error - will fallback to localStorage
-                }
-            }
+            const response = await fetch('/api/contact.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    nom,
+                    email,
+                    message: desc,
+                    serviceRef,
+                    website: contactForm.querySelector('#website')?.value || '',
+                }),
+            });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok || !data.ok) throw new Error(data.error || 'Envoi impossible');
 
-            // Fallback : sauvegarder dans localStorage si Supabase a échoué
-            if (!result) {
-                const contactData = {
-                    nom, email, serviceRaw, desc, serviceRef,
-                    timestamp: new Date().toISOString()
-                };
-                const contacts = JSON.parse(localStorage.getItem('pendingContacts') || '[]');
-                contacts.push(contactData);
-                localStorage.setItem('pendingContacts', JSON.stringify(contacts));
-                result = { id: 'local-' + Date.now() };
-            }
-            
-            // Afficher le message approprié
-            if (sentToDatabase) {
-                formSuccess.textContent = '✅ Votre demande a été envoyée avec succès ! Nous vous contacterons sous peu.';
-                formSuccess.style.display = 'block';
-                formSuccess.style.background = '';
-                showToast('success', 'Message envoyé !', 'Votre demande a été envoyée avec succès. Nous vous recontacterons sous peu.');
-            } else {
-                // Fallback: afficher avec lien WhatsApp pour réponse rapide
-                formSuccess.innerHTML = '⚠️ Votre demande a été enregistrée. Pour une réponse immédiate, <a href="https://wa.me/690752430?text=Bonjour%2C%20je%20souhaite%20un%20devis" target="_blank" style="color:#fff;text-decoration:underline;font-weight:bold">contactez-nous sur WhatsApp</a>.';
-                formSuccess.style.display = 'block';
-                formSuccess.style.background = 'linear-gradient(135deg, #ff9800 0%, #f57c00 100%)';
-                showToast('warning', 'Demande enregistrée', 'Pour une réponse rapide, contactez-nous sur WhatsApp.');
-            }
-            
-            // Réinitialiser le formulaire
+            formSuccess.textContent = '✅ Votre demande a bien été envoyée. Je vous répondrai dans les plus brefs délais.';
+            formSuccess.style.display = 'block';
+            formSuccess.style.background = '';
+            showToast('success', 'Message envoyé !', 'Votre demande a été reçue.');
             contactForm.reset();
             clearErrors();
-            
-            // Scroll vers le message de succès (avec délai)
+
             setTimeout(() => {
                 try {
                     formSuccess.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -956,21 +803,15 @@ function initFormValidation() {
                     window.scrollTo(0, formSuccess.offsetTop - 100);
                 }
             }, 200);
-            
-            // Cacher le message après 8 secondes (plus long sur mobile pour que l'utilisateur voie)
             setTimeout(() => {
                 formSuccess.style.display = 'none';
             }, 8000);
-            
         } catch (error) {
-            formSuccess.textContent = '❌ Une erreur est survenue. Veuillez réessayer ou nous contacter directement.';
+            formSuccess.innerHTML = '❌ Votre demande n’a pas été envoyée. Réessayez ou <a href="https://wa.me/590690752430?text=Bonjour%2C%20je%20souhaite%20un%20devis" target="_blank" rel="noopener noreferrer" style="color:#fff;text-decoration:underline;font-weight:bold">contactez-moi sur WhatsApp</a>.';
             formSuccess.style.background = 'linear-gradient(135deg, #f44336 0%, #d32f2f 100%)';
             formSuccess.style.display = 'block';
-            
-            // Afficher une notification toast d'erreur
-            showToast('error', 'Erreur', 'Une erreur est survenue. Veuillez réessayer ou nous contacter directement.');
+            showToast('error', 'Envoi non confirmé', 'Votre demande n’a pas été enregistrée.');
         } finally {
-            // Réactiver le bouton et les animations (SANS toucher au style formSuccess)
             submitBtn.disabled = false;
             submitBtn.classList.remove('disabled');
             btnText.style.display = 'inline';
@@ -1137,27 +978,6 @@ function initPortfolioCarousel() {
     
     // Initialiser
     updateCarousel();
-}
-
-// ========== BANDEAU RGPD COOKIES ==========
-function initCookieBanner() {
-    const banner    = document.getElementById('cookieBanner');
-    const acceptBtn = document.getElementById('cookieAccept');
-    const refuseBtn = document.getElementById('cookieRefuse');
-
-    if (!banner) return;
-
-    if (!localStorage.getItem('cookie-consent')) {
-        setTimeout(() => banner.classList.add('visible'), 1500);
-    }
-
-    function hideBanner(choice) {
-        localStorage.setItem('cookie-consent', choice);
-        banner.classList.remove('visible');
-    }
-
-    if (acceptBtn) acceptBtn.addEventListener('click', () => hideBanner('accepted'));
-    if (refuseBtn) refuseBtn.addEventListener('click', () => hideBanner('refused'));
 }
 
 // ========== PERFORMANCE: Lazy loading des animations ==========
