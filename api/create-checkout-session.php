@@ -66,7 +66,9 @@ try {
     $session = $stripe->checkout->sessions->create([
         'mode' => $product['mode'],
         'line_items' => [$lineItem],
-        'success_url' => cx_app_url() . '/merci.html?session_id={CHECKOUT_SESSION_ID}',
+        // La formule (clé du catalogue, déjà validée côté serveur) ne sert qu'à personnaliser le texte :
+        // seul le webhook Stripe fait foi pour confirmer un paiement.
+        'success_url' => cx_app_url() . '/merci.html?session_id={CHECKOUT_SESSION_ID}&formula=' . rawurlencode($priceKey),
         'cancel_url' => cx_app_url() . '/paiement.html',
         'locale' => 'fr',
         'metadata' => [

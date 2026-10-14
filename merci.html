@@ -173,10 +173,11 @@
                 <i class="fas fa-check"></i>
             </div>
 
-            <h1>Paiement reçu !</h1>
+            <h1 id="merciTitle">Paiement reçu !</h1>
             <p class="subtitle">
-                Votre acompte a été enregistré avec succès.<br>
-                Nous vous contacterons <strong>sous 24h</strong> pour lancer votre projet ensemble.
+                <span id="merciText">Votre paiement a bien été enregistré.</span><br>
+                <strong id="merciNote" style="display:none;"></strong>
+                <span id="merciNext">Nous vous contacterons prochainement pour organiser la suite.</span>
             </p>
 
             <div class="merci-ref" id="sessionIdBlock" style="display:none;">
@@ -185,15 +186,15 @@
             </div>
 
             <div class="merci-info">
-                <i class="fas fa-envelope"></i>
-                <span>Un email de confirmation vous a été envoyé. Pensez à vérifier vos spams si vous ne le recevez pas sous quelques minutes.</span>
+                <i class="fas fa-info-circle"></i>
+                <span>Pour toute question concernant votre paiement, contactez-nous via WhatsApp en indiquant la référence de transaction si elle est affichée.</span>
             </div>
 
             <div class="merci-actions">
                 <a href="index.html" class="btn-merci">
                     <i class="fas fa-home"></i> Retour à l'accueil
                 </a>
-                <a href="https://wa.me/590690752430?text=Bonjour%2C%20j%27ai%20effectu%C3%A9%20un%20paiement%20et%20je%20souhaite%20d%C3%A9marrer%20mon%20projet."
+                <a id="merciWhatsapp" href="https://wa.me/590690752430?text=Bonjour%2C%20j%27ai%20effectu%C3%A9%20un%20paiement%20sur%20cxrilwebs.fr."
                    target="_blank" rel="noopener noreferrer" class="btn-merci btn-whatsapp">
                     <i class="fab fa-whatsapp"></i> WhatsApp
                 </a>
@@ -205,13 +206,60 @@
     <script src="script.js?v=20260403"></script>
     <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // Textes selon la formule. La formule vient de l'URL : elle personnalise uniquement
+        // l'affichage et ne prouve pas le paiement (le webhook Stripe reste la source de vérité).
+        var webStart = 'Nous vous contacterons prochainement pour organiser le démarrage de votre projet.';
+        var webWa = 'Bonjour, j\'ai versé un acompte pour mon projet de site web sur cxrilwebs.fr.';
+        var CONTENT = {
+            web_express:   { title: 'Acompte reçu !', text: 'Votre acompte a bien été enregistré.', next: webStart, wa: webWa },
+            web_vitrine:   { title: 'Acompte reçu !', text: 'Votre acompte a bien été enregistré.', next: webStart, wa: webWa },
+            web_ecommerce: { title: 'Acompte reçu !', text: 'Votre acompte a bien été enregistré.', next: webStart, wa: webWa },
+            maintenance_site_ponctuel: {
+                title: 'Paiement reçu !',
+                text: 'Votre paiement de 80 € pour l\'intervention ponctuelle a bien été enregistré.',
+                next: 'Nous vous contacterons prochainement pour organiser l\'intervention.',
+                wa: 'Bonjour, j\'ai payé une intervention ponctuelle de maintenance sur cxrilwebs.fr.'
+            },
+            maintenance_site_mensuel: {
+                title: 'Abonnement activé !',
+                text: 'Votre abonnement de maintenance à 150 €/mois a bien été enregistré.',
+                note: 'Abonnement mensuel facturé chaque mois.',
+                next: 'Nous vous contacterons prochainement pour organiser la mise en place de votre maintenance.',
+                wa: 'Bonjour, j\'ai souscrit un abonnement de maintenance mensuel sur cxrilwebs.fr.'
+            },
+            maintenance_site_annuel: {
+                title: 'Paiement reçu !',
+                text: 'Votre contrat de maintenance annuel de 1 490 € a bien été enregistré.',
+                note: 'Paiement unique — sans renouvellement automatique.',
+                next: 'Nous vous contacterons prochainement pour organiser la mise en place de votre maintenance.',
+                wa: 'Bonjour, j\'ai payé le contrat de maintenance annuel sur cxrilwebs.fr.'
+            }
+        };
+
         var params    = new URLSearchParams(window.location.search);
-        var sessionId = params.get('session_id');
-        if (sessionId) {
-            var block = document.getElementById('sessionIdBlock');
-            var value = document.getElementById('sessionIdValue');
-            value.textContent = sessionId;
-            block.style.display = 'block';
+        var sessionId = params.get('session_id') || '';
+        var formula   = params.get('formula') || '';
+        // Format d'un identifiant de session Stripe Checkout : toute autre valeur est ignorée.
+        var hasSession = /^cs_(test|live)_[A-Za-z0-9]{10,200}$/.test(sessionId);
+
+        if (hasSession) {
+            document.getElementById('sessionIdValue').textContent = sessionId;
+            document.getElementById('sessionIdBlock').style.display = 'block';
+        }
+
+        // Sans référence Stripe valide ou avec une formule inconnue : texte générique du HTML.
+        if (hasSession && Object.prototype.hasOwnProperty.call(CONTENT, formula)) {
+            var c = CONTENT[formula];
+            document.getElementById('merciTitle').textContent = c.title;
+            document.getElementById('merciText').textContent = c.text;
+            document.getElementById('merciNext').textContent = c.next;
+            if (c.note) {
+                var note = document.getElementById('merciNote');
+                note.textContent = c.note;
+                note.style.display = 'block';
+            }
+            var wa = document.getElementById('merciWhatsapp');
+            wa.href = 'https://wa.me/590690752430?text=' + encodeURIComponent(c.wa);
         }
     });
     </script>
