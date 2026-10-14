@@ -21,16 +21,15 @@ const PRICING_CONFIG = {
     multilingue: { price: 90,  label: 'Site multilingue'       },
     hebergement: { price: 25,  label: 'Hébergement 1 an'       },
   },
+  // Maintenance — clés de paiement : maintenance_site_ponctuel / _mensuel / _annuel (cf. api/create-checkout-session.php).
+  // Monitoring, sauvegardes et mises à jour CMS/plugins sont inclus dans le mensuel et l'annuel.
   maintenance: {
-    ponctuel: { price: 80,   label: 'Intervention Ponctuelle', acompte: 1.00, mode: 'payment'      },
-    mensuel:  { price: 150,  label: 'Contrat Mensuel',         acompte: 1.00, mode: 'subscription' },
-    annuel:   { price: 1490, label: 'Contrat Annuel',          acompte: 1.00, mode: 'payment'      },
+    ponctuel: { price: 80,   label: 'Intervention ponctuelle', acompte: 1.00, mode: 'payment'      },
+    mensuel:  { price: 150,  label: 'Maintenance mensuelle',   acompte: 1.00, mode: 'subscription' },
+    annuel:   { price: 1490, label: 'Maintenance annuelle',    acompte: 1.00, mode: 'payment'      },
   },
   maintenanceOptions: {
-    monitoring:      { price: 20, label: 'Monitoring uptime 24/7'              },
-    sauvegardesAuto: { price: 15, label: 'Sauvegardes automatiques quotidiennes' },
-    majCms:          { price: 25, label: 'Mises à jour CMS & plugins'          },
-    rapportMensuel:  { price: 10, label: 'Rapport mensuel détaillé'            },
+    rapportMensuel:  { price: 10, label: 'Rapport mensuel détaillé' },
   },
   social: {
     basic:     { price: 160,  label: 'Forfait Basic',     acompte: 1.00, mode: 'subscription' },
@@ -45,7 +44,7 @@ const PRICING_CONFIG = {
   // Affichage index.html #tarifs uniquement
   tarifs: {
     web:         { price: 290,  display: 'À partir de 290€' },
-    maintenance: { price: 150,  display: 'À partir de 150€/mois' },
+    maintenance: { price: 80,   display: 'À partir de 80€' },
     social:      { price: 80,   display: 'À partir de 80€' },
     essentiel:   { price: 890,  display: 'À partir de 890€' },
     pro:         { price: 1690, display: 'À partir de 1 690€' },

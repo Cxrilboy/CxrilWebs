@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css?v=20260929">
     <link rel="stylesheet" href="paiement-styles.css?v=20260929">
-    <script src="js/pricing.js?v=20260403"></script>
+    <script src="js/pricing.js?v=20261014"></script>
 </head>
 <body>
     <!-- Dark Mode Toggle -->
@@ -105,9 +105,9 @@
                     <div class="pay-service-card" data-service="maintenance">
                         <div class="pay-service-icon"><i class="fas fa-tools"></i></div>
                         <h3>Maintenance Informatique</h3>
-                        <p>Contrats mensuels & annuels sans engagement</p>
-                        <span class="pay-service-price">À partir de 150€/mois</span>
-                        <span class="pay-service-deposit">Abonnement récurrent</span>
+                        <p>Intervention ponctuelle, contrat mensuel ou annuel</p>
+                        <span class="pay-service-price">À partir de 80€</span>
+                        <span class="pay-service-deposit">Paiement unique ou abonnement</span>
                     </div>
 
                     <!-- Réseaux Sociaux -->
@@ -195,19 +195,36 @@
 
                 <!-- Maintenance options -->
                 <div class="pay-options-panel" id="pay-options-maintenance" style="display:none">
-                    <div class="pay-options-grid pay-options-2col">
+                    <div class="pay-options-grid">
 
-                        <!-- Site Web — Mensuel -->
+                        <!-- Intervention ponctuelle -->
+                        <div class="pay-option-card" data-key="maintenance_site_ponctuel">
+                            <div class="pay-option-badge"><i class="fas fa-wrench" style="margin-right:.35em"></i> Ponctuel</div>
+                            <h3>Intervention ponctuelle</h3>
+                            <div class="pay-option-price">80€<span class="pay-price-period"> /intervention</span></div>
+                            <ul class="pay-option-features">
+                                <li><i class="fas fa-check"></i> 1 intervention ciblée sur votre site web</li>
+                                <li><i class="fas fa-check"></i> Diagnostic et correction du problème</li>
+                                <li><i class="fas fa-check"></i> Rapport d'intervention par email</li>
+                                <li><i class="fas fa-check"></i> Sans abonnement</li>
+                            </ul>
+                            <div class="pay-option-deposit">
+                                <span class="pay-deposit-label">Paiement unique</span>
+                                <span class="pay-deposit-amount">80€</span>
+                            </div>
+                        </div>
+
+                        <!-- Maintenance mensuelle -->
                         <div class="pay-option-card" data-key="maintenance_site_mensuel">
-                            <div class="pay-option-badge"><i class="fas fa-globe" style="margin-right:.35em"></i> Site Web</div>
-                            <h3>Mensuel — Site Web</h3>
+                            <div class="pay-option-badge"><i class="fas fa-globe" style="margin-right:.35em"></i> Mensuel</div>
+                            <h3>Maintenance mensuelle</h3>
                             <div class="pay-option-price">150€<span class="pay-price-period">/mois</span></div>
                             <ul class="pay-option-features">
-                                <li><i class="fas fa-check"></i> Mises à jour CMS & plugins</li>
-                                <li><i class="fas fa-check"></i> Sauvegarde hebdomadaire</li>
-                                <li><i class="fas fa-check"></i> Monitoring uptime 24/7</li>
-                                <li><i class="fas fa-check"></i> Support technique inclus</li>
-                                <li><i class="fas fa-check"></i> Sans engagement</li>
+                                <li><i class="fas fa-check"></i> Monitoring de disponibilité inclus</li>
+                                <li><i class="fas fa-check"></i> Sauvegardes incluses</li>
+                                <li><i class="fas fa-check"></i> Mises à jour CMS &amp; plugins incluses</li>
+                                <li><i class="fas fa-check"></i> 1 intervention corrective par mois</li>
+                                <li><i class="fas fa-check"></i> Support technique par email sous 24h</li>
                             </ul>
                             <div class="pay-option-deposit pay-option-subscription">
                                 <span class="pay-deposit-label">Abonnement mensuel</span>
@@ -215,24 +232,24 @@
                             </div>
                         </div>
 
-                        <!-- Site Web — Annuel -->
+                        <!-- Maintenance annuelle -->
                         <div class="pay-option-card pay-option-featured" data-key="maintenance_site_annuel">
-                            <div class="pay-option-badge">⭐ Site Web — Meilleur rapport</div>
-                            <h3>Annuel — Site Web</h3>
+                            <div class="pay-option-badge">⭐ Annuel — Économisez 310€</div>
+                            <h3>Maintenance annuelle</h3>
                             <div class="pay-option-price">1 490€<span class="pay-price-period">/an</span></div>
                             <ul class="pay-option-features">
-                                <li><i class="fas fa-check"></i> Tout le mensuel inclus</li>
-                                <li><i class="fas fa-check"></i> 2 mois offerts</li>
-                                <li><i class="fas fa-check"></i> Audit sécurité annuel</li>
-                                <li><i class="fas fa-check"></i> Sauvegarde cloud incluse</li>
-                                <li><i class="fas fa-check"></i> Intervention prioritaire</li>
+                                <li><i class="fas fa-check"></i> Monitoring de disponibilité inclus</li>
+                                <li><i class="fas fa-check"></i> Sauvegardes incluses</li>
+                                <li><i class="fas fa-check"></i> Mises à jour CMS &amp; plugins incluses</li>
+                                <li><i class="fas fa-check"></i> Interventions correctives illimitées</li>
+                                <li><i class="fas fa-check"></i> Support technique prioritaire</li>
+                                <li><i class="fas fa-check"></i> 310€ économisés vs 12 × 150€ (1 800€)</li>
                             </ul>
-                            <div class="pay-option-deposit pay-option-subscription">
-                                <span class="pay-deposit-label">Paiement annuel</span>
-                                <span class="pay-deposit-amount">1 490€/an</span>
+                            <div class="pay-option-deposit">
+                                <span class="pay-deposit-label">Paiement annuel unique</span>
+                                <span class="pay-deposit-amount">1 490€</span>
                             </div>
                         </div>
-
 
                     </div>
                 </div>
@@ -515,7 +532,7 @@
 
             var keyMap = {
                 web:               { express: 'web_express', vitrine: 'web_vitrine', ecommerce: 'web_ecommerce', app: 'web_app', appweb: 'web_app' },
-                maintenance:       { mensuel: 'maintenance_site_mensuel', mensuelle: 'maintenance_site_mensuel', annuel: 'maintenance_site_annuel', annuelle: 'maintenance_site_annuel', site_mensuel: 'maintenance_site_mensuel', site_mensuelle: 'maintenance_site_mensuel', site_annuel: 'maintenance_site_annuel', site_annuelle: 'maintenance_site_annuel' },
+                maintenance:       { maintenance_site_ponctuel: 'maintenance_site_ponctuel', maintenance_site_mensuel: 'maintenance_site_mensuel', maintenance_site_annuel: 'maintenance_site_annuel' },
                 'reseaux-sociaux': { basic: 'rs_basic', plus: 'rs_plus', facebook: 'rs_facebook', instagram: 'rs_instagram', tiktok: 'rs_tiktok', ads: 'rs_ads', audit: 'rs_audit', mensuel: 'rs_mensuel', annuel: 'rs_annuel' }
             };
             var serviceMap = (keyMap[selectedService] || {});
@@ -630,14 +647,6 @@
             
             document.getElementById('payCheckoutTotal').textContent  = config.total;
 
-            // Ajouter la sélection type maintenance (via query string)
-            if (service === 'maintenance') {
-                var urlFormula = new URLSearchParams(window.location.search).get('formula') || '';
-                if (urlFormula) {
-                    document.getElementById('payCheckoutDesc').textContent += ' — ' + urlFormula.replace(/_/g, ' ');
-                }
-            }
-
             // Remplacer le bouton pour éviter les doubles listeners
             var oldBtn = document.getElementById('payCheckoutBtn');
             var newBtn = oldBtn.cloneNode(true);
@@ -671,8 +680,8 @@
 
                 document.getElementById('payCheckoutDepositLabel').textContent = 'Montant de l\'abonnement';
                 document.getElementById('payCheckoutDeposit').textContent      = config.deposit;
-                document.getElementById('payCheckoutBalanceLabel').textContent = 'Renouvellement automatique';
-                document.getElementById('payCheckoutBalance').textContent      = 'Sans engagement';
+                document.getElementById('payCheckoutBalanceLabel').textContent = config.billingNote ? 'Facturation' : 'Renouvellement automatique';
+                document.getElementById('payCheckoutBalance').textContent      = config.billingNote || 'Sans engagement';
                 document.getElementById('payCheckoutBtnText').textContent      = 'S\'abonner maintenant — ' + config.deposit;
             } else {
                 var pricingKey = key; // ex. web_vitrine
@@ -697,10 +706,10 @@
 
                 if (pct >= 100) {
                     document.getElementById('payCheckoutDepositLabel').textContent = 'Montant total dû maintenant';
-                    document.getElementById('payCheckoutDeposit').textContent      = amount + '€';
-                    document.getElementById('payCheckoutBalanceLabel').textContent = 'Paiement unique';
-                    document.getElementById('payCheckoutBalance').textContent      = '—';
-                    document.getElementById('payCheckoutBtnText').textContent      = 'Payer ' + amount + '€';
+                    document.getElementById('payCheckoutDeposit').textContent      = amount.toLocaleString('fr-FR') + '€';
+                    document.getElementById('payCheckoutBalanceLabel').textContent = config.oneTimeNote ? 'Durée' : 'Paiement unique';
+                    document.getElementById('payCheckoutBalance').textContent      = config.oneTimeNote || '—';
+                    document.getElementById('payCheckoutBtnText').textContent      = 'Payer ' + amount.toLocaleString('fr-FR') + '€';
                 } else {
                     document.getElementById('payCheckoutDepositLabel').textContent = 'Acompte ' + pct + '% dû maintenant';
                     document.getElementById('payCheckoutDeposit').textContent      = amount + '€';
@@ -781,8 +790,9 @@
             var opts = {                web_express:         { icon: 'laptop-code', title: 'Site Express',       desc: 'Site one-page express livré sous 7 jours',    total: '290€',      totalRaw: 290,  deposit: '87€',       depositRaw: 87,   balance: '203€', balanceRaw: 203 },                web_vitrine:         { icon: 'laptop-code', title: 'Site Vitrine',       desc: 'Création de site vitrine jusqu\'à 5 pages',    total: '890€',      totalRaw: 890,  deposit: '267€',      depositRaw: 267,  balance: '623€', balanceRaw: 623 },
                 web_ecommerce:       { icon: 'laptop-code', title: 'Site E-commerce',    desc: 'Site e-commerce complet avec design premium',   total: '1 690€',    totalRaw: 1690, deposit: '507€',      depositRaw: 507,  balance: '1 183€', balanceRaw: 1183 },
                 web_app:             { icon: 'laptop-code', title: 'Projet web sur mesure', desc: 'Projet web sur mesure — Sur devis',           total: 'Sur devis', totalRaw: 0, deposit: 'Sur devis',  depositRaw: 0,  balance: '—', onDemand: true },
-                maintenance_site_mensuel: { icon: 'globe',   title: 'Maintenance Site Web — Mensuel',   desc: 'Contrat mensuel de maintenance de site web',                  total: '150€/mois',  totalRaw: 150,  deposit: '150€/mois',  depositRaw: 150,  balance: '—', isSubscription: true  },
-                maintenance_site_annuel:  { icon: 'globe',   title: 'Maintenance Site Web — Annuel',    desc: 'Contrat annuel de maintenance de site web (2 mois offerts)',  total: '1 490€/an', totalRaw: 1490, deposit: '1 490€/an', depositRaw: 1490, balance: '—', balanceRaw: 0, acompteRate: 1.0, isSubscription: false },
+                maintenance_site_ponctuel: { icon: 'wrench',  title: 'Intervention ponctuelle',          desc: 'Intervention ciblée sur votre site web — paiement unique',    total: '80€',        totalRaw: 80,   deposit: '80€',        depositRaw: 80,   balance: '—', balanceRaw: 0, acompteRate: 1.0, isSubscription: false },
+                maintenance_site_mensuel: { icon: 'globe',   title: 'Maintenance mensuelle',            desc: 'Monitoring, sauvegardes et mises à jour CMS/plugins inclus',   total: '150€/mois',  totalRaw: 150,  deposit: '150€/mois',  depositRaw: 150,  balance: '—', isSubscription: true, billingNote: 'Premier paiement immédiat, puis chaque mois' },
+                maintenance_site_annuel:  { icon: 'globe',   title: 'Maintenance annuelle',             desc: 'Monitoring, sauvegardes et mises à jour CMS/plugins inclus',   total: '1 490€/an', totalRaw: 1490, deposit: '1 490€/an', depositRaw: 1490, balance: '—', balanceRaw: 0, acompteRate: 1.0, isSubscription: false, oneTimeNote: 'Valable 12 mois, sans renouvellement automatique' },
                 rs_basic:            { icon: 'share-alt',   title: 'Forfait Basic',       desc: '4 publications/mois — Abonnement',             total: '160€',      totalRaw: 160,  deposit: '160€',      depositRaw: 160,  balance: '—', isSubscription: true, recurring: '160€/mois' },
                 rs_plus:             { icon: 'share-alt',   title: 'Forfait Plus',        desc: '8 publications/mois — Abonnement',             total: '320€',      totalRaw: 320,  deposit: '320€',      depositRaw: 320,  balance: '—', isSubscription: true, recurring: '320€/mois' },
                 rs_facebook:         { icon: 'share-alt',   title: 'Création Facebook',   desc: 'Page Facebook professionnelle',                 total: '120€',      totalRaw: 120,  deposit: '120€',      depositRaw: 120,  balance: '—' },

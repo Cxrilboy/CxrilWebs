@@ -14,6 +14,7 @@ $catalog = [
     'web_express' => ['name' => 'Acompte — Site Express', 'amount' => 87, 'mode' => 'payment', 'record' => 'acompte', 'env' => 'STRIPE_PRICE_WEB_EXPRESS_DEPOSIT'],
     'web_vitrine' => ['name' => 'Acompte — Site Vitrine', 'amount' => 267, 'mode' => 'payment', 'record' => 'acompte', 'env' => 'STRIPE_PRICE_WEB_VITRINE_DEPOSIT'],
     'web_ecommerce' => ['name' => 'Acompte — Site E-commerce', 'amount' => 507, 'mode' => 'payment', 'record' => 'acompte', 'env' => 'STRIPE_PRICE_WEB_ECOMMERCE_DEPOSIT'],
+    'maintenance_site_ponctuel' => ['name' => 'Maintenance Site Web — Intervention ponctuelle', 'amount' => 80, 'mode' => 'payment', 'record' => 'unique', 'env' => 'STRIPE_PRICE_MAINTENANCE_ONESHOT'],
     'maintenance_site_mensuel' => ['name' => 'Maintenance Site Web — Mensuel', 'amount' => 150, 'mode' => 'subscription', 'record' => 'abonnement', 'recurring' => ['interval' => 'month'], 'env' => 'STRIPE_PRICE_MAINTENANCE_MONTHLY'],
     'maintenance_site_annuel' => ['name' => 'Maintenance Site Web — Annuel', 'amount' => 1490, 'mode' => 'payment', 'record' => 'unique', 'env' => 'STRIPE_PRICE_MAINTENANCE_YEARLY'],
     'rs_basic' => ['name' => 'Gestion Réseaux Sociaux — Basic', 'amount' => 160, 'mode' => 'subscription', 'record' => 'abonnement', 'recurring' => ['interval' => 'month'], 'env' => 'STRIPE_PRICE_SOCIAL_BASIC_MONTHLY'],

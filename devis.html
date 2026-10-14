@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css?v=20260929">
     <link rel="stylesheet" href="devis-styles.css?v=20260929">
-    <script src="js/pricing.js?v=20260403"></script>
+    <script src="js/pricing.js?v=20261014"></script>
 </head>
 <body>
     <!-- Dark Mode Toggle -->
@@ -267,59 +267,58 @@
                                 <h3 class="option-group-title">Type de contrat</h3>
                                 <div class="radio-cards">
                                     <label class="radio-card" for="maint-ponctuel">
-                                        <input type="radio" name="contrat-maintenance" id="maint-ponctuel" value="ponctuelle" data-price="80">
+                                        <input type="radio" name="contrat-maintenance" id="maint-ponctuel" value="ponctuel" data-price="80">
                                         <span class="radio-card-label">Intervention ponctuelle<span class="radio-price">80€</span></span>
                                     </label>
                                     <label class="radio-card" for="maint-mensuel">
-                                        <input type="radio" name="contrat-maintenance" id="maint-mensuel" value="mensuelle" data-price="150">
+                                        <input type="radio" name="contrat-maintenance" id="maint-mensuel" value="mensuel" data-price="150">
                                         <span class="radio-card-label">Contrat mensuel<span class="radio-price">150€/mois</span></span>
                                     </label>
                                     <label class="radio-card" for="maint-annuel">
-                                        <input type="radio" name="contrat-maintenance" id="maint-annuel" value="annuelle" data-price="1490">
+                                        <input type="radio" name="contrat-maintenance" id="maint-annuel" value="annuel" data-price="1490">
                                         <span class="radio-card-label">Contrat annuel<span class="radio-price">1 490€/an</span></span>
                                     </label>
                                 </div>
                             </div>
 
                             <!-- Cartes inclus — Maintenance -->
-                            <div class="inclus-card" id="inclus-ponctuelle" style="display:none">
-                                <p class="inclus-titre">✅ Inclus dans l'intervention ponctuelle (80€) :</p>
+                            <div class="inclus-card" id="inclus-ponctuel" style="display:none">
+                                <p class="inclus-titre">✅ Inclus dans l'intervention ponctuelle (80€, paiement unique) :</p>
                                 <ul>
                                     <li>1 intervention ciblée sur votre site web</li>
                                     <li>Diagnostic et correction du problème signalé</li>
                                     <li>Rapport d'intervention par email</li>
                                 </ul>
-                                <p class="inclus-note">⚠️ Ne comprend pas : monitoring continu, sauvegardes automatiques, mises à jour régulières. Ces options sont disponibles ci-dessous.</p>
+                                <p class="inclus-note">⚠️ Ne comprend pas : monitoring, sauvegardes, mises à jour CMS/plugins. Ces prestations sont incluses dans les contrats mensuel et annuel.</p>
                             </div>
-                            <div class="inclus-card" id="inclus-mensuelle" style="display:none">
+                            <div class="inclus-card" id="inclus-mensuel" style="display:none">
                                 <p class="inclus-titre">✅ Inclus dans le contrat mensuel (150€/mois) :</p>
                                 <ul>
-                                    <li>Surveillance de disponibilité du site (uptime)</li>
+                                    <li>Monitoring de disponibilité du site (uptime)</li>
+                                    <li>Sauvegardes du site incluses</li>
+                                    <li>Mises à jour CMS &amp; plugins incluses</li>
                                     <li>1 intervention corrective par mois incluse</li>
-                                    <li>Mises à jour de sécurité de base</li>
                                     <li>Support technique par email sous 24h</li>
                                 </ul>
-                                <p class="inclus-note">Options supplémentaires disponibles ci-dessous.</p>
+                                <p class="inclus-note">Abonnement mensuel sans engagement de durée.</p>
                             </div>
-                            <div class="inclus-card" id="inclus-annuelle" style="display:none">
-                                <p class="inclus-titre">✅ Inclus dans le contrat annuel (1 490€ HT/an) :</p>
+                            <div class="inclus-card" id="inclus-annuel" style="display:none">
+                                <p class="inclus-titre">✅ Inclus dans le contrat annuel (1 490€/an, paiement unique) :</p>
                                 <ul>
-                                    <li>Surveillance de disponibilité du site (uptime)</li>
+                                    <li>Monitoring de disponibilité du site (uptime)</li>
+                                    <li>Sauvegardes du site incluses</li>
+                                    <li>Mises à jour CMS &amp; plugins incluses</li>
                                     <li>Interventions correctives illimitées</li>
-                                    <li>Mises à jour de sécurité prioritaires</li>
-                                    <li>Support technique prioritaire sous 4h</li>
-                                    <li>Économie équivalente à ~2 mois offerts vs mensuel</li>
+                                    <li>Support technique prioritaire</li>
+                                    <li>Économie de 310€ par rapport à 12 × 150€ (1 800€)</li>
                                 </ul>
-                                <p class="inclus-note">Options supplémentaires disponibles ci-dessous.</p>
+                                <p class="inclus-note">Paiement annuel unique pour 12 mois, sans renouvellement automatique.</p>
                             </div>
 
                             <div class="option-group">
-                                <h3 class="option-group-title">Options supplémentaires <span class="option-group-hint">— facultatives</span></h3>
+                                <h3 class="option-group-title">Option supplémentaire <span class="option-group-hint">— contrats mensuel et annuel</span></h3>
                                 <div id="opts-maintenance" class="checkbox-options">
-                                    <label class="checkbox-option"><input type="checkbox" name="opt-maint" data-opt="monitoring" data-price="20"> <span>Monitoring uptime 24/7 <em>+20€/mois</em></span></label>
-                                    <label class="checkbox-option"><input type="checkbox" name="opt-maint" data-opt="sauvegardes-auto" data-price="15"> <span>Sauvegardes automatiques quotidiennes <em>+15€/mois</em></span></label>
-                                    <label class="checkbox-option"><input type="checkbox" name="opt-maint" data-opt="maj-cms" data-price="25"> <span>Mises à jour CMS &amp; plugins <em>+25€/mois</em></span></label>
-                                    <label class="checkbox-option"><input type="checkbox" name="opt-maint" data-opt="rapport-mensuel" data-price="10"> <span>Rapport mensuel détaillé <em>+10€/mois</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-maint" data-opt="rapport-mensuel" data-price="10"> <span>Rapport mensuel détaillé <em>+10€/mois (120€ sur 12 mois en contrat annuel)</em></span></label>
                                 </div>
                             </div>
 
@@ -332,7 +331,7 @@
                             </div>
 
                             <div class="devis-reassurance-bar">
-                                <span><i class="fas fa-info-circle"></i> Un contrat mensuel avec options courantes revient à environ <strong>150€ – 220€/mois</strong>. Toute intervention dépassant 1h fera l'objet d'un devis séparé.</span>
+                                <span><i class="fas fa-info-circle"></i> Le contrat mensuel à <strong>150€/mois</strong> inclut le monitoring, les sauvegardes et les mises à jour CMS/plugins. Toute intervention dépassant 1h fera l'objet d'un devis séparé.</span>
                             </div>
                         </div>
 
@@ -595,11 +594,11 @@
 
                                 <!-- Cas maintenance : abonnement -->
                                 <div id="stripeSubscriptionBlock" style="display:none;">
-                                    <p class="stripe-subscription-note">
+                                    <p class="stripe-subscription-note" id="stripeSubscriptionNote">
                                         Ce service fonctionne par abonnement. Pas d'acompte — votre premier paiement démarre à la signature du contrat.
                                     </p>
                                     <a href="#" id="stripeSubscribeBtn" class="btn btn-stripe" target="_blank" rel="noopener noreferrer">
-                                        S'abonner maintenant
+                                        <span id="stripeSubscribeBtnText">S'abonner maintenant</span>
                                     </a>
                                 </div>
                             </div>
@@ -660,8 +659,8 @@
 
     <script src="components-loader.js?v=20260403" defer></script>
     <script src="script.js?v=20260403"></script>
-    <script src="devis.js?v=20260403"></script>
-    <script src="js/devis-payment-links.js" defer></script>
+    <script src="devis.js?v=20261014"></script>
+    <script src="js/devis-payment-links.js?v=20261014" defer></script>
 
 </body>
 </html>

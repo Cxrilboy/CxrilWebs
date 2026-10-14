@@ -25,13 +25,14 @@
                 'api-integration': 180, 'notifications': 100, 'export-data': 90
             }
         },
+        // Clés = suffixe des clés de paiement : maintenance_site_ponctuel / _mensuel / _annuel.
+        // Monitoring, sauvegardes et mises à jour CMS/plugins sont inclus dans le mensuel et l'annuel.
         maintenance: {
-            ponctuelle: 80,
-            mensuelle: 150,
-            annuelle: 1490,
+            ponctuel: 80,
+            mensuel: 150,
+            annuel: 1490,
             options: {
-                'monitoring': 20, 'sauvegardes-auto': 15,
-                'maj-cms': 25, 'rapport-mensuel': 10
+                'rapport-mensuel': 10
             },
             forfaits: {
                 'modification-fonctionnalites': 120,
@@ -129,6 +130,15 @@
     // ============================================================
     // RÈGLE 3 — getPrixMaintenance()
     // ============================================================
+    // Les options de maintenance sont tarifées par mois : sur un contrat annuel elles couvrent 12 mois.
+    function maintOptionMonths(contratValue) {
+        return contratValue === 'annuel' ? 12 : 1;
+    }
+
+    function maintOptionTotal(cb, contratValue) {
+        return (parseInt(cb.dataset.price, 10) || 0) * maintOptionMonths(contratValue);
+    }
+
     function getPrixMaintenance() {
         const contrat = form.querySelector('input[name="contrat-maintenance"]:checked');
         if (!contrat) return 0;
@@ -139,7 +149,7 @@
         const optsForfaitContainer = document.getElementById('opts-maintenance-forfait');
 
         // Options mensuelles (uniquement si contrat mensuel ou annuel)
-        if (contrat.value === 'mensuelle' || contrat.value === 'annuelle') {
+        if (contrat.value === 'mensuel' || contrat.value === 'annuel') {
             if (optsContainer) {
                 optsContainer.querySelectorAll('input').forEach(cb => {
                     cb.disabled = false;
@@ -148,7 +158,7 @@
                 optsContainer.title = '';
             }
             form.querySelectorAll('input[name="opt-maint"]:checked').forEach(cb => {
-                total += parseInt(cb.dataset.price, 10) || 0;
+                total += maintOptionTotal(cb, contrat.value);
             });
         } else {
             // Ponctuelle : désactiver et décocher toutes les options mensuelles
@@ -231,7 +241,7 @@
 
         const messages = {
             web: 'Devis indicatif. Le tarif définitif sera confirmé après analyse complète de votre projet.',
-            maintenance: 'Tarif mensuel estimatif. Un audit de votre site sera réalisé avant signature du contrat.',
+            maintenance: 'Estimation indicative. Un audit de votre site peut être réalisé avant la mise en place d\'un contrat mensuel ou annuel.',
             'reseaux-sociaux': 'Estimation indicative. Premier mois sans engagement.'
         };
 
@@ -272,13 +282,14 @@
         if (service === 'maintenance') {
             const contrat = form.querySelector('input[name="contrat-maintenance"]:checked');
             if (contrat) {
-                const labels = { ponctuelle: 'Intervention ponctuelle', mensuelle: 'Contrat mensuel', annuelle: 'Contrat annuel' };
+                const labels = { ponctuel: 'Intervention ponctuelle', mensuel: 'Contrat mensuel', annuel: 'Contrat annuel' };
                 breakdown.push({ label: labels[contrat.value], amount: TARIFS.maintenance[contrat.value] || 0 });
             }
             form.querySelectorAll('input[name="opt-maint"]:checked').forEach(cb => {
                 if (cb.disabled) return;
-                const p = parseInt(cb.dataset.price, 10) || 0;
-                const lbl = cb.closest('label').querySelector('span').childNodes[0].textContent.trim();
+                const p = maintOptionTotal(cb, contrat ? contrat.value : '');
+                let lbl = cb.closest('label').querySelector('span').childNodes[0].textContent.trim();
+                if (contrat && contrat.value === 'annuel') lbl += ' (12 mois)';
                 breakdown.push({ label: lbl, amount: p });
             });
             form.querySelectorAll('input[name="opt-maint-forfait"]:checked').forEach(cb => {
@@ -367,7 +378,7 @@
 
     // Maintenance — carte selon contrat
     function showInclusMaintenance() {
-        ['inclus-ponctuelle', 'inclus-mensuelle', 'inclus-annuelle'].forEach(id => {
+        ['inclus-ponctuel', 'inclus-mensuel', 'inclus-annuel'].forEach(id => {
             const el = document.getElementById(id);
             if (el) el.style.display = 'none';
         });
@@ -668,6 +679,12 @@
         const isAbonnement = svc === 'maintenance' || svc === 'reseaux-sociaux';
         const acompte30    = !isAbonnement ? Math.round(subtotal * 0.3) : 0;
         const solde70      = subtotal - acompte30;
+        const maintContrat = svc === 'maintenance' ? ((form.querySelector('input[name="contrat-maintenance"]:checked') || {}).value || '') : '';
+        const conditionPaiement = maintContrat === 'ponctuel'
+            ? '<li>Paiement unique à la commande de l\'intervention</li>'
+            : maintContrat === 'annuel'
+                ? '<li>Paiement annuel unique à la signature du contrat</li>'
+                : '<li>Paiement par abonnement — premier paiement à la signature du contrat</li>';
 
         document.getElementById('recapContent').innerHTML =
             '<div class="invoice-header">' +
@@ -725,7 +742,7 @@
                     '<ul>' +
                         '<li>Devis valable 30 jours à compter de la date d\'émission</li>' +
                         (isAbonnement
-                            ? '<li>Paiement par abonnement — premier paiement à la signature du contrat</li>'
+                            ? conditionPaiement
                             : '<li>Acompte de 30% à la signature</li><li>Solde à la livraison du projet</li>') +
                         '<li>Ce devis est une estimation indicative</li>' +
                     '</ul>' +
@@ -770,15 +787,21 @@
         if (svc === 'maintenance') {
             var contrat = form.querySelector('input[name="contrat-maintenance"]:checked');
             if (contrat) {
-                var cLabels = { ponctuelle: 'Maintenance ponctuelle', mensuelle: 'Contrat mensuel', annuelle: 'Contrat annuel' };
+                var cLabels = { ponctuel: 'Intervention ponctuelle', mensuel: 'Contrat de maintenance mensuel', annuel: 'Contrat de maintenance annuel' };
+                var cDetails = {
+                    ponctuel: 'Intervention ciblée sur votre site web',
+                    mensuel: 'Monitoring, sauvegardes et mises à jour CMS/plugins inclus',
+                    annuel: 'Monitoring, sauvegardes et mises à jour CMS/plugins inclus'
+                };
                 var cPrice = TARIFS.maintenance[contrat.value] || 0;
-                items.push({ label: cLabels[contrat.value] || contrat.value, detail: 'Support technique & maintenance site web', qty: 1, unitPrice: cPrice, total: cPrice });
+                items.push({ label: cLabels[contrat.value] || contrat.value, detail: cDetails[contrat.value] || '', qty: 1, unitPrice: cPrice, total: cPrice });
             }
             form.querySelectorAll('input[name="opt-maint"]:checked').forEach(function(cb) {
                 if (cb.disabled) return;
+                var months = maintOptionMonths(contrat ? contrat.value : '');
                 var p = parseInt(cb.dataset.price, 10) || 0;
                 var lbl = cb.closest('label').querySelector('span').childNodes[0].textContent.trim();
-                items.push({ label: lbl, detail: 'Option mensuelle', qty: 1, unitPrice: p, total: p });
+                items.push({ label: lbl, detail: 'Option mensuelle', qty: months, unitPrice: p, total: p * months });
             });
             form.querySelectorAll('input[name="opt-maint-forfait"]:checked').forEach(function(cb) {
                 if (cb.disabled) return;
@@ -960,11 +983,23 @@
             if (subscriptionBlock) subscriptionBlock.style.display = 'block';
 
             var subscribeBtn = document.getElementById('stripeSubscribeBtn');
+            var subscribeNote = document.getElementById('stripeSubscriptionNote');
+            var subscribeText = document.getElementById('stripeSubscribeBtnText');
             if (service === 'maintenance') {
-                var contrat = (form.querySelector('input[name="contrat-maintenance"]:checked') || {}).value || 'mensuelle';
-                if (subscribeBtn) subscribeBtn.href = 'paiement.html?service=maintenance&formula=site_' + contrat + '&mode=' + (contrat === 'annuelle' ? 'payment' : 'subscription');
+                var contrat = (form.querySelector('input[name="contrat-maintenance"]:checked') || {}).value || 'mensuel';
+                if (subscribeBtn) subscribeBtn.href = 'paiement.html?service=maintenance&formula=maintenance_site_' + contrat;
+                var maintTexts = {
+                    ponctuel: { note: 'Intervention ponctuelle : paiement unique, sans abonnement.', btn: 'Payer l\'intervention' },
+                    mensuel: { note: 'Contrat mensuel : abonnement de 150€/mois, premier paiement immédiat, sans acompte.', btn: 'S\'abonner maintenant' },
+                    annuel: { note: 'Contrat annuel : paiement unique de 1 490€ pour 12 mois, sans renouvellement automatique.', btn: 'Payer le contrat annuel' }
+                };
+                var maintText = maintTexts[contrat] || maintTexts.mensuel;
+                if (subscribeNote) subscribeNote.textContent = maintText.note;
+                if (subscribeText) subscribeText.textContent = maintText.btn;
             } else {
                 if (subscribeBtn) subscribeBtn.href = 'paiement.html?service=reseaux-sociaux';
+                if (subscribeNote) subscribeNote.textContent = 'Ce service fonctionne par abonnement. Pas d\'acompte — votre premier paiement démarre à la signature du contrat.';
+                if (subscribeText) subscribeText.textContent = 'S\'abonner maintenant';
             }
             return;
         }
@@ -1016,7 +1051,7 @@
             if (service === 'web' && webType) {
                 url += '&formula=' + encodeURIComponent(webType.value);
             } else if (service === 'maintenance' && contrat) {
-                url += '&formula=' + encodeURIComponent('site_' + contrat.value);
+                url += '&formula=' + encodeURIComponent('maintenance_site_' + contrat.value);
             }
             e.preventDefault();
             window.location.href = url;

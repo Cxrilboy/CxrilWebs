@@ -7,12 +7,18 @@
         var stripeAltLink = document.getElementById('stripeAltLinkHref');
         var btnPayer = document.getElementById('btn-payer');
 
-        // Mapping service+formule → clé PRICING_CONFIG et segment URL
+        // Mapping service+formule → formule transmise à paiement.html
+        // Maintenance : clés identiques à celles du catalogue de paiement et de l'API Stripe.
         var formulaMap = {
             web:         { vitrine: 'vitrine', ecommerce: 'ecommerce', app: 'app' },
-            maintenance: { ponctuelle: 'site_ponctuelle', mensuelle: 'site_mensuelle', annuelle: 'site_annuelle' },
+            maintenance: { ponctuel: 'maintenance_site_ponctuel', mensuel: 'maintenance_site_mensuel', annuel: 'maintenance_site_annuel' },
             'reseaux-sociaux': { creation: null, gestion: null, pack: null }
         };
+
+        // 'maintenance_site_mensuel' → 'mensuel' (clé de PRICING_CONFIG.maintenance)
+        function pricingFormula(service, formula) {
+            return service === 'maintenance' ? String(formula || '').replace('maintenance_site_', '') : formula;
+        }
 
         function getFormula(service) {
             var maps = {
@@ -28,7 +34,7 @@
 
         function getMode(service, formula) {
             var svcKey = service === 'web' ? 'web' : service === 'maintenance' ? 'maintenance' : 'social';
-            var fKey   = formula === 'app' ? 'appWeb' : formula;
+            var fKey   = formula === 'app' ? 'appWeb' : pricingFormula(service, formula);
             var cfg    = PRICING_CONFIG[svcKey] && PRICING_CONFIG[svcKey][fKey];
             return cfg ? (cfg.mode || 'payment') : 'payment';
         }
@@ -40,7 +46,7 @@
                 var k = formula === 'vitrine' ? 'vitrine' : formula === 'ecommerce' ? 'ecommerce' : 'appWeb';
                 cfg = PRICING_CONFIG.web[k];
             } else if (service === 'maintenance') {
-                cfg = PRICING_CONFIG.maintenance[formula];
+                cfg = PRICING_CONFIG.maintenance[pricingFormula(service, formula)];
             } else if (service === 'reseaux-sociaux') {
                 cfg = PRICING_CONFIG.social[formula];
             }
