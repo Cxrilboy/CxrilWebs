@@ -8,7 +8,7 @@
     <link rel="canonical" href="https://cxrilwebs.fr/merci.html">
     <meta property="og:title" content="Merci pour votre paiement - CxrilWebs">
     <title>Merci — CxrilWebs</title>
-    <link rel="icon" type="image/png" href="logo/logo-cw.png">
+    <link rel="icon" type="image/png" href="logo/logoCW-no-bg.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -210,7 +210,17 @@
         // l'affichage et ne prouve pas le paiement (le webhook Stripe reste la source de vérité).
         var webStart = 'Nous vous contacterons prochainement pour organiser le démarrage de votre projet.';
         var webWa = 'Bonjour, j\'ai versé un acompte pour mon projet de site web sur cxrilwebs.fr.';
+        var rsNext = 'Nous vous contacterons prochainement pour organiser la suite.';
+        var rsSubNext = 'Nous vous contacterons prochainement pour organiser la mise en place de votre gestion de réseaux sociaux.';
+        var rsSubNote = 'Abonnement mensuel facturé chaque mois.';
+        var rsWa = 'Bonjour, j\'ai effectué un paiement pour mes réseaux sociaux sur cxrilwebs.fr.';
         var CONTENT = {
+            rs_basic: { title: 'Abonnement activé !', text: 'Votre abonnement de gestion de réseaux sociaux (forfait Basic) à 160 €/mois a bien été enregistré.', note: rsSubNote, next: rsSubNext, wa: rsWa },
+            rs_plus:  { title: 'Abonnement activé !', text: 'Votre abonnement de gestion de réseaux sociaux (forfait Plus) à 320 €/mois a bien été enregistré.', note: rsSubNote, next: rsSubNext, wa: rsWa },
+            rs_facebook:  { title: 'Paiement reçu !', text: 'Votre paiement de 120 € pour la création de votre page Facebook a bien été enregistré.', next: rsNext, wa: rsWa },
+            rs_instagram: { title: 'Paiement reçu !', text: 'Votre paiement de 100 € pour la création de votre compte Instagram a bien été enregistré.', next: rsNext, wa: rsWa },
+            rs_tiktok:    { title: 'Paiement reçu !', text: 'Votre paiement de 150 € pour la création de votre page TikTok a bien été enregistré.', next: rsNext, wa: rsWa },
+            rs_linkedin:  { title: 'Paiement reçu !', text: 'Votre paiement de 80 € pour la création de votre page LinkedIn a bien été enregistré.', next: rsNext, wa: rsWa },
             web_express:   { title: 'Acompte reçu !', text: 'Votre acompte a bien été enregistré.', next: webStart, wa: webWa },
             web_vitrine:   { title: 'Acompte reçu !', text: 'Votre acompte a bien été enregistré.', next: webStart, wa: webWa },
             web_ecommerce: { title: 'Acompte reçu !', text: 'Votre acompte a bien été enregistré.', next: webStart, wa: webWa },

@@ -15,7 +15,7 @@
             vitrine: 890,
             ecommerce: 1690,
             application: 2990,
-            pages: { '1-5': 0, '6-10': 90, '10+': 190 },
+            pages: { '1': 0, '1-5': 0, '6-10': 90, '10+': 190 },
             options: {
                 'seo-avance': 190, 'blog': 120, 'galerie': 90,
                 'formulaire-avance': 60, 'animations': 80, 'hebergement': 60,
@@ -43,7 +43,7 @@
             plateformes: { facebook: 120, instagram: 100, tiktok: 150, linkedin: 80 },
             forfaits: { basic: 160, plus: 320 },
             options: {
-                'pub-fb-ig': 150, 'moderation-rs': 50, 'stories': 60
+                'moderation-rs': 50, 'stories': 60
             }
         }
     };
@@ -89,8 +89,10 @@
 
         // Mise à jour affichage prix
         const el = totalPriceEl;
-        if (surDevis) {
-            el.textContent = total > 0 ? total.toLocaleString('fr-FR') + '€' : '0€';
+        if (service === 'web' && checkedWebApp()) {
+            el.textContent = 'À partir de ' + total.toLocaleString('fr-FR') + ' € — Sur devis';
+        } else if (surDevis) {
+            el.textContent = 'Sur devis';
         } else {
             el.textContent = total > 0 ? total.toLocaleString('fr-FR') + '€' : '0€';
         }
@@ -109,6 +111,21 @@
     // ============================================================
     // RÈGLE 2 — getPrixCreation()
     // ============================================================
+    function checkedWebApp() {
+        return !!form.querySelector('input[name="web-type"][value="app"]:checked');
+    }
+
+    function updateWebPages() {
+        const express = !!form.querySelector('input[name="web-type"][value="express"]:checked');
+        form.querySelectorAll('input[name="web-pages"]').forEach(input => {
+            const allowed = express ? input.value === '1' : input.value !== '1';
+            input.disabled = !allowed;
+            input.closest('label').style.display = allowed ? '' : 'none';
+            if (!allowed) input.checked = false;
+            if (express && allowed) input.checked = true;
+        });
+    }
+
     function getPrixCreation() {
         const type = form.querySelector('input[name="web-type"]:checked');
         if (!type) return 0;
@@ -214,6 +231,7 @@
             var activeOptsEl = document.getElementById(activeOptsId);
             if (activeOptsEl) {
                 activeOptsEl.querySelectorAll('input[name="opt-rs"]:checked').forEach(cb => {
+                    if (cb.dataset.onDemand === 'true') { surDevis = true; return; }
                     total += parseInt(cb.dataset.price, 10) || 0;
                 });
             }
@@ -229,7 +247,14 @@
         const blocAcompte    = document.getElementById('bloc-acompte');
         const blocAbonnement = document.getElementById('bloc-abonnement');
 
-        const estAbonnement = ['maintenance', 'reseaux-sociaux'].includes(service);
+        const target = window.cxDevisPaymentTarget && window.cxDevisPaymentTarget();
+        if (service !== 'maintenance' && target && !target.url) {
+            if (blocAcompte) blocAcompte.style.display = 'none';
+            if (blocAbonnement) blocAbonnement.style.display = 'none';
+            return;
+        }
+        const objectifRS = (form.querySelector('input[name="objectif-rs"]:checked') || {}).value;
+        const estAbonnement = service === 'maintenance' || (service === 'reseaux-sociaux' && objectifRS === 'gestion');
 
         if (blocAcompte)    blocAcompte.style.display    = estAbonnement ? 'none' : (service === 'web' ? 'block' : 'none');
         if (blocAbonnement) blocAbonnement.style.display = estAbonnement ? 'block' : 'none';
@@ -239,10 +264,13 @@
         const recapEl = document.getElementById('recap-note');
         if (!recapEl) return;
 
+        const webType = (form.querySelector('input[name="web-type"]:checked') || {}).value;
         const messages = {
-            web: 'Devis indicatif. Le tarif définitif sera confirmé après analyse complète de votre projet.',
+            web: webType === 'app'
+                ? 'Application web — À partir de 2 990 € : estimation indicative, le tarif est confirmé avec vous après échange. Aucun paiement en ligne.'
+                : 'Devis indicatif. Le tarif définitif sera confirmé après analyse complète de votre projet. L\'acompte de 30 % du total (options incluses) peut se régler en ligne.',
             maintenance: 'Estimation indicative. Un audit de votre site peut être réalisé avant la mise en place d\'un contrat mensuel ou annuel.',
-            'reseaux-sociaux': 'Estimation indicative. Premier mois sans engagement.'
+            'reseaux-sociaux': 'Prestations ponctuelles ou forfaits Basic 160 €/mois et Plus 320 €/mois. Les devis personnalisés avec options et les campagnes publicitaires sont à valider avant paiement.'
         };
 
         if (messages[service]) {
@@ -265,7 +293,7 @@
                 const labels = { express: 'Site Express', vitrine: 'Site vitrine', ecommerce: 'Site e-commerce', app: 'Application web' };
                 const typeMap = { express: 'express', vitrine: 'vitrine', ecommerce: 'ecommerce', app: 'application' };
                 const p = TARIFS.creation[typeMap[type.value]] || 0;
-                breakdown.push({ label: labels[type.value], amount: p });
+                breakdown.push({ label: labels[type.value], amount: p, startingPrice: type.value === 'app' });
             }
             const pages = form.querySelector('input[name="web-pages"]:checked');
             if (pages) {
@@ -320,7 +348,7 @@
                     activeOptsEl.querySelectorAll('input[name="opt-rs"]:checked').forEach(cb => {
                         const p = parseInt(cb.dataset.price, 10) || 0;
                         const lbl = cb.closest('label').querySelector('span').childNodes[0].textContent.trim();
-                        breakdown.push({ label: lbl, amount: p });
+                        breakdown.push({ label: lbl, amount: p, onDemand: cb.dataset.onDemand === 'true' });
                     });
                 }
             }
@@ -333,7 +361,7 @@
             breakdown.forEach(item => {
                 const div = document.createElement('div');
                 div.className = 'breakdown-item';
-                div.innerHTML = '<span class="b-label">' + escapeHTML(item.label) + '</span><span class="b-amount">' + item.amount.toLocaleString('fr-FR') + '€</span>';
+                div.innerHTML = '<span class="b-label">' + escapeHTML(item.label) + '</span><span class="b-amount">' + (item.onDemand ? 'Sur devis' : (item.startingPrice ? 'À partir de ' : '') + item.amount.toLocaleString('fr-FR') + '€') + '</span>';
                 breakdownEl.appendChild(div);
             });
         }
@@ -496,6 +524,7 @@
             if (e.target.name === 'web-type') {
                 showInclusCreation();
                 showOptsCreation();
+                updateWebPages();
                 recalculate();
             }
             if (e.target.name === 'web-pages' || e.target.name === 'opt-web') {
@@ -677,10 +706,17 @@
         const lineItems = buildLineItems(svc);
         const subtotal  = lineItems.reduce((s, i) => s + i.total, 0);
         const isAbonnement = svc === 'maintenance' || svc === 'reseaux-sociaux';
+        const target = window.cxDevisPaymentTarget && window.cxDevisPaymentTarget();
+        const manualQuote = svc !== 'maintenance' && target && !target.url;
+        const hasOnDemand = lineItems.some(item => item.onDemand);
+        const isApp = svc === 'web' && checkedWebApp();
+        const socialOneOff = svc === 'reseaux-sociaux' && (form.querySelector('input[name="objectif-rs"]:checked') || {}).value === 'creation';
         const acompte30    = !isAbonnement ? Math.round(subtotal * 0.3) : 0;
         const solde70      = subtotal - acompte30;
         const maintContrat = svc === 'maintenance' ? ((form.querySelector('input[name="contrat-maintenance"]:checked') || {}).value || '') : '';
-        const conditionPaiement = maintContrat === 'ponctuel'
+        const conditionPaiement = socialOneOff
+            ? '<li>Prestation ponctuelle : paiement unique, sans abonnement.</li>'
+            : maintContrat === 'ponctuel'
             ? '<li>Paiement unique à la commande de l\'intervention</li>'
             : maintContrat === 'annuel'
                 ? '<li>Paiement annuel unique à la signature du contrat</li>'
@@ -724,16 +760,16 @@
                         return '<tr>' +
                             '<td class="col-desc"><strong>' + escapeHTML(item.label) + '</strong>' + (item.detail ? '<br><span class="item-detail">' + escapeHTML(item.detail) + '</span>' : '') + '</td>' +
                             '<td class="col-qty">' + item.qty + '</td>' +
-                            '<td class="col-price">' + item.unitPrice.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' €</td>' +
-                            '<td class="col-total">' + item.total.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' €</td>' +
+                            '<td class="col-price">' + (item.onDemand ? 'Sur devis' : (item.startingPrice ? 'À partir de ' : '') + item.unitPrice.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' €') + '</td>' +
+                            '<td class="col-total">' + (item.onDemand ? 'Sur devis' : (item.startingPrice ? 'À partir de ' : '') + item.total.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' €') + '</td>' +
                         '</tr>';
                     }).join('') +
                 '</tbody>' +
             '</table>' +
             '<div class="invoice-totals"><div class="invoice-totals-inner">' +
-                '<div class="total-line total-final"><span>TOTAL</span><span class="total-amount">' + subtotal.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' €</span></div>' +
+                '<div class="total-line total-final"><span>TOTAL</span><span class="total-amount">' + (hasOnDemand ? 'Sur devis' : (isApp ? 'À partir de ' : '') + subtotal.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' €') + '</span></div>' +
                 '<p class="mention-tva">TVA non applicable — art. 293 B du CGI</p>' +
-                '<p class="net-a-payer">Net à payer</p>' +
+                '<p class="net-a-payer">' + (manualQuote ? 'Estimation à valider — aucun paiement automatique' : 'Net à payer') + '</p>' +
             '</div></div>' +
             (msg ? '<div class="invoice-message"><h4><i class="fas fa-comment-alt"></i> Message</h4><p>' + escapeHTML(msg) + '</p></div>' : '') +
             '<div class="invoice-footer">' +
@@ -741,7 +777,9 @@
                     '<h4>Conditions & Modalités</h4>' +
                     '<ul>' +
                         '<li>Devis valable 30 jours à compter de la date d\'émission</li>' +
-                        (isAbonnement
+                        (manualQuote
+                            ? '<li>Tarif final confirmé après échange et validation du devis avant paiement.</li>'
+                            : isAbonnement
                             ? conditionPaiement
                             : '<li>Acompte de 30% à la signature</li><li>Solde à la livraison du projet</li>') +
                         '<li>Ce devis est une estimation indicative</li>' +
@@ -770,7 +808,7 @@
                 var labels = { express: 'Site Express', vitrine: 'Site vitrine', ecommerce: 'Site e-commerce', app: 'Application web' };
                 var typeMap = { express: 'express', vitrine: 'vitrine', ecommerce: 'ecommerce', app: 'application' };
                 var price = TARIFS.creation[typeMap[type.value]] || 0;
-                items.push({ label: labels[type.value] || type.value, detail: 'Conception et développement sur mesure', qty: 1, unitPrice: price, total: price });
+                items.push({ label: labels[type.value] || type.value, detail: 'Conception et développement sur mesure', qty: 1, unitPrice: price, total: price, startingPrice: type.value === 'app' });
             }
             var pages = form.querySelector('input[name="web-pages"]:checked');
             if (pages && (TARIFS.creation.pages[pages.value] || 0) > 0) {
@@ -837,7 +875,7 @@
                     activeOptsEl.querySelectorAll('input[name="opt-rs"]:checked').forEach(function(cb) {
                         var op = parseInt(cb.dataset.price, 10) || 0;
                         var lbl = cb.closest('label').querySelector('span').childNodes[0].textContent.trim();
-                        items.push({ label: lbl, detail: 'Option mensuelle', qty: 1, unitPrice: op, total: op });
+                        items.push({ label: lbl, detail: cb.dataset.onDemand === 'true' ? 'Budget et prestation à définir' : 'Option mensuelle', qty: 1, unitPrice: op, total: op, onDemand: cb.dataset.onDemand === 'true' });
                     });
                 }
             }
@@ -976,6 +1014,13 @@
         }
 
         const isAbonnement = service === 'maintenance' || service === 'reseaux-sociaux';
+        const paymentTarget = typeof window.cxDevisPaymentTarget === 'function' ? window.cxDevisPaymentTarget() : { url: null };
+
+        // Devis réseaux sociaux non payable en ligne (options, pack) : aucun bloc de paiement.
+        if (service === 'reseaux-sociaux' && !paymentTarget.url) {
+            block.style.display = 'none';
+            return;
+        }
 
         if (isAbonnement) {
             document.querySelector('.stripe-payment-amounts').style.display = 'none';
@@ -997,9 +1042,12 @@
                 if (subscribeNote) subscribeNote.textContent = maintText.note;
                 if (subscribeText) subscribeText.textContent = maintText.btn;
             } else {
-                if (subscribeBtn) subscribeBtn.href = 'paiement.html?service=reseaux-sociaux';
-                if (subscribeNote) subscribeNote.textContent = 'Ce service fonctionne par abonnement. Pas d\'acompte — votre premier paiement démarre à la signature du contrat.';
-                if (subscribeText) subscribeText.textContent = 'S\'abonner maintenant';
+                const socialOneOff = (form.querySelector('input[name="objectif-rs"]:checked') || {}).value === 'creation';
+                if (subscribeBtn) subscribeBtn.href = paymentTarget.url;
+                if (subscribeNote) subscribeNote.textContent = socialOneOff
+                    ? 'Prestation ponctuelle : paiement unique, sans abonnement.'
+                    : 'Abonnement mensuel : premier paiement immédiat, puis chaque mois.';
+                if (subscribeText) subscribeText.textContent = socialOneOff ? 'Payer la prestation' : 'S\'abonner maintenant';
             }
             return;
         }
@@ -1036,25 +1084,16 @@
     init();
 
     // ════════════════════════════════════════════════════════════════
-    // Le paiement d'un devis personnalisé est validé manuellement : seules les
-    // formules affichées par paiement.html peuvent être envoyées à Stripe.
+    // Le lien de paiement est construit par js/devis-payment-links.js (clés du catalogue de l'API).
+    // Un devis non payable en ligne (projet sur mesure, options/pack réseaux sociaux) est validé manuellement.
     // ════════════════════════════════════════════════════════════════
     const btnPayer = document.getElementById('btn-payer');
     if (btnPayer) {
         btnPayer.addEventListener('click', function(e) {
-            const service = getSelectedService();
-            if (!service) return; // Pas de service sélectionné, laisser le href par défaut
-            const contrat = form.querySelector('input[name="contrat-maintenance"]:checked');
-            const webType = form.querySelector('input[name="web-type"]:checked');
-
-            let url = 'paiement.html?service=' + encodeURIComponent(service);
-            if (service === 'web' && webType) {
-                url += '&formula=' + encodeURIComponent(webType.value);
-            } else if (service === 'maintenance' && contrat) {
-                url += '&formula=' + encodeURIComponent('maintenance_site_' + contrat.value);
-            }
+            const target = typeof window.cxDevisPaymentTarget === 'function' ? window.cxDevisPaymentTarget() : null;
+            if (!target) return; // Pas de module de liens : laisser le href par défaut
             e.preventDefault();
-            window.location.href = url;
+            if (target.url) window.location.href = target.url;
         });
     }
 

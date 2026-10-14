@@ -1,25 +1,34 @@
 /**
- * pricing.js — Source unique de vérité pour les prix CxrilWebs
- * Importé dans index.html, devis.html et paiement.html
+ * pricing.js — Prix affichés CxrilWebs (index, devis, paiement)
  *
- * Modifier UN prix ici le met à jour sur les 3 pages simultanément.
+ * Ces valeurs servent à l'affichage uniquement. Le montant réellement facturé par Stripe est
+ * toujours recalculé par api/create-checkout-session.php, qui doit rester identique à ce fichier
+ * (contrôlé par scripts/pricing-consistency.test.mjs).
  */
 const PRICING_CONFIG = {
   web: {
     express:   { price: 290,  label: 'Site Express',        acompte: 0.30, mode: 'payment' },
     vitrine:   { price: 890,  label: 'Site Vitrine',       acompte: 0.30, mode: 'payment' },
     ecommerce: { price: 1690, label: 'Site E-commerce',    acompte: 0.30, mode: 'payment' },
-    appWeb:    { price: null, label: 'Projet web sur mesure', acompte: 0.30, mode: 'ondemand' },
+    // Projet sur mesure : sur devis uniquement, jamais envoyé à Stripe.
+    appWeb:    { price: null, startingPrice: 2990, label: 'Application web — À partir de 2 990 € — Sur devis', acompte: 0.30, mode: 'ondemand' },
   },
+  // Express : une page uniquement. Vitrine/E-commerce : 1–5 pages incluses.
+  webPages: { '1': 0, '1-5': 0, '6-10': 90, '10+': 190 },
+  // Options du devis web : identifiant = data-opt de devis.html = identifiant accepté par l'API.
+  // "for" : formules (clés de paiement) auxquelles l'option s'applique.
   webOptions: {
-    pages610:    { price: 90,  label: 'Pages 6–10'             },
-    pages10plus: { price: 190, label: 'Pages 10+'              },
-    design:      { price: 120, label: 'Design sur mesure'      },
-    seo:         { price: 149, label: 'SEO on-page'            },
-    blog:        { price: 60,  label: 'Blog intégré'           },
-    contact:     { price: 30,  label: 'Formulaire avancé'      },
-    multilingue: { price: 90,  label: 'Site multilingue'       },
-    hebergement: { price: 25,  label: 'Hébergement 1 an'       },
+    'seo-avance':        { price: 190, label: 'SEO avancé',                       for: ['web_express', 'web_vitrine'] },
+    'formulaire-avance': { price: 60,  label: 'Formulaire de contact avancé',     for: ['web_express', 'web_vitrine'] },
+    'animations':        { price: 80,  label: 'Animations & effets visuels',      for: ['web_express', 'web_vitrine'] },
+    'hebergement':       { price: 60,  label: 'Hébergement 1 an',                 for: ['web_express', 'web_vitrine'] },
+    'blog':              { price: 120, label: 'Blog intégré',                     for: ['web_vitrine'] },
+    'galerie':           { price: 90,  label: 'Galerie photos',                   for: ['web_vitrine'] },
+    'stock-avance':      { price: 120, label: 'Gestion de stock avancée',         for: ['web_ecommerce'] },
+    'fiches-avancees':   { price: 100, label: 'Fiches produits enrichies',        for: ['web_ecommerce'] },
+    'multidevise':       { price: 80,  label: 'Multi-devises',                    for: ['web_ecommerce'] },
+    'seo-ecom':          { price: 190, label: 'SEO e-commerce avancé',            for: ['web_ecommerce'] },
+    'avis-clients':      { price: 70,  label: "Système d'avis clients",           for: ['web_ecommerce'] },
   },
   // Maintenance — clés de paiement : maintenance_site_ponctuel / _mensuel / _annuel (cf. api/create-checkout-session.php).
   // Monitoring, sauvegardes et mises à jour CMS/plugins sont inclus dans le mensuel et l'annuel.
@@ -37,15 +46,13 @@ const PRICING_CONFIG = {
     facebook:  { price: 120,  label: 'Création Facebook', acompte: 1.00, mode: 'payment'      },
     instagram: { price: 100,  label: 'Création Instagram',acompte: 1.00, mode: 'payment'      },
     tiktok:    { price: 150,  label: 'Création TikTok',   acompte: 1.00, mode: 'payment'      },
-    publications: { price: null, label: 'à partir de 150€/mois', mode: 'subscription' },
-    combo:     { price: null, label: 'à partir de 220€/mois', mode: 'subscription' },
-    ads:       { price: 400,  label: 'Campagnes Pub',     acompte: 1.00, mode: 'payment'      },
+    linkedin:  { price: 80,   label: 'Création LinkedIn', acompte: 1.00, mode: 'payment'      },
   },
   // Affichage index.html #tarifs uniquement
   tarifs: {
     web:         { price: 290,  display: 'À partir de 290€' },
     maintenance: { price: 80,   display: 'À partir de 80€' },
-    social:      { price: 80,   display: 'À partir de 80€' },
+    social:      { price: 80,   display: 'À partir de 80 € — prestations ponctuelles' },
     essentiel:   { price: 890,  display: 'À partir de 890€' },
     pro:         { price: 1690, display: 'À partir de 1 690€' },
     entreprise:  { price: null, display: 'Sur devis'        },

@@ -36,7 +36,15 @@ try {
     $object = $event->data->object;
     $type = (string) $event->type;
 
-    if (in_array($type, ['checkout.session.completed', 'checkout.session.async_payment_succeeded'], true)) {
+    require_once __DIR__ . '/stripe-billing.php';
+    if (in_array($type, CX_BILLING_EVENTS, true)) {
+        $httpClient = new \Stripe\HttpClient\CurlClient();
+        $httpClient->setConnectTimeout(5);
+        $httpClient->setTimeout(15);
+        \Stripe\ApiRequestor::setHttpClient($httpClient);
+        $stripe = new \Stripe\StripeClient(cx_env('STRIPE_SECRET_KEY'));
+        cx_handle_billing_event($event, $stripe);
+    } elseif (in_array($type, ['checkout.session.completed', 'checkout.session.async_payment_succeeded'], true)) {
         $paid = ($object->payment_status ?? '') === 'paid';
         $email = cx_valid_email((string) ($object->customer_details->email ?? ''));
         $userId = null;

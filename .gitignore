@@ -27,3 +27,5 @@ database/
 .cache/
 .next/
 dist/
+
+/composer.phar

@@ -3,7 +3,7 @@
  * Le montant, la devise et le type de paiement sont résolus exclusivement par
  * l'API PHP : aucune donnée financière n'est fiable côté navigateur.
  */
-async function startCheckout({ priceKey }) {
+async function startCheckout({ priceKey, webPages, webOptions }) {
   const btn = document.getElementById('btn-payer') || document.getElementById('payCheckoutBtn');
   const originalHTML = btn ? btn.innerHTML : '';
   if (startCheckout.pending) return;
@@ -24,7 +24,8 @@ async function startCheckout({ priceKey }) {
     const response = await fetch('/api/create-checkout-session.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ priceKey }),
+      // webPages / webOptions : simples identifiants (créations de site) ; le serveur recalcule le montant.
+      body: JSON.stringify({ priceKey, webPages, webOptions }),
       signal: controller.signal,
       cache: 'no-store',
     });

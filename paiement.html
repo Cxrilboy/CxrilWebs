@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css?v=20260929">
     <link rel="stylesheet" href="paiement-styles.css?v=20260929">
-    <script src="js/pricing.js?v=20261014"></script>
+    <script src="js/pricing.js?v=20261016"></script>
 </head>
 <body>
     <!-- Dark Mode Toggle -->
@@ -115,8 +115,8 @@
                         <div class="pay-service-icon"><i class="fas fa-share-alt"></i></div>
                         <h3>Gestion Réseaux Sociaux</h3>
                         <p>Stratégie social media & création de contenu</p>
-                        <span class="pay-service-price">À partir de 80€</span>
-                        <span class="pay-service-deposit">Création ou forfait</span>
+                        <span class="pay-service-price">À partir de 80 € — prestations ponctuelles</span>
+                        <span class="pay-service-deposit">Basic 160 €/mois · Plus 320 €/mois</span>
                     </div>
                 </div>
             </div>
@@ -166,7 +166,7 @@
                             <h3>Site E-commerce</h3>
                             <div class="pay-option-price" data-price-key="web.ecommerce.price">1 690€</div>
                             <ul class="pay-option-features">
-                                <li><i class="fas fa-check"></i> Jusqu'à 10 pages</li>
+                                <li><i class="fas fa-check"></i> Jusqu'à 5 pages incluses ; pages supplémentaires sur le devis</li>
                                 <li><i class="fas fa-check"></i> Design premium sur mesure</li>
                                 <li><i class="fas fa-check"></i> SEO avancé + Analytics</li>
                                 <li><i class="fas fa-check"></i> Blog intégré</li>
@@ -178,8 +178,9 @@
                         </div>
                         <div class="pay-option-card pay-option-disabled" data-key="web_app">
                             <div class="pay-option-badge">Sur devis</div>
-                            <h3>Projet web sur mesure</h3>
-                            <div class="pay-option-price">Sur devis</div>
+                            <h3>Application web</h3>
+                            <div class="pay-option-price">À partir de 2 990 €</div>
+                            <p>Sur devis : tarif final confirmé après échange.</p>
                             <ul class="pay-option-features">
                                 <li><i class="fas fa-check"></i> Application sur mesure</li>
                                 <li><i class="fas fa-check"></i> Architecture complète</li>
@@ -352,21 +353,20 @@
                                 <span class="pay-deposit-amount">80€</span>
                             </div>
                         </div>
-                        <div class="pay-option-card" data-key="rs_ads">
-                            <div class="pay-option-badge">🎯 75 € de budget pub inclus !</div>
+                        <div class="pay-option-card pay-option-disabled" data-key="rs_ads">
+                            <div class="pay-option-badge">Sur devis</div>
                             <h3>Campagnes Publicitaires</h3>
                             <p>Facebook & Instagram</p>
-                            <div class="pay-option-price">400€</div>
+                            <div class="pay-option-price">Sur devis</div>
                             <ul class="pay-option-features">
-                                <li><i class="fas fa-check"></i> 15 jours de campagne</li>
-                                <li><i class="fas fa-check"></i> Budget 75 € (5 €/jour)</li>
+                                <li><i class="fas fa-check"></i> Durée adaptée à vos objectifs</li>
+                                <li><i class="fas fa-check"></i> Budget publicitaire et prestation définis ensemble</li>
                                 <li><i class="fas fa-check"></i> 2 visuels + tests A/B</li>
                                 <li><i class="fas fa-check"></i> Rédaction / configuration / gestion</li>
                                 <li><i class="fas fa-check"></i> Rapports mensuels (impressions, clics, conversions)</li>
                             </ul>
                             <div class="pay-option-deposit">
-                                <span class="pay-deposit-label">Paiement unique</span>
-                                <span class="pay-deposit-amount">400€</span>
+                                <a href="devis.html?service=reseaux-sociaux" class="btn btn-primary btn-full">Demander un devis</a>
                             </div>
                         </div>
 
@@ -396,7 +396,7 @@
                         </div>
                         <div class="pay-checkout-divider"></div>
                         <div class="pay-checkout-row">
-                            <span>Prix total du service</span>
+                            <span id="payCheckoutTotalLabel">Prix total du service</span>
                             <span class="pay-checkout-total" id="payCheckoutTotal">—</span>
                         </div>
                         <div class="pay-checkout-row pay-checkout-highlight">
@@ -480,7 +480,7 @@
 
     <script src="components-loader.js?v=20260403"></script>
     <script src="script.js?v=20260403"></script>
-    <script src="js/checkout.js?v=20261014"></script>
+    <script src="js/checkout.js?v=20261015"></script>
     <script>
     (function () {
         'use strict';
@@ -525,19 +525,51 @@
             step2.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
-        // ── PREFILL depuis devis.html (?service=&formula=&amount=&description=) ─
-        // Les montants issus de l'URL sont volontairement ignorés : ils ne sont pas fiables.
+        // ── PREFILL depuis devis.html (?service=&formula=&pages=&options=) ───────
+        // formula = clé du catalogue (identique à l'API). Aucun montant n'est lu dans l'URL :
+        // pages/options ne sont que des identifiants, validés ici puis recalculés par le serveur.
+        // Le projet web "sur mesure" n'a volontairement pas de clé : il se traite sur devis.
+        var webExtras = null;
+
+        function readWebExtrasFromURL(key) {
+            var pages = urlParams.get('pages') || '';
+            var optionsParam = urlParams.get('options') || '';
+            if (!pages && !optionsParam) return { ok: true, extras: null };
+
+            var has = Object.prototype.hasOwnProperty;
+            if (key === 'web_express' && pages && pages !== '1') return { ok: false };
+            if (pages && !has.call(PRICING_CONFIG.webPages, pages)) return { ok: false };
+            var ids = optionsParam ? optionsParam.split(',') : [];
+            if (ids.length > 20) return { ok: false };
+            var options = [];
+            for (var i = 0; i < ids.length; i++) {
+                var id = ids[i];
+                var cfg = has.call(PRICING_CONFIG.webOptions, id) ? PRICING_CONFIG.webOptions[id] : null;
+                if (!cfg || cfg.for.indexOf(key) === -1) return { ok: false };
+                if (options.indexOf(id) === -1) options.push(id);
+            }
+            return { ok: true, extras: { pages: pages, options: options } };
+        }
+
         function prefillFromDevis(formula) {
             if (!formula || !selectedService) return;
 
             var keyMap = {
-                web:               { express: 'web_express', vitrine: 'web_vitrine', ecommerce: 'web_ecommerce', app: 'web_app', appweb: 'web_app' },
+                web:               { web_express: 'web_express', web_vitrine: 'web_vitrine', web_ecommerce: 'web_ecommerce' },
                 maintenance:       { maintenance_site_ponctuel: 'maintenance_site_ponctuel', maintenance_site_mensuel: 'maintenance_site_mensuel', maintenance_site_annuel: 'maintenance_site_annuel' },
-                'reseaux-sociaux': { basic: 'rs_basic', plus: 'rs_plus', facebook: 'rs_facebook', instagram: 'rs_instagram', tiktok: 'rs_tiktok', ads: 'rs_ads', audit: 'rs_audit', mensuel: 'rs_mensuel', annuel: 'rs_annuel' }
+                'reseaux-sociaux': { rs_basic: 'rs_basic', rs_plus: 'rs_plus', rs_facebook: 'rs_facebook', rs_instagram: 'rs_instagram', rs_tiktok: 'rs_tiktok', rs_linkedin: 'rs_linkedin' }
             };
             var serviceMap = (keyMap[selectedService] || {});
             var key = serviceMap[formula.toLowerCase()] || null;
             if (!key) return;
+            if (selectedService === 'reseaux-sociaux' && (urlParams.get('options') || urlParams.get('pages') || urlParams.get('rsOptions'))) return;
+
+            webExtras = null;
+            if (selectedService === 'web') {
+                var parsed = readWebExtrasFromURL(key);
+                if (!parsed.ok) return; // options inconnues : on laisse l'utilisateur choisir lui-même
+                webExtras = parsed.extras;
+            }
 
             selectedKey = key;
             // Sélectionner visuellement la carte
@@ -586,6 +618,7 @@
                 card.classList.add('selected');
 
                 selectedKey = card.dataset.key;
+                webExtras = null; // choix manuel : formule de base, sans options du devis
                 showCheckout(selectedService, selectedKey, null);
             });
         });
@@ -624,6 +657,28 @@
             });
         }
 
+        // Applique pages/options du devis à l'affichage : le serveur refait le même calcul à partir des identifiants.
+        function withWebExtras(config, extras) {
+            var total = config.totalRaw + (PRICING_CONFIG.webPages[extras.pages] || 0);
+            var details = [];
+            if (extras.pages && extras.pages !== '1-5') details.push('pages ' + extras.pages);
+            extras.options.forEach(function (id) {
+                total += PRICING_CONFIG.webOptions[id].price;
+                details.push(PRICING_CONFIG.webOptions[id].label);
+            });
+            var depositCents = total * 30;               // 30 % du total, en centimes
+            var balanceCents = total * 100 - depositCents;
+            var euros = function (cents) {
+                return (cents / 100).toLocaleString('fr-FR', { minimumFractionDigits: cents % 100 ? 2 : 0 }) + '€';
+            };
+            return Object.assign({}, config, {
+                total: euros(total * 100), totalRaw: total,
+                deposit: euros(depositCents), depositRaw: depositCents / 100,
+                balance: euros(balanceCents), balanceRaw: balanceCents / 100,
+                desc: config.desc + (details.length ? ' — avec : ' + details.join(', ') : '')
+            });
+        }
+
         // ── Afficher l'étape 3 (récapitulatif) ───────────────────────────────
         function showCheckout(service, key) {
             var config = getOptionConfig(key);
@@ -633,6 +688,10 @@
                 return;
             }
 
+            var extras = service === 'web' ? webExtras : null;
+            if (extras) config = withWebExtras(config, extras);
+            document.getElementById('payCheckoutTotalLabel').textContent = extras ? 'Prix total du projet (options incluses)' : 'Prix total du service';
+
             var payCheckoutIconEl = document.getElementById('payCheckoutIcon');
             if (payCheckoutIconEl) {
                 var newIcon = document.createElement('i');
@@ -641,9 +700,7 @@
                 payCheckoutIconEl.parentNode.replaceChild(newIcon, payCheckoutIconEl);
             }
             document.getElementById('payCheckoutTitle').textContent  = config.title;
-            var descText = config.desc || '';
-            if (config.recurring) descText += ' (' + config.recurring + ' à partir du 2e mois)';
-            document.getElementById('payCheckoutDesc').textContent   = descText;
+            document.getElementById('payCheckoutDesc').textContent   = config.desc || '';
             
             document.getElementById('payCheckoutTotal').textContent  = config.total;
 
@@ -712,17 +769,21 @@
                     document.getElementById('payCheckoutBtnText').textContent      = 'Payer ' + amount.toLocaleString('fr-FR') + '€';
                 } else {
                     document.getElementById('payCheckoutDepositLabel').textContent = 'Acompte ' + pct + '% dû maintenant';
-                    document.getElementById('payCheckoutDeposit').textContent      = amount + '€';
+                    document.getElementById('payCheckoutDeposit').textContent      = amount.toLocaleString('fr-FR') + '€';
                     document.getElementById('payCheckoutBalanceLabel').textContent = 'Solde ' + (100 - pct) + '% à la livraison';
-                    document.getElementById('payCheckoutBalance').textContent      = (isNaN(bal) ? '—' : bal + '€');
-                    document.getElementById('payCheckoutBtnText').textContent      = 'Payer l\'acompte de ' + amount + '€';
+                    document.getElementById('payCheckoutBalance').textContent      = (isNaN(bal) ? '—' : bal.toLocaleString('fr-FR') + '€');
+                    document.getElementById('payCheckoutBtnText').textContent      = 'Payer l\'acompte de ' + amount.toLocaleString('fr-FR') + '€';
                 }
             }
+
+            // Identifiants uniquement : le serveur recalcule total et acompte (cf. api/create-checkout-session.php).
+            var checkoutWebPages   = extras && extras.pages ? extras.pages : undefined;
+            var checkoutWebOptions = extras && extras.options.length ? extras.options : undefined;
 
             newBtn.href = '#';
             newBtn.addEventListener('click', function (e) {
                 e.preventDefault();
-                startCheckout({ priceKey: key });
+                startCheckout({ priceKey: key, webPages: checkoutWebPages, webOptions: checkoutWebOptions });
             });
 
             step2.style.display = 'none';
@@ -789,20 +850,16 @@
         function getOptionConfig(key) {
             var opts = {                web_express:         { icon: 'laptop-code', title: 'Site Express',       desc: 'Site one-page express livré sous 7 jours',    total: '290€',      totalRaw: 290,  deposit: '87€',       depositRaw: 87,   balance: '203€', balanceRaw: 203 },                web_vitrine:         { icon: 'laptop-code', title: 'Site Vitrine',       desc: 'Création de site vitrine jusqu\'à 5 pages',    total: '890€',      totalRaw: 890,  deposit: '267€',      depositRaw: 267,  balance: '623€', balanceRaw: 623 },
                 web_ecommerce:       { icon: 'laptop-code', title: 'Site E-commerce',    desc: 'Site e-commerce complet avec design premium',   total: '1 690€',    totalRaw: 1690, deposit: '507€',      depositRaw: 507,  balance: '1 183€', balanceRaw: 1183 },
-                web_app:             { icon: 'laptop-code', title: 'Projet web sur mesure', desc: 'Projet web sur mesure — Sur devis',           total: 'Sur devis', totalRaw: 0, deposit: 'Sur devis',  depositRaw: 0,  balance: '—', onDemand: true },
+                web_app:             { icon: 'laptop-code', title: 'Projet web sur mesure', desc: 'Application web — Sur devis, tarif final confirmé après échange', total: 'À partir de 2 990 €', totalRaw: 0, deposit: 'Sur devis',  depositRaw: 0,  balance: '—', onDemand: true },
                 maintenance_site_ponctuel: { icon: 'wrench',  title: 'Intervention ponctuelle',          desc: 'Intervention ciblée sur votre site web — paiement unique',    total: '80€',        totalRaw: 80,   deposit: '80€',        depositRaw: 80,   balance: '—', balanceRaw: 0, acompteRate: 1.0, isSubscription: false },
                 maintenance_site_mensuel: { icon: 'globe',   title: 'Maintenance mensuelle',            desc: 'Monitoring, sauvegardes et mises à jour CMS/plugins inclus',   total: '150€/mois',  totalRaw: 150,  deposit: '150€/mois',  depositRaw: 150,  balance: '—', isSubscription: true, billingNote: 'Premier paiement immédiat, puis chaque mois' },
                 maintenance_site_annuel:  { icon: 'globe',   title: 'Maintenance annuelle',             desc: 'Monitoring, sauvegardes et mises à jour CMS/plugins inclus',   total: '1 490€/an', totalRaw: 1490, deposit: '1 490€/an', depositRaw: 1490, balance: '—', balanceRaw: 0, acompteRate: 1.0, isSubscription: false, oneTimeNote: 'Valable 12 mois, sans renouvellement automatique' },
-                rs_basic:            { icon: 'share-alt',   title: 'Forfait Basic',       desc: '4 publications/mois — Abonnement',             total: '160€',      totalRaw: 160,  deposit: '160€',      depositRaw: 160,  balance: '—', isSubscription: true, recurring: '160€/mois' },
-                rs_plus:             { icon: 'share-alt',   title: 'Forfait Plus',        desc: '8 publications/mois — Abonnement',             total: '320€',      totalRaw: 320,  deposit: '320€',      depositRaw: 320,  balance: '—', isSubscription: true, recurring: '320€/mois' },
+                rs_basic:            { icon: 'share-alt',   title: 'Forfait Basic',       desc: '4 publications/mois — Abonnement',             total: '160€',      totalRaw: 160,  deposit: '160€/mois', depositRaw: 160,  balance: '—', isSubscription: true, billingNote: 'Premier paiement immédiat, puis chaque mois' },
+                rs_plus:             { icon: 'share-alt',   title: 'Forfait Plus',        desc: '8 publications/mois — Abonnement',             total: '320€',      totalRaw: 320,  deposit: '320€/mois', depositRaw: 320,  balance: '—', isSubscription: true, billingNote: 'Premier paiement immédiat, puis chaque mois' },
                 rs_facebook:         { icon: 'share-alt',   title: 'Création Facebook',   desc: 'Page Facebook professionnelle',                 total: '120€',      totalRaw: 120,  deposit: '120€',      depositRaw: 120,  balance: '—' },
                 rs_instagram:        { icon: 'share-alt',   title: 'Création Instagram',  desc: 'Compte Instagram professionnel',                total: '100€',      totalRaw: 100,  deposit: '100€',      depositRaw: 100,  balance: '—' },
                 rs_tiktok:           { icon: 'share-alt',   title: 'Création TikTok',    desc: 'Page TikTok professionnelle',                   total: '150€',      totalRaw: 150, deposit: '150€',      depositRaw: 150, balance: '—', balanceRaw: 0, acompteRate: 1.0 },
                 rs_linkedin:         { icon: 'share-alt',   title: 'Création LinkedIn',  desc: 'Page LinkedIn professionnelle',                 total: '80€',       totalRaw: 80,  deposit: '80€',       depositRaw: 80,  balance: '—', balanceRaw: 0, acompteRate: 1.0 },
-                rs_mensuel:          { icon: 'share-alt',   title: 'Gestion Réseaux Sos. Mensuelle', desc: 'Abonnement mensuel (Basic/Plus)',            total: '160€',      totalRaw: 160,  deposit: '160€',      depositRaw: 160,  balance: '—', isSubscription: true, recurring: '200€/mois' },
-                rs_annuel:           { icon: 'share-alt',   title: 'Gestion Réseaux Sos. Annuelle',  desc: 'Abonnement annuel',                          total: '1920€',     totalRaw: 1920, deposit: '1920€',     depositRaw: 1920, balance: '—', isSubscription: true, recurring: '2400€/an' },
-                rs_ads:              { icon: 'share-alt',   title: 'Campagnes Pub',      desc: 'Campagnes Facebook & Instagram',                total: '400€',      totalRaw: 400,  deposit: '400€',      depositRaw: 400,  balance: '—' },
-                rs_audit:            { icon: 'share-alt',   title: 'Audit Social Media', desc: 'Audit complet de vos réseaux sociaux',          total: '299€',      totalRaw: 299,  deposit: '299€',      depositRaw: 299,  balance: '—' }
             };
             return opts[key] || null;
         }

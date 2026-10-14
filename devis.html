@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css?v=20260929">
     <link rel="stylesheet" href="devis-styles.css?v=20260929">
-    <script src="js/pricing.js?v=20261014"></script>
+    <script src="js/pricing.js?v=20261016"></script>
 </head>
 <body>
     <!-- Dark Mode Toggle -->
@@ -140,7 +140,7 @@
                                     </label>
                                     <label class="radio-card" for="web-app">
                                         <input type="radio" name="web-type" id="web-app" value="app" data-price="2990">
-                                        <span class="radio-card-label">Application web<span class="radio-price">2 990€</span></span>
+                                        <span class="radio-card-label">Application web<span class="radio-price">À partir de 2 990 € — Sur devis</span></span>
                                     </label>
                                 </div>
                             </div>
@@ -173,6 +173,7 @@
                             <div class="inclus-card" id="inclus-ecom" style="display:none">
                                 <p class="inclus-titre">✅ Inclus dans le site e-commerce (1 690€) :</p>
                                 <ul>
+                                    <li>Jusqu'à 5 pages incluses</li>
                                     <li>Design responsive sur mesure</li>
                                     <li>Catalogue produits (jusqu'à 20 références)</li>
                                     <li>Panier et tunnel de commande</li>
@@ -183,7 +184,7 @@
                                 <p class="inclus-note">Options supplémentaires disponibles ci-dessous.</p>
                             </div>
                             <div class="inclus-card" id="inclus-app" style="display:none">
-                                <p class="inclus-titre">✅ Inclus dans l'application web (2 990€) :</p>
+                                <p class="inclus-titre">✅ Application web — À partir de 2 990 €, sur devis :</p>
                                 <ul>
                                     <li>Architecture technique sur mesure</li>
                                     <li>Interface responsive et accessible</li>
@@ -197,6 +198,10 @@
                             <div class="option-group">
                                 <h3 class="option-group-title">Nombre de pages</h3>
                                 <div class="radio-cards">
+                                    <label class="radio-card" for="web-pages-one" style="display:none">
+                                        <input type="radio" name="web-pages" id="web-pages-one" value="1" data-price="0" disabled>
+                                        <span class="radio-card-label">Une page (one-page)<span class="radio-price">Inclus</span></span>
+                                    </label>
                                     <label class="radio-card" for="web-pages-5">
                                         <input type="radio" name="web-pages" id="web-pages-5" value="1-5" data-price="0">
                                         <span class="radio-card-label">1–5 pages<span class="radio-price">Inclus</span></span>
@@ -430,7 +435,7 @@
                             <div class="options-group" id="opts-rs-facebook" style="display:none">
                                 <h4 class="option-group-title">Options supplémentaires — Facebook</h4>
                                 <div class="checkbox-options">
-                                    <label class="checkbox-option"><input type="checkbox" name="opt-rs" data-opt="pub-fb" data-price="150"> <span>Campagne publicitaire Facebook <em>+150€/mois</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-rs" data-opt="pub-fb" data-on-demand="true"> <span>Campagne publicitaire Facebook <em>Sur devis</em></span></label>
                                     <label class="checkbox-option"><input type="checkbox" name="opt-rs" data-opt="moderation-rs" data-price="50"> <span>Modération active des commentaires <em>+50€/mois</em></span></label>
                                     <label class="checkbox-option"><input type="checkbox" name="opt-rs" data-opt="stories-fb" data-price="60"> <span>Stories hebdomadaires <em>+60€/mois</em></span></label>
                                     <label class="checkbox-option"><input type="checkbox" name="opt-rs" data-opt="groupe-fb" data-price="80"> <span>Création &amp; animation de groupe <em>+80€/mois</em></span></label>
@@ -439,7 +444,7 @@
                             <div class="options-group" id="opts-rs-instagram" style="display:none">
                                 <h4 class="option-group-title">Options supplémentaires — Instagram</h4>
                                 <div class="checkbox-options">
-                                    <label class="checkbox-option"><input type="checkbox" name="opt-rs" data-opt="pub-ig" data-price="150"> <span>Campagne publicitaire Instagram <em>+150€/mois</em></span></label>
+                                    <label class="checkbox-option"><input type="checkbox" name="opt-rs" data-opt="pub-ig" data-on-demand="true"> <span>Campagne publicitaire Instagram <em>Sur devis</em></span></label>
                                     <label class="checkbox-option"><input type="checkbox" name="opt-rs" data-opt="stories-ig" data-price="60"> <span>Stories hebdomadaires <em>+60€/mois</em></span></label>
                                     <label class="checkbox-option"><input type="checkbox" name="opt-rs" data-opt="reels" data-price="100"> <span>Création de Reels <em>+100€/mois</em></span></label>
                                     <label class="checkbox-option"><input type="checkbox" name="opt-rs" data-opt="moderation-rs" data-price="50"> <span>Modération active des commentaires <em>+50€/mois</em></span></label>
@@ -463,7 +468,7 @@
                             </div>
 
                             <div class="devis-reassurance-bar">
-                                <span><i class="fas fa-info-circle"></i> La création d'une page démarre à <strong>80€</strong>. La gestion est facturée par abonnement.</span>
+                                <span><i class="fas fa-info-circle"></i> Prestations ponctuelles à partir de <strong>80 €</strong>. Basic : 160 €/mois ; Plus : 320 €/mois. Les campagnes publicitaires sont sur devis, selon le budget et la prestation.</span>
                             </div>
 
                         </div>
@@ -537,6 +542,7 @@
                             <i class="fas fa-info-circle"></i>
                             <p>Devis indicatif généré automatiquement. Le tarif définitif sera établi après étude complète de votre projet lors d'un premier rendez-vous gratuit.</p>
                         </div>
+                        <p class="devis-note" id="payerNote" style="display:none"></p>
                         <div class="recap-actions">
                             <button type="button" class="btn btn-print" id="btnPrint" onclick="var t=document.title;document.title=' ';window.print();document.title=t;">
                                 <i class="fas fa-download"></i>
@@ -659,8 +665,8 @@
 
     <script src="components-loader.js?v=20260403" defer></script>
     <script src="script.js?v=20260403"></script>
-    <script src="devis.js?v=20261014"></script>
-    <script src="js/devis-payment-links.js?v=20261014" defer></script>
+    <script src="devis.js?v=20261016"></script>
+    <script src="js/devis-payment-links.js?v=20261016" defer></script>
 
 </body>
 </html>

@@ -57,7 +57,7 @@ N'envoie pas `.git/`, `node_modules/`, ni un éventuel fichier `.env` placé à 
 
 ## 5. Services externes
 
-- Dans Stripe, remplace le webhook par `https://cxrilwebs.fr/api/stripe-webhook.php` et sélectionne `checkout.session.completed` et `checkout.session.async_payment_succeeded`.
+- Pour Stripe et Supabase, suivre [PREPRODUCTION_STRIPE.md](PREPRODUCTION_STRIPE.md) : sauvegarde, recette isolée, migration, code puis activation des 15 événements. Conserver les endpoints et secrets distincts entre test et production.
 - Dans Supabase, conserve les politiques RLS : seule la clé `service_role`, utilisée par les API PHP, doit pouvoir effectuer les écritures serveur.
 - Dans cPanel, crée l'adresse expéditrice puis relève les paramètres dans **Email Accounts → Connect Devices**. L'adresse expéditrice doit normalement être la même que `SMTP_USERNAME`.
 

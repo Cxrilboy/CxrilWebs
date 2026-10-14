@@ -16,7 +16,7 @@ Dans Stripe, crée un endpoint de webhook à l'adresse suivante :
 https://cxrilwebs.fr/api/stripe-webhook.php
 ```
 
-Abonne cet endpoint aux événements `checkout.session.completed` et `checkout.session.async_payment_succeeded`, puis reporte la signature reçue dans `STRIPE_WEBHOOK_SECRET`.
+Applique d'abord la migration et déploie le nouveau code, puis configure les 15 événements décrits dans [PREPRODUCTION_STRIPE.md](PREPRODUCTION_STRIPE.md). Le secret de signature est propre à chaque endpoint et reste dans `STRIPE_WEBHOOK_SECRET`.
 
 Les variables `STRIPE_PRICE_*` sont facultatives. Sans elles, l'API PHP utilise la grille de prix côté serveur ; avec elles, elle emploie les Price IDs Stripe associés aux offres.
 

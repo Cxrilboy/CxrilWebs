@@ -1,81 +1,91 @@
 /**
- * Construit dynamiquement les liens paiement.html depuis les données du devis
- * Appelé automatiquement au chargement de devis.html
+ * Liens devis → paiement.html (point unique de construction).
+ *
+ * - formula = clé du catalogue de api/create-checkout-session.php (web_vitrine, maintenance_site_mensuel, rs_basic…).
+ * - Création de site : pages/options ne sont que des identifiants. Le serveur recalcule total et acompte.
+ * - Aucun montant n'est jamais placé dans l'URL.
+ * - Un devis qui ne correspond à aucune formule payable en ligne (projet sur mesure, options ou pack
+ *   réseaux sociaux) n'affiche pas de bouton de paiement : il est validé manuellement.
  */
-(function() {
-    document.addEventListener('DOMContentLoaded', function() {
-        var stripeAltLink = document.getElementById('stripeAltLinkHref');
+(function () {
+    var RS_NOTE = 'Ce devis comprend des options ou plusieurs prestations qui ne se paient pas en ligne : nous le validons avec vous avant tout paiement. Envoyez votre demande.';
+    var APP_NOTE = 'Application web — À partir de 2 990 € : le tarif est confirmé avec vous après échange. Envoyez votre demande, aucun paiement en ligne n\'est proposé.';
+
+    function checked(name) {
+        var input = document.querySelector('input[name="' + name + '"]:checked');
+        return input ? input.value : '';
+    }
+
+    // Retourne { url } ou { url: null, note } si le devis n'est pas payable en ligne.
+    function getTarget() {
+        var service = checked('service');
+        if (!service) return { url: 'paiement.html' };
+        var base = 'paiement.html?service=' + encodeURIComponent(service);
+
+        if (service === 'web') {
+            var type = checked('web-type');
+            if (!type) return { url: base };
+            if (type === 'app') return { url: null, note: APP_NOTE };
+            var url = base + '&formula=' + encodeURIComponent('web_' + type);
+            var pages = checked('web-pages');
+            if (type === 'express' && pages && pages !== '1') return { url: null, note: 'Site Express comprend une seule page.' };
+            if (pages && pages !== '1-5') url += '&pages=' + encodeURIComponent(pages);
+            var options = [];
+            document.querySelectorAll('input[name="opt-web"]:checked').forEach(function (cb) {
+                if (cb.dataset.opt && options.indexOf(cb.dataset.opt) === -1) options.push(cb.dataset.opt);
+            });
+            if (options.length) url += '&options=' + options.map(encodeURIComponent).join(',');
+            return { url: url };
+        }
+
+        if (service === 'maintenance') {
+            var contrat = checked('contrat-maintenance');
+            return { url: contrat ? base + '&formula=' + encodeURIComponent('maintenance_site_' + contrat) : base };
+        }
+
+        if (service === 'reseaux-sociaux') {
+            var objectif = checked('objectif-rs');
+            var plateforme = checked('plateforme-rs');
+            var forfait = checked('forfait-rs');
+            if (!objectif) return { url: base };
+            var optionsRS = document.querySelectorAll('input[name="opt-rs"]:checked').length;
+            if (objectif === 'pack' || optionsRS > 0) return { url: null, note: RS_NOTE };
+            if (objectif === 'creation' && plateforme) return { url: base + '&formula=' + encodeURIComponent('rs_' + plateforme) };
+            if (objectif === 'gestion' && forfait) return { url: base + '&formula=' + encodeURIComponent('rs_' + forfait) };
+            return { url: base };
+        }
+
+        return { url: base };
+    }
+
+    function apply() {
+        var target = getTarget();
         var btnPayer = document.getElementById('btn-payer');
-
-        // Mapping service+formule → formule transmise à paiement.html
-        // Maintenance : clés identiques à celles du catalogue de paiement et de l'API Stripe.
-        var formulaMap = {
-            web:         { vitrine: 'vitrine', ecommerce: 'ecommerce', app: 'app' },
-            maintenance: { ponctuel: 'maintenance_site_ponctuel', mensuel: 'maintenance_site_mensuel', annuel: 'maintenance_site_annuel' },
-            'reseaux-sociaux': { creation: null, gestion: null, pack: null }
-        };
-
-        // 'maintenance_site_mensuel' → 'mensuel' (clé de PRICING_CONFIG.maintenance)
-        function pricingFormula(service, formula) {
-            return service === 'maintenance' ? String(formula || '').replace('maintenance_site_', '') : formula;
+        var altLink = document.getElementById('stripeAltLinkHref');
+        var note = document.getElementById('payerNote');
+        if (btnPayer) {
+            btnPayer.style.display = target.url ? '' : 'none';
+            if (target.url) btnPayer.setAttribute('href', target.url);
+            else btnPayer.removeAttribute('href');
         }
-
-        function getFormula(service) {
-            var maps = {
-                web:             document.querySelector('input[name="web-type"]:checked'),
-                maintenance:     document.querySelector('input[name="contrat-maintenance"]:checked'),
-                'reseaux-sociaux': document.querySelector('input[name="objectif-rs"]:checked')
-            };
-            var input = maps[service];
-            if (!input) return null;
-            var serviceMap = formulaMap[service] || {};
-            return serviceMap[input.value] || input.value;
+        if (altLink) {
+            if (target.url) altLink.setAttribute('href', target.url);
+            else altLink.removeAttribute('href');
         }
-
-        function getMode(service, formula) {
-            var svcKey = service === 'web' ? 'web' : service === 'maintenance' ? 'maintenance' : 'social';
-            var fKey   = formula === 'app' ? 'appWeb' : pricingFormula(service, formula);
-            var cfg    = PRICING_CONFIG[svcKey] && PRICING_CONFIG[svcKey][fKey];
-            return cfg ? (cfg.mode || 'payment') : 'payment';
+        if (note) {
+            note.textContent = target.note || '';
+            note.style.display = target.note ? 'block' : 'none';
         }
+        return target;
+    }
 
-        function getDescription(service, formula) {
-            if (!formula) return service;
-            var cfg = null;
-            if (service === 'web') {
-                var k = formula === 'vitrine' ? 'vitrine' : formula === 'ecommerce' ? 'ecommerce' : 'appWeb';
-                cfg = PRICING_CONFIG.web[k];
-            } else if (service === 'maintenance') {
-                cfg = PRICING_CONFIG.maintenance[pricingFormula(service, formula)];
-            } else if (service === 'reseaux-sociaux') {
-                cfg = PRICING_CONFIG.social[formula];
-            }
-            return cfg ? cfg.label : formula;
-        }
+    window.cxDevisPaymentTarget = getTarget;
 
-        function updatePaymentLinks() {
-            setTimeout(function() {
-                try {
-                    var totalEl = document.getElementById('totalPrice');
-                    if (!totalEl) return;
-                    var service = (document.querySelector('input[name="service"]:checked') || {}).value || 'web';
-                    var formula = getFormula(service);
-                    var href = 'paiement.html?service=' + encodeURIComponent(service);
-                    if (formula) href += '&formula=' + encodeURIComponent(formula);
-                    if (stripeAltLink) stripeAltLink.href = href;
-                    if (btnPayer) { btnPayer.href = href; btnPayer.style.display = ''; }
-                } catch (e) {
-                    console.error('Erreur mise à jour liens paiement:', e);
-                }
-            }, 100);
-        }
-
-        // Mise à jour initiale et observateur sur le montant affiché
-        updatePaymentLinks();
+    document.addEventListener('DOMContentLoaded', function () {
+        var form = document.getElementById('devisForm');
+        if (form) form.addEventListener('change', apply);
         var ttcEl = document.getElementById('totalPriceTTC');
-        if (ttcEl) {
-            var observer = new MutationObserver(updatePaymentLinks);
-            observer.observe(ttcEl, { childList: true, characterData: true, subtree: true });
-        }
+        if (ttcEl) new MutationObserver(apply).observe(ttcEl, { childList: true, characterData: true, subtree: true });
+        apply();
     });
 })();
