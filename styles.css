@@ -1104,6 +1104,7 @@ body.stop-hero-animation .marquee-track {
     }
     .logo img { height: 72px !important; }
 
+    html.menu-is-open,
     html:has(body.menu-is-open),
     body.menu-is-open { overflow: hidden; overscroll-behavior: none; }
     .mobile-sidebar { padding: 0; background: rgba(4, 14, 34, 0.48); overscroll-behavior: none; }
@@ -1115,17 +1116,30 @@ body.stop-hero-animation .marquee-track {
     }
     .sidebar-panel {
         width: min(92vw, 420px);
+        height: 100dvh !important;
+        max-height: 100dvh !important;
+        box-sizing: border-box !important;
         padding: max(1.25rem, env(safe-area-inset-top, 0px)) 1.25rem max(1.5rem, env(safe-area-inset-bottom, 0px));
         background: linear-gradient(160deg, var(--bg-primary), var(--card-bg));
         transform: translateX(105%);
         transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
         border-left: 1px solid rgba(43, 92, 184, 0.14);
         overflow: hidden !important;
+        overscroll-behavior: none;
     }
     .mobile-sidebar.is-open .sidebar-panel { transform: translateX(0); }
     .sidebar-header { padding: 0 0 1rem; min-height: 58px; }
     .sidebar-panel .sidebar-logo img { height: 50px; }
-    .sidebar-nav { flex: 0 0 auto; justify-content: flex-start; gap: 0.25rem; padding: 0.75rem 0; max-height: none; overflow: hidden; }
+    .sidebar-nav {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        flex: 0 0 auto;
+        gap: 0.65rem;
+        padding: 1rem 0;
+        max-height: none;
+        overflow: hidden !important;
+        overflow-y: hidden !important;
+    }
     .sidebar-nav-label {
         margin: 0 0 0.5rem 0.75rem;
         color: var(--text-muted);
@@ -1136,18 +1150,17 @@ body.stop-hero-animation .marquee-track {
     }
     .sidebar-panel .sidebar-link {
         position: relative;
-        padding: 0.68rem 2.75rem 0.68rem 1rem;
-        border: 1px solid transparent;
-        font-size: 1rem;
+        display: flex;
+        min-height: 50px;
+        align-items: center;
+        justify-content: center;
+        padding: 0.7rem;
+        border: 1px solid rgba(43, 92, 184, 0.12);
+        background: rgba(43, 92, 184, 0.05);
+        font-size: 0.94rem;
+        text-align: center;
     }
-    .sidebar-panel .sidebar-link::after {
-        content: '›';
-        position: absolute;
-        right: 1rem;
-        color: var(--color-orange);
-        font-size: 1.3rem;
-        line-height: 1;
-    }
+    .sidebar-panel .sidebar-link::after { content: none; }
     .sidebar-panel .sidebar-link:hover,
     .sidebar-panel .sidebar-link:focus-visible,
     .sidebar-panel .sidebar-link.active {
@@ -1160,18 +1173,19 @@ body.stop-hero-animation .marquee-track {
         align-items: center;
         justify-content: center;
         gap: 0.6rem;
-        margin-top: 0.4rem;
-        padding: 0.95rem 1rem;
+        margin-top: 0.25rem;
+        min-height: 50px;
+        padding: 0.8rem 1rem;
         border-radius: 12px;
-        background: var(--color-gradient-primary);
-        color: #fff;
+        background: var(--color-blue) !important;
+        color: #fff !important;
         font-weight: 700;
         text-decoration: none;
         box-shadow: 0 10px 22px rgba(43, 92, 184, 0.22);
     }
     .sidebar-cta:hover,
     .sidebar-cta:focus-visible { filter: brightness(1.07); outline: 3px solid rgba(255, 122, 0, 0.25); outline-offset: 2px; }
-    .sidebar-social { display: none; }
+    .sidebar-social { display: none !important; }
 }
 
 @media (max-width: 600px) {
@@ -1180,7 +1194,8 @@ body.stop-hero-animation .marquee-track {
     .logo img { height: 58px !important; }
     .mobile-menu-toggle { width: 40px; height: 40px; border-radius: 11px; }
     .sidebar-panel { width: min(94vw, 390px); }
-    .sidebar-panel .sidebar-link { padding-top: 0.78rem; padding-bottom: 0.78rem; }
+    .sidebar-nav { gap: 0.55rem; padding: 0.8rem 0; }
+    .sidebar-panel .sidebar-link { min-height: 46px; padding: 0.6rem; font-size: 0.9rem; }
 }
 [data-theme="dark"] .btn-pricing-outline:hover {
     background: #477dd6;
