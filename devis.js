@@ -786,7 +786,7 @@
                     '</ul>' +
                 '</div>' +
                 '<div class="invoice-partners">' +
-                    '<h4>PARTENAIRES IT DE CONFIANCE</h4>' +
+                    '<h4>OUTILS ET TECHNOLOGIES UTILISÉS</h4>' +
                     '<div class="invoice-partner-logos">' +
                         '<span><i class="fab fa-github"></i> GitHub</span>' +
                         '<span><i class="fab fa-stripe"></i> Stripe</span>' +
