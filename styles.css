@@ -1104,7 +1104,9 @@ body.stop-hero-animation .marquee-track {
     }
     .logo img { height: 72px !important; }
 
-    .mobile-sidebar { padding: 0; background: rgba(4, 14, 34, 0.48); }
+    html:has(body.menu-is-open),
+    body.menu-is-open { overflow: hidden; overscroll-behavior: none; }
+    .mobile-sidebar { padding: 0; background: rgba(4, 14, 34, 0.48); overscroll-behavior: none; }
     .mobile-sidebar.is-open { display: block; }
     .sidebar-overlay {
         background: rgba(4, 14, 34, 0.48);
@@ -1118,11 +1120,12 @@ body.stop-hero-animation .marquee-track {
         transform: translateX(105%);
         transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
         border-left: 1px solid rgba(43, 92, 184, 0.14);
+        overflow: hidden !important;
     }
     .mobile-sidebar.is-open .sidebar-panel { transform: translateX(0); }
     .sidebar-header { padding: 0 0 1rem; min-height: 58px; }
     .sidebar-panel .sidebar-logo img { height: 50px; }
-    .sidebar-nav { justify-content: flex-start; gap: 0.35rem; padding: 1.25rem 0; max-height: none; }
+    .sidebar-nav { flex: 0 0 auto; justify-content: flex-start; gap: 0.25rem; padding: 0.75rem 0; max-height: none; overflow: hidden; }
     .sidebar-nav-label {
         margin: 0 0 0.5rem 0.75rem;
         color: var(--text-muted);
@@ -1133,7 +1136,7 @@ body.stop-hero-animation .marquee-track {
     }
     .sidebar-panel .sidebar-link {
         position: relative;
-        padding: 0.85rem 2.75rem 0.85rem 1rem;
+        padding: 0.68rem 2.75rem 0.68rem 1rem;
         border: 1px solid transparent;
         font-size: 1rem;
     }
@@ -1157,7 +1160,7 @@ body.stop-hero-animation .marquee-track {
         align-items: center;
         justify-content: center;
         gap: 0.6rem;
-        margin-top: auto;
+        margin-top: 0.4rem;
         padding: 0.95rem 1rem;
         border-radius: 12px;
         background: var(--color-gradient-primary);
@@ -1168,6 +1171,7 @@ body.stop-hero-animation .marquee-track {
     }
     .sidebar-cta:hover,
     .sidebar-cta:focus-visible { filter: brightness(1.07); outline: 3px solid rgba(255, 122, 0, 0.25); outline-offset: 2px; }
+    .sidebar-social { display: none; }
 }
 
 @media (max-width: 600px) {

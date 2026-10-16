@@ -516,6 +516,7 @@ function initMobileMenu() {
         sidebar.classList.add('is-open');
         // Ne pas forcer display en inline - laisser la CSS gérer
         body.style.overflow = 'hidden';
+        body.classList.add('menu-is-open');
         const icon = mobileMenuToggle.querySelector('i');
         if (icon) { 
             icon.classList.remove('fa-bars'); 
@@ -530,6 +531,7 @@ function initMobileMenu() {
         sidebar.classList.remove('is-open');
         // Ne pas forcer display en inline - laisser la CSS gérer
         body.style.overflow = '';
+        body.classList.remove('menu-is-open');
         const icon = mobileMenuToggle.querySelector('i');
         if (icon) { 
             icon.classList.add('fa-bars'); 
