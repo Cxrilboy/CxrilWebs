@@ -521,6 +521,9 @@ function initMobileMenu() {
             icon.classList.remove('fa-bars'); 
             icon.classList.add('fa-times');
         }
+        mobileMenuToggle.setAttribute('aria-expanded', 'true');
+        mobileMenuToggle.setAttribute('aria-label', 'Fermer le menu');
+        if (sidebarClose) sidebarClose.focus();
     }
     
     function closeSidebar() {
@@ -532,6 +535,8 @@ function initMobileMenu() {
             icon.classList.add('fa-bars'); 
             icon.classList.remove('fa-times');
         }
+        mobileMenuToggle.setAttribute('aria-expanded', 'false');
+        mobileMenuToggle.setAttribute('aria-label', 'Ouvrir le menu');
     }
     
     // Event listener pour le bouton hamburger
